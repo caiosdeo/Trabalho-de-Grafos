@@ -1,5 +1,5 @@
 /**************************************************************************************************
- * 
+ * Implementation of the TAD Graph
 **************************************************************************************************/
 
 #ifndef GRAPH_H_INCLUDED
@@ -22,7 +22,18 @@ class Graph{
     public:
         Graph();
         ~Graph();
-        
+        int getOrder();
+        int getNumberEdges();
+        bool getDirected();
+        bool getWeightedEdge();
+        Node* getFirstNode();
+        Node* getLastNode();
+        void setOrder(int order);
+        void setNumberEdges(int n);
+        void setDirected(bool directed);
+        void setWeightedEdge(bool weighted_edge);
+        void setFirstNode(Node* first_node);
+        void setLastNode(Node* last_node);
 
 } 
 

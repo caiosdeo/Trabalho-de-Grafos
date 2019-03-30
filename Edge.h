@@ -1,5 +1,5 @@
 /**************************************************************************************************
- * 
+ * Implementation of the TAD Edge
 **************************************************************************************************/
 
 #ifndef EDGE_H_INCLUDED
@@ -13,6 +13,17 @@ class Edge{
         int target_id;
         Edge* next_edge;
         float weight;
-        
 
-} #endif
+    public:
+        Edge(int target_id, Edge* next_edge, float weight);
+        ~Edge();
+        int getTargetId();
+        Edge* getNextEdge();
+        float getWeight();
+        void setTargetId(int id);
+        void setNextEdge(Edge* edge);
+        void setWeight(float weight);    
+
+} 
+
+#endif
