@@ -20,7 +20,7 @@ class Graph{
         Node* last_node;
 
     public:
-        Graph();
+        Graph(int order, bool directed, bool weighted_edge, bool weighted_node);
         ~Graph();
         int getOrder();
         int getNumberEdges();
