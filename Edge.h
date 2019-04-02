@@ -20,9 +20,7 @@ class Edge{
         int getTargetId();
         Edge* getNextEdge();
         float getWeight();
-        void setTargetId(int id);
-        void setNextEdge(Edge* edge);
-        void setWeight(float weight);    
+        void setNextEdge(Edge* edge);    
 
 } 
 

@@ -29,16 +29,9 @@ class Node{
         float getWeight();
         int getDegree();
         Node* getNextNode();
-        void setAdjacencyList(Edge* adjacency_list);
-        void setId(int id);
-        void setInDegree(unsigned int in_degree);
-        void setOutDegree(int out_degree);
-        void setWeight(float weight);
-        void setDegree(int degree);
+        void setNextNode(Node* node);
 
     private:
-        void insertNode(Node* node);
-        void removeNode(Node* node);
         void insertEdge(Edge* edge);
         void removeEdge(Edge* edge);
 

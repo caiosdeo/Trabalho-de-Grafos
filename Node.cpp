@@ -75,41 +75,6 @@ Node* Node::getNextNode(){
 }
 
 // Setters
-void Node::setAdjacencyList(Edge* adjacency_list){
-
-    this->adjacency_list = adjacency_list;
-
-}
-
-void Node::setId(int id){
-
-    this->id = id;
-
-}
-
-void Node::setInDegree(unsigned int in_degree){
-
-    this->in_degree = in_degree;
-
-}
-
-void Node::setOutDegree(int out_degree){
-
-    this->out_degree = out_degree;
-
-}
-
-void Node::setWeight(float weight){
-
-    this->weight = weight;
-
-}
-
-void Node::setDegree(int degree){
-
-    this->degree = degree;
-
-}
 
 void Node::setNextNode(Node* next_node){
 

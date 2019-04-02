@@ -29,11 +29,10 @@ class Graph{
         Node* getFirstNode();
         Node* getLastNode();
         void setNumberEdges(int n);
-        void setDirected(bool directed);
-        void setWeightedEdge(bool weighted_edge);
-        void setFirstNode(Node* first_node);
-        void setLastNode(Node* last_node);
 
+    private:
+        void insertNode(Node* node);
+        void removeNode(Node* node);
 } 
 
 #endif

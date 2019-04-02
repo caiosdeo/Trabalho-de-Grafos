@@ -26,7 +26,7 @@ Graph::~Graph(){
 
     while(next_node != nullptr){
 
-        Node* aux_node = next_node->getNext();
+        Node* aux_node = next_node->getNextNode();
         delete next_node;
         next_node = aux_node;
 
@@ -75,29 +75,5 @@ Node* Graph::getLastNode(){
 void Graph::setNumberEdges(int n){
 
     this->number_edges = n;
-
-}
-
-void Graph::setDirected(bool directed){
-
-    this->directed = directed;
-
-}
-
-void Graph::setWeightedEdge(bool weighted_edge){
-
-    this->weighted_edge = weighted_edge;
-
-}
-
-void Graph::setFirstNode(Node* first_node){
-
-    this->first_node = first_node;
-
-}
-
-void Graph::getLastNode(Node* last_node){
-
-    this->last_node = last_node;
 
 }
