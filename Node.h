@@ -35,7 +35,12 @@ class Node{
         void setOutDegree(int out_degree);
         void setWeight(float weight);
         void setDegree(int degree);
-        void setNextNode(Node* next_node);
+
+    private:
+        void insertNode(Node* node);
+        void removeNode(Node* node);
+        void insertEdge(Edge* edge);
+        void removeEdge(Edge* edge);
 
 } 
 

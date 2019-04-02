@@ -72,12 +72,6 @@ Node* Graph::getLastNode(){
 }
 
 // Setters
-void Graph::setOrder(int order){
-
-    this->order = order;
-
-}
-
 void Graph::setNumberEdges(int n){
 
     this->number_edges = n;

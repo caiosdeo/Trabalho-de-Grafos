@@ -28,7 +28,6 @@ class Graph{
         bool getWeightedEdge();
         Node* getFirstNode();
         Node* getLastNode();
-        void setOrder(int order);
         void setNumberEdges(int n);
         void setDirected(bool directed);
         void setWeightedEdge(bool weighted_edge);
