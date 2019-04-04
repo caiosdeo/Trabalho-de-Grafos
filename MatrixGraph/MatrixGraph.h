@@ -27,14 +27,15 @@ class MatrixGraph
 
         int getOrder();
         int getNumberNode();
+        int getWeight(int node1, int node2);
 
         bool getDirected();
         bool getWeightedEdge();
-        bool getWeightedNode();
-
 
         void insertNode(int node);
         void insertEdge(int node1, int node2, int weight);
+        void removeEdge(int node1, int node2);;
+        void removeNode(int node);
 };
 
 
