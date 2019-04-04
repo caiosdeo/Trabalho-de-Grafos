@@ -3,8 +3,8 @@
 **************************************************************************************************/
 
 
-#ifndef GRAPH_H_INCLUDED
-#define GRAPH_H_INCLUDED
+#ifndef MATRIXGRAPH_H_INCLUDED
+#define MATRIXGRAPH_H_INCLUDED
 
 using namespace std;
 
