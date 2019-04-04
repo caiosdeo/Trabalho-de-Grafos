@@ -21,7 +21,7 @@ class Node{
         float weight;
         int degree;
         Node* next_node;
-    
+
     public:
         // Constructor
         Node(int id);
@@ -43,6 +43,6 @@ class Node{
         void insertEdge(Edge* edge);
         void removeEdge();
 
-}  
+};
 
-#endif // NODE_H_INCLUDED
+#endif

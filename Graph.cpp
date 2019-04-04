@@ -34,7 +34,7 @@ Graph::~Graph(){
 
 }
 
-// Getters 
+// Getters
 int Graph::getOrder(){
 
     return this->order;
@@ -68,12 +68,5 @@ Node* Graph::getFirstNode(){
 Node* Graph::getLastNode(){
 
     return this->last_node;
-
-}
-
-// Setters
-void Graph::setNumberEdges(int n){
-
-    this->number_edges = n;
 
 }

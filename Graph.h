@@ -10,6 +10,7 @@ using namespace std;
 
 class Graph{
 
+    //Atributes
     private:
         int order;
         int number_edges;
@@ -20,19 +21,20 @@ class Graph{
         Node* last_node;
 
     public:
+        //Constructor
         Graph(int order, bool directed, bool weighted_edge, bool weighted_node);
+        //Destructor
         ~Graph();
+        //Getters
         int getOrder();
         int getNumberEdges();
         bool getDirected();
         bool getWeightedEdge();
         Node* getFirstNode();
         Node* getLastNode();
-        void setNumberEdges(int n);
-
-    private:
+        //Other methods
         void insertNode(Node* node);
         void removeNode(Node* node);
-} 
 
-#endif // GRAPH_H_INCLUDED
+
+}; #endif GRAPH_H_INCLUDED
