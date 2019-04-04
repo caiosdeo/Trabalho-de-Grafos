@@ -11,6 +11,9 @@ using namespace std;
 Node::Node(int id){
 
     this->id = id;
+    this->in_degree = 0;
+    this->out_degree = 0;
+    this->degree = 0;
     this->adjacency_list = nullptr;
     this->next_node = nullptr;
 
@@ -79,5 +82,11 @@ Node* Node::getNextNode(){
 void Node::setNextNode(Node* next_node){
 
     this->next_node = next_node;
+
+}
+
+void Node::setWeight(float weight){
+
+    this->weight = weight;
 
 }

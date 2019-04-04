@@ -24,4 +24,4 @@ class Edge{
 
 } 
 
-#endif
+#endif // EDGE_H_INCLUDED

@@ -20,7 +20,7 @@ class Node{
         Node* next_node;
     
     public:
-        Node();
+        Node(int id);
         ~Node();
         Edge* getAdjacencyList();
         int getId();
@@ -30,11 +30,12 @@ class Node{
         int getDegree();
         Node* getNextNode();
         void setNextNode(Node* node);
+        void setWeight();
 
     private:
         void insertEdge(Edge* edge);
-        void removeEdge(Edge* edge);
+        void removeEdge();
 
 } 
 
-#endif
+#endif // NODE_H_INCLUDED
