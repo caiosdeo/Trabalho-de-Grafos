@@ -8,12 +8,10 @@ using namespace std;
 **************************************************************************************************/
 
 // Constructor
-Edge::Edge(int target_id, Edge* next_edge, float weight){
+Edge::Edge(int target_id){
 
     this->target_id = target_id;
-    this->next_edge = next_edge;
-    this->weight = weight;
-
+    this->next_edge = null;
 }
 
 // Destructor
@@ -48,3 +46,10 @@ void Edge::setNextEdge(Edge* edge){
     this->next_edge = edge;
 
 }
+
+void Edge::setWeight(float weight){
+
+    this->weight = weight;
+}
+
+)
