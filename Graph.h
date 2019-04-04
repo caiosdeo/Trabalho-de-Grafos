@@ -28,11 +28,9 @@ class Graph{
         bool getWeightedEdge();
         Node* getFirstNode();
         Node* getLastNode();
-        void setNumberEdges(int n);
 
     private:
         void insertNode(Node* node);
         void removeNode(Node* node);
-} 
 
-#endif
+} #endif GRAPH_H_INCLUDED
