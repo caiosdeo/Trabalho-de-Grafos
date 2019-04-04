@@ -18,7 +18,7 @@ class Node{
         float weight;
         int degree;
         Node* next_node;
-    
+
     public:
         Node();
         ~Node();
@@ -35,6 +35,6 @@ class Node{
         void insertEdge(Edge* edge);
         void removeEdge(Edge* edge);
 
-} 
+};
 
 #endif
