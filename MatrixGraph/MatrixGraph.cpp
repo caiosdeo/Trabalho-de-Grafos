@@ -64,6 +64,39 @@ bool MatrixGraph::getWeightedNode(){
     return this->weighted_node;
 };
 
+int MatrixGraph::getWeight(int node1, int node2){
+    int i = 0;
+    int j = 0;
+    for( ; graph[i][0] != node1 && graph[i][0] != 0; i++){}//finding node1
+    for( ; graph[0][j] != node2 && graph[0][j] != 0; i++){}//finding node 2
+    if(getWeightedEdge() == true)
+        {
+        if(getDirected() == true)
+            //if the graph is directed that means that the edges point from a node to other, so only one node gets the variable changed
+            //in that form is possible to know which node is point to the other.
+            return graph[i][j]; 
+        else
+        {
+            //if the graph isn't directed that means that the edges doesn't point from node to other, needing to put in both spaces
+            //the number that shows that the nodes are connected by an edge.
+            return graph[i][j];
+        }
+    }
+    else 
+    {
+        if(getDirected() == true)
+            //if the graph is directed that means that the edges point from a node to other, so only one node gets the variable changed
+            //in that form is possible to know which node is point to the other.
+            return graph[i][j]; 
+        else
+        {
+            //if the graph isn't directed that means that the edges doesn't point from node to other, needing to put in both spaces
+            //the number that shows that the nodes are connected by an edge.
+            return graph[i][j];
+        }
+    }
+}
+
 void MatrixGraph::insertNode(int node){
     //inserting node in the matrix
     int i = 0;
@@ -111,3 +144,22 @@ void MatrixGraph::insertEdge(int node1, int node2, int weight){
     }
 };
 
+void MatrixGraph::removeEdge(int node1, int node2){
+    int i = 0;
+    int j = 0;
+    for( ; graph[i][0] != node1 && graph[i][0] != 0; i++){}//finding node1
+    for( ; graph[0][j] != node2 && graph[0][j] != 0; i++){}//finding node 2
+    if(getDirected == true)
+    {
+        this->graph[i][j] = 0
+    }
+    else
+    {
+        this->graph[i][j] = 0;
+        this->graph[j][i] = 0;
+    }
+};
+
+void MatrixGraph::removeNode(int node){
+
+};
