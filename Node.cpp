@@ -11,7 +11,11 @@ using namespace std;
 Node::Node(int id){
 
     this->id = id;
-    this->adjacency_list = nullptr;
+    this->in_degree = 0;
+    this->out_degree = 0;
+    this->degree = 0;
+    this->first_edge = nullptr;
+    this->last_edge = nullptr;
     this->next_node = nullptr;
 
 };
@@ -19,11 +23,11 @@ Node::Node(int id){
 // Destructor
 Node::~Node(){
 
-    Edge* next_edge = this->adjacency_list;
+    Edge* next_edge = this->first_edge;
 
     while(next_edge != nullptr){
 
-        Node* aux_edge = next_edge->getNext();
+        Edge* aux_edge = next_edge->getNextEdge();
         delete next_edge;
         next_edge = aux_edge;
         
@@ -32,9 +36,15 @@ Node::~Node(){
 };
 
 // Getters
-Edge* Node::getAdjacencyList(){
+Edge* Node::getFirstEdge(){
 
-    return this->adjacency_list;
+    return this->first_edge;
+
+}
+
+Edge* Node::getLastEdge(){
+
+    return this->last_edge;
 
 }
 
@@ -81,3 +91,11 @@ void Node::setNextNode(Node* next_node){
     this->next_node = next_node;
 
 }
+
+void Node::setWeight(float weight){
+
+    this->weight = weight;
+
+}
+
+// Other Methods

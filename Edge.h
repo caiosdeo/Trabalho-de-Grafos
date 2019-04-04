@@ -21,8 +21,8 @@ class Edge{
         Edge* getNextEdge();
         float getWeight();
         void setNextEdge(Edge* edge);
-        void setWeight(float weight);
+        void setWeight(float weight); 
 
-} 
+};
 
-#endif
+#endif // EDGE_H_INCLUDED

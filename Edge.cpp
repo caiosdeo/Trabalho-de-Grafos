@@ -11,7 +11,7 @@ using namespace std;
 Edge::Edge(int target_id){
 
     this->target_id = target_id;
-    this->next_edge = null;
+    this->next_edge = null; 
 }
 
 // Destructor
