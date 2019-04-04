@@ -16,7 +16,6 @@ Node::Node(int id){
     this->degree = 0;
     this->first_edge = nullptr;
     this->last_edge = nullptr;
-    this->adjacency_list = nullptr;
     this->next_node = nullptr;
 
 };
