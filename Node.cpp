@@ -14,6 +14,8 @@ Node::Node(int id){
     this->in_degree = 0;
     this->out_degree = 0;
     this->degree = 0;
+    this->first_edge = nullptr;
+    this->last_edge = nullptr;
     this->adjacency_list = nullptr;
     this->next_node = nullptr;
 
@@ -35,9 +37,15 @@ Node::~Node(){
 };
 
 // Getters
-Edge* Node::getAdjacencyList(){
+Edge* Node::getFirstEdge(){
 
-    return this->adjacency_list;
+    return this->first_edge;
+
+}
+
+Edge* Node::getLastEdge(){
+
+    return this->last_edge;
 
 }
 
@@ -90,3 +98,5 @@ void Node::setWeight(float weight){
     this->weight = weight;
 
 }
+
+// Other Methods

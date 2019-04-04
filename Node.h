@@ -4,14 +4,17 @@
 
 #ifndef NODE_H_INCLUDED
 #define NODE_H_INCLUDED
-#include "Edge.h"
+#include "Edge.h" // Include of the Edge class
 
 using namespace std;
 
+// Definition of the Node class
 class Node{
 
+    // Attributes
     private:
-        Edge* adjacency_list;
+        Edge* first_edge;  
+        Edge* last_edge;
         int id;
         unsigned int in_degree;
         int out_degree;
@@ -20,22 +23,26 @@ class Node{
         Node* next_node;
     
     public:
+        // Constructor
         Node(int id);
+        // Destructor
         ~Node();
-        Edge* getAdjacencyList();
+        // Getters
+        Edge* getFirstEdge();
+        Edge* getLastEdge();
         int getId();
         int getInDegree();
         int getOutDegree();
         float getWeight();
         int getDegree();
         Node* getNextNode();
+        // Setters
         void setNextNode(Node* node);
         void setWeight();
-
-    private:
+        // Other methods
         void insertEdge(Edge* edge);
         void removeEdge();
 
-} 
+}  
 
 #endif // NODE_H_INCLUDED
