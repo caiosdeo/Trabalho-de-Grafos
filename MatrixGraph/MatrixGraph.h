@@ -32,10 +32,9 @@ class MatrixGraph
         bool getWeightedEdge();
         bool getWeightedNode();
 
-        void insertNode(int node);
-        void insertEdge(int node1, int node2);
-        void sortAscendingGraph();
 
+        void insertNode(int node);
+        void insertEdge(int node1, int node2, int weight);
 };
 
 
