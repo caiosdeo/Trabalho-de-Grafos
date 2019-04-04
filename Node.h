@@ -38,7 +38,7 @@ class Node{
         Node* getNextNode();
         // Setters
         void setNextNode(Node* node);
-        void setWeight();
+        void setWeight(float weight);
         // Other methods
         void insertEdge(Edge* edge);
         void removeEdge();

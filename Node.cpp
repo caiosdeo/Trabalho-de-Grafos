@@ -27,7 +27,7 @@ Node::~Node(){
 
     while(next_edge != nullptr){
 
-        Edge* aux_edge = next_edge->getNext();
+        Edge* aux_edge = next_edge->getNextEdge();
         delete next_edge;
         next_edge = aux_edge;
         
