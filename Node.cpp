@@ -23,11 +23,11 @@ Node::Node(int id){
 // Destructor
 Node::~Node(){
 
-    Edge* next_edge = this->adjacency_list;
+    Edge* next_edge = this->first_edge;
 
     while(next_edge != nullptr){
 
-        Node* aux_edge = next_edge->getNext();
+        Edge* aux_edge = next_edge->getNext();
         delete next_edge;
         next_edge = aux_edge;
         
