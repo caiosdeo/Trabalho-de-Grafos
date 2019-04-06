@@ -1,4 +1,5 @@
 #include "Node.h"
+#include "Edge.cpp"
 #include <iostream>
 
 using namespace std;

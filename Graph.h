@@ -37,4 +37,6 @@ class Graph{
         void removeNode(Node* node);
 
 
-}; #endif GRAPH_H_INCLUDED
+}; 
+
+#endif // GRAPH_H_INCLUDED

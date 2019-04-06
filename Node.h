@@ -43,6 +43,6 @@ class Node{
         void insertEdge(Edge* edge);
         void removeEdge();
 
-};
+}; 
 
-#endif
+#endif // NODE_H_INCLUDED
