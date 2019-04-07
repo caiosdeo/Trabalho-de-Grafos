@@ -3,8 +3,8 @@
 **************************************************************************************************/
 
 
-#ifndef GRAPH_H_INCLUDED
-#define GRAPH_H_INCLUDED
+#ifndef MATRIXGRAPH_H_INCLUDED
+#define MATRIXGRAPH_H_INCLUDED
 
 using namespace std;
 
@@ -18,23 +18,23 @@ class MatrixGraph
         int number_node;
         bool directed;
         bool weighted_edge;
-        bool weighted_node;
 
     public:
 
-        MatrixGraph(int number_node, bool directed, bool weighted_edge, bool weighted_node, int order);
+        MatrixGraph(int number_node, bool directed, bool weighted_edge, int order);
         ~MatrixGraph();
 
         int getOrder();
         int getNumberNode();
+        int edgeWeight(int node1, int node2); //if directed node1 points to node2
 
         bool getDirected();
         bool getWeightedEdge();
-        bool getWeightedNode();
 
-
-        void insertNode(int node);
-        void insertEdge(int node1, int node2, int weight);
+        bool insertNode(int node);
+        void insertEdge(int node1, int node2, int weight); //if directed node1 points to node2
+        void removeEdge(int node1, int node2);
+        void removeNode(int node);
 };
 
 
