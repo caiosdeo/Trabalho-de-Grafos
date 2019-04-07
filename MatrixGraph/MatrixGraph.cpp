@@ -70,12 +70,12 @@ int MatrixGraph::edgeWeight(int node1, int node2){
     if(getWeightedEdge() == true)
     {
         if(graph[i][j] == 0)
-            cout << "The edge doesn't exists"
+            cout << "The edge doesn't exists";
         return graph[i][j];
     }
     else 
     {
-        cout << "The graph isn't weighted in edges so the edges doesn't have a weight different than one or zero"
+        cout << "The graph isn't weighted in edges so the edges doesn't have a weight different than one or zero";
         return graph[i][j];
     }
 }
@@ -164,7 +164,7 @@ void MatrixGraph::removeEdge(int node1, int node2){
         cout << "Node2 wasn't found";
         return;
     }
-    if(getDirected == true)
+    if(getDirected() == true)
     {  // since column and line are different, only the one pointing the oder must become zero.
         this->graph[i][j] = 0;
     }
