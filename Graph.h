@@ -36,6 +36,7 @@ class Graph{
         void insertNode(Node* node);
         void removeNode(int id);
         bool searchNode(int id);
+        Node* getNode(int id);
 
 
 }; 
