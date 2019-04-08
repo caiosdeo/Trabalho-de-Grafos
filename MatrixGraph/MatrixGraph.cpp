@@ -82,7 +82,7 @@ int MatrixGraph::edgeWeight(int node1, int node2){
 
 bool MatrixGraph::insertNode(int node){ // this actually bool so it become easier to manipulate insertEdge.
     //inserting node in the matrix
-    int i = 0;
+    int i = 1;
     for(; graph[i][0] != 0 && i < this->number_node; i++)
     {
         //finding a empty space for the new node
