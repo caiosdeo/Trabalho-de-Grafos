@@ -9,12 +9,13 @@ using namespace std;
 **************************************************************************************************/
 
 // Constructor
-Node::Node(int id){
+Node::Node(int id, int weight){
 
     this->id = id;
     this->in_degree = 0;
     this->out_degree = 0;
     this->degree = 0;
+    this->weight = weight;
     this->first_edge = nullptr;
     this->last_edge = nullptr;
     this->next_node = nullptr;

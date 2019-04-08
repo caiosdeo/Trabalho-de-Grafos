@@ -34,7 +34,8 @@ class Graph{
         Node* getLastNode();
         //Other methods
         void insertNode(Node* node);
-        void removeNode(Node* node);
+        void removeNode(int id);
+        bool searchNode(int id);
 
 
 }; 

@@ -71,3 +71,38 @@ Node* Graph::getLastNode(){
     return this->last_node;
 
 }
+
+// Other methods
+void Graph::insertNode(int id, int weight){
+
+    Node* aux_node = this->first_node;
+    Node* node = new Node(id, weight);
+
+    while(aux_node->getNextNode() != nullptr)
+        aux_node = aux_node->getNextNode();
+
+    aux_node->setNextNode(node);
+
+}
+
+void Graph::removeNode(int id){
+
+    Node* aux = this->first_node;
+    Node* previous = nullptr;
+
+    while(aux->id() != id){
+
+        aux = aux->getNextNode();
+        previous = aux;
+
+    }
+
+
+
+}
+
+bool Graph::searchNode(int id){
+
+    
+
+}

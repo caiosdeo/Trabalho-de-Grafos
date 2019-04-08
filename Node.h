@@ -24,7 +24,7 @@ class Node{
 
     public:
         // Constructor
-        Node(int id);
+        Node(int id, int weight);
         // Destructor
         ~Node();
         // Getters
