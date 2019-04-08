@@ -1,5 +1,5 @@
 #include "Graph.h"
-#include "Node.cpp"
+#include "Node.h"
 #include <iostream>
 
 using namespace std;
@@ -35,7 +35,7 @@ Graph::~Graph(){
 
 }
 
-// Getters 
+// Getters
 int Graph::getOrder(){
 
     return this->order;

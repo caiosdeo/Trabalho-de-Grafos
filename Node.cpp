@@ -1,5 +1,5 @@
 #include "Node.h"
-#include "Edge.cpp"
+#include "Edge.h"
 #include <iostream>
 
 using namespace std;
@@ -31,7 +31,7 @@ Node::~Node(){
         Edge* aux_edge = next_edge->getNextEdge();
         delete next_edge;
         next_edge = aux_edge;
-        
+
     }
 
 };
