@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include "Graph.h"
+#include "Node.h"
 
 using namespace std;
 
@@ -24,6 +25,7 @@ int main(int argc, char const *argv[]) {
     //Criação do arquivo de saída
     ofstream output_file(argv[2]);
 
+    //Variáveis para atributos do grafo
     bool directed;
     bool weighted_edge;
     bool weighted_node;
@@ -74,6 +76,61 @@ int main(int argc, char const *argv[]) {
 
     //Criando objeto grafo
     Graph graph(order, directed, weighted_edge, weighted_node);
+
+    //Variáveis para auxiliar na criação dos nós no Grafo
+    int idNodeSource;
+    int idNodeTarget;
+
+    //Leitura de dados a partir de arquivo
+    while(input_file >> idNodeSource >> idNodeTarget) {
+
+        //Se o grafo for direcionado já serão adicionadas as arestas nos dois sentidos
+        if(directed == true){
+
+            //Caso o nó já esteja no grafo, só inserimos a aresta no nó
+            if(graph.search(idNodeSource) == true){
+
+                graph.getNode(idNodeSource).insertEdge(idNodeTarget);
+
+            //Caso o nó não esteja presente, ele cria o nó no grafo e adiciona a aresta
+            }else{
+
+                graph.insertNode(idNodeSource);
+                graph.getNode(idNodeSource).insertEdge(idNodeTarget);
+
+            }
+
+        }else{
+
+            //Caso os nós já estejam no grafo, só inserimos as arestas nos nós
+            if(graph.search(idNodeSource) == true && graph.search(idNodeTarget) == true){
+
+                graph.getNode(idNodeSource).insertEdge(idNodeTarget);
+                graph.getNode(idNodeTarget).insertEdge(idNodeSource);
+
+            //Caso o nó fonte, já esteja presente e o nó alvo não, criamos a aresta
+            //no nó fonte e criamos o nó alvo, adicionando a aresta neste
+            }else if(graph.search(idNodeSource) == true && graph.search(idNodeTarget) == false){
+
+                graph.getNode(idNodeSource).insertEdge(idNodeTarget);
+                graph.insertNode(idNodeTarget);
+                graph.getNode(idNodeTarget).insertEdge(idNodeSource);
+
+            //Caso nenhum dos nós estejam presente, ele cria os nós no grafo e adiciona as arestas
+            }else{
+
+                graph.insertNode(idNodeSource);
+                graph.getNode(idNodeSource).insertEdge(idNodeTarget);
+                graph.insertNode(idNodeTarget);
+                graph.getNode(idNodeTarget).insertEdge(idNodeSource);
+
+            }
+
+        }
+
+    }
+
+
 
     /*
     Escrita em arquivo (exemplo):
