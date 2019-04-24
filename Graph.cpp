@@ -103,18 +103,17 @@ void Graph::removeNode(int id){
 
 bool Graph::searchNode(int id){
 
-    
+
 
 }
 
 Node* Graph::getNode(int id){
 
-    Node *aux = new Node(0, 0);
 
-    aux = first_node;
-    
+    Node *aux = first_node;
+
     while(aux != NULL){
-        
+
         if(aux->getId() == id){
             return aux;
         }
