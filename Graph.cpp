@@ -27,6 +27,7 @@ Graph::~Graph(){
 
     while(next_node != nullptr){
 
+        next_node->removeEdges();
         Node* aux_node = next_node->getNextNode();
         delete next_node;
         next_node = aux_node;
@@ -73,36 +74,91 @@ Node* Graph::getLastNode(){
 }
 
 // Other methods
-void Graph::insertNode(int id, int weight){
+void Graph::insertNode(int id, int target_id, float weight){
 
-    Node* aux_node = this->first_node;
-    Node* node = new Node(id, weight);
+    if(this->searchNode(id) && this->searchNode(target_id, weight)){
 
-    while(aux_node->getNextNode() != nullptr)
-        aux_node = aux_node->getNextNode();
+        if(this->directed)
+            this->getNode(id)->insertEdge(target_id, weight);
 
-    aux_node->setNextNode(node);
+        else{
 
-}
+            this->getNode(id)->insertEdge(target_id, weight);
+            this->getNode(target_id)->insertEdge(id, weight);
 
-void Graph::removeNode(int id){
+        }
+           
+    }
+    else if(this->searchNode(id, weight) || this->searchNode(target_id, weight)){
 
-    Node* aux = this->first_node;
-    Node* previous = nullptr;
 
-    while(aux->id() != id){
 
-        aux = aux->getNextNode();
-        previous = aux;
+    }
+    else{
+
+        Node* aux = this->first_node;
+        Node* node = new Node(id);
+        Node* target_node = new Node(target_id);
+        node->setWeight(weight);
+
+        while(aux->getNextNode() != nullptr)
+            aux = aux->getNextNode();
+
+        aux->setNextNode(node);
 
     }
 
+}
 
+/*
+    
+    Node* aux = this->first_node;
+    Node* node = new Node(id);
+    node->setWeight(weight);
+
+    while(aux->getNextNode() != nullptr)
+        aux = aux->getNextNode();
+
+    aux->setNextNode(node);
+
+*/
+
+void Graph::removeNode(int id){
+
+    if(this->searchNode(id)){
+
+        if(this->first_node != nullptr){
+
+            Node* aux = this->first_node;
+            Node* previous = nullptr;
+
+            while(aux->getId() != id){
+
+                previous = aux;
+                aux = aux->getNextNode();
+
+            }
+
+            previous->setNextNode(aux->getNextNode());
+            aux->removeEdges();
+            delete aux;
+
+        }
+
+        this->order--;
+
+    }
 
 }
 
 bool Graph::searchNode(int id){
 
-    
+    Node* aux = this->first_node;
+
+    while(aux->getNextNode() != nullptr)
+        if(aux->getId() == id)
+            return true;
+
+    return false;
 
 }

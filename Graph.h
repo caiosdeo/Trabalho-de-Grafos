@@ -33,7 +33,7 @@ class Graph{
         Node* getFirstNode();
         Node* getLastNode();
         //Other methods
-        void insertNode(Node* node);
+        void insertNode(int id, int target_id, float weight);
         void removeNode(int id);
         bool searchNode(int id);
 
