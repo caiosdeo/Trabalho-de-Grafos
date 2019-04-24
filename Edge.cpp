@@ -12,6 +12,8 @@ Edge::Edge(int target_id){
 
     this->target_id = target_id;
     this->next_edge = nullptr; 
+    this->weight = 0;
+
 }
 
 // Destructor
