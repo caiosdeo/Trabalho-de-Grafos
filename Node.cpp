@@ -157,7 +157,7 @@ void Node::removeEdge(int id){
         previous->setNextEdge(aux->getNextEdge());
         delete aux;
 
-        this->degree--;
+        this->in_degree--;
 
     }
 
@@ -172,5 +172,29 @@ bool Node::searchEdge(int target_id){
             return true;
 
     return false;
+
+}
+
+void Node::incrementInDegree(){
+
+    this->in_degree++;
+
+}
+
+void Node::incrementOutDegree(){
+
+    this->out_degree--;
+
+}
+
+void Node::decrementInDegree(){
+
+    this->in_degree--;
+
+}
+
+void Node::decrementOutDegree(){
+
+    this->out_degree++;
 
 }

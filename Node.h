@@ -43,6 +43,10 @@ class Node{
         void insertEdge(int target_id, float weight);
         void removeEdges();
         void removeEdge(int id);
+        void incrementOutDegree();
+        void decrementOutDegree();
+        void incrementInDegree();
+        void decrementInDegree();
 
 }; 
 
