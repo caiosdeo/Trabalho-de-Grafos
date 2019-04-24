@@ -162,3 +162,21 @@ bool Graph::searchNode(int id){
     return false;
 
 }
+
+Node* Graph::getNode(int id){
+
+    Node *aux = new Node(0, 0);
+
+    aux = first_node;
+    
+    while(aux != NULL){
+        
+        if(aux->getId() == id){
+            return aux;
+        }
+
+        aux = aux->getNextNode();
+    }
+
+    return aux;
+}
