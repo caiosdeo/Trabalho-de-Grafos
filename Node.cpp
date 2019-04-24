@@ -9,13 +9,12 @@ using namespace std;
 **************************************************************************************************/
 
 // Constructor
-Node::Node(int id, int weight){
+Node::Node(int id){
 
     this->id = id;
     this->in_degree = 0;
     this->out_degree = 0;
-    this->degree = 0;
-    this->weight = weight;
+    this->weight = 0;
     this->first_edge = nullptr;
     this->last_edge = nullptr;
     this->next_node = nullptr;
@@ -74,12 +73,6 @@ float Node::getWeight(){
 
 }
 
-int Node::getDegree(){
-
-    return this->degree;
-
-}
-
 Node* Node::getNextNode(){
 
     return this->next_node;
@@ -100,4 +93,84 @@ void Node::setWeight(float weight){
 
 }
 
-// Other Methods
+// Other methods
+void Node::insertEdge(int target_id, float weight){
+
+    if(this->first_edge != nullptr){
+
+        Edge* aux = this->first_edge;
+        Edge* edge = new Edge(target_id);
+        edge->setWeight(weight);
+
+        while(aux->getNextEdge() != nullptr)
+            aux = aux->getNextEdge();
+
+        aux->setNextEdge(edge);
+
+    }
+    else{
+
+        this->first_edge = new Edge(target_id);
+        this->first_edge->setWeight(weight);
+
+    }
+
+    this->degree++;
+
+}
+
+void Node::removeEdges(){
+
+    if(this->first_edge != nullptr){
+
+        Edge* previous = nullptr;
+        Edge* aux = this->first_edge;
+
+        while(aux != nullptr){
+
+            Node* target_node = getNode(aux->getTargetId());
+            target_node->removeEdge(this->getId());
+            previous = aux;
+            aux = aux->getNextEdge();
+            delete previous;
+
+        }
+
+    }
+
+}
+
+void Node::removeEdge(int id){
+
+    if(this->searchEdge(id)){
+
+        Edge* aux = this->first_edge;
+        Edge* previous = nullptr;
+
+        while(aux->getTargetId() != id){
+
+            previous = aux;
+            aux = aux->getNextEdge();
+
+        }
+
+        previous->setNextEdge(aux->getNextEdge());
+        delete aux;
+
+        this->degree--;
+
+    }
+
+}
+
+bool Node::searchEdge(int target_id){
+
+    Edge* aux = this->first_edge;
+
+    while(aux->getNextEdge() != nullptr)
+        if(aux->getTargetId() == target_id)
+            return true;
+
+    return false;
+
+}
