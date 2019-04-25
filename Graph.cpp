@@ -114,6 +114,9 @@ void Graph::insertNode(int id, int target_id, float weight){
 
         source_node = new Node(id);
         target_node = new Node(target_id);
+        
+        if(this->first_node == nullptr)
+            this->first_node = source_node;
 
         if(this->last_node != nullptr){
 
