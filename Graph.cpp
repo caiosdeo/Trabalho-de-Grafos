@@ -151,23 +151,34 @@ void Graph::insertNode(int id, int target_id, float weight){
 
 void Graph::removeNode(int id){
 
-    if(this->searchNode(id)){
+    if(this->first_node != nullptr){
 
-        if(this->first_node != nullptr){
+        if(this->searchNode(id)){
 
-            Node* aux = this->first_node;
-            Node* previous = nullptr;
+            Node* aux_node = this->first_node;
+            Node* previous_node = nullptr;
+            Node* target_node = nullptr;
 
-            while(aux->getId() != id){
+            while(aux_node->getId() != id){
 
-                previous = aux;
-                aux = aux->getNextNode();
+                previous_node = aux_node;
+                aux_node = aux_node->getNextNode();
 
             }
 
-            previous->setNextNode(aux->getNextNode());
-            aux->removeEdges();
-            delete aux;
+            previous_node->setNextNode(aux_node->getNextNode());
+            Edge* aux_edge = aux_node->getFirstEdge();
+
+            while(aux_edge != nullptr){
+
+                target_node = this->getNode(aux_edge->getTargetId());
+                target_node->removeEdge(aux_node->getId());
+                aux_edge = aux_edge->getNextEdge();
+
+            }
+
+            aux_node->removeEdges();
+            delete aux_node;
 
         }
 
