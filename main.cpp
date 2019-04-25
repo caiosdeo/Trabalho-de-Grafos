@@ -153,5 +153,34 @@ int main(int argc, char const *argv[]) {
     //Fechando arquivo de saída
     output_file.close();
     */
+
+
+    //Criando objeto grafo
+    Graph graph(6, 0, 0, 0);
+
+    //Inserindo Nós
+    graph.insertNode(2, 3, 0);
+    graph.insertNode(1, 2, 0);
+    graph.insertNode(4, 1, 0);
+    graph.insertNode(5, 6, 0);
+    graph.insertNode(5, 4, 0);
+    graph.insertNode(6, 4, 0);
+    graph.insertNode(3, 4, 0);
+
+    //Imprimindo funções básicas
+    cout << "Ordem: " << graph.getOrder() << endl;
+    cout << "Direcionado: " << graph.getDirected() << endl;
+    cout << "Numero de arestas: " << graph.getNumberEdges() << endl;
+    cout << "No id = 7 esta no grafo? " << graph.searchNode(7) << endl;
+    cout << "No id = 4 esta no grafo? " << graph.searchNode(4) << endl;
+
+    //Imprimindo o Grafo
+    graph.printGraph();
+
+    //Removendo um nó
+    cout << "Removendo nó id = 4" << endl;
+    graph.removeNode(4);
+    graph.printGraph();
+
     return 0;
 }
