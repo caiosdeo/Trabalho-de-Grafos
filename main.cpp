@@ -8,6 +8,8 @@ using namespace std;
 
 int main(int argc, char const *argv[]) {
 
+    /*MAIN COMENTADA PARA SER USADA FUTURAMENTE. ENQUANTO ISSO SERVIRÁ PARA TESTES
+
     //Verificação se todos os parâmetros do programa foram entrados
     if (argc != 6) {
 
@@ -143,13 +145,13 @@ int main(int argc, char const *argv[]) {
         cout << "Unable to open " << argv[2];
 
     }
-    */
+
 
     //Fechando arquivo de entrada
     input_file.close();
 
     //Fechando arquivo de saída
     output_file.close();
-
+    */
     return 0;
 }
