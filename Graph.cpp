@@ -87,7 +87,7 @@ void Graph::insertNode(int id, int target_id, float weight){
             this->getNode(target_id)->insertEdge(id, weight);
 
         }
-           
+
     }
     else if(this->searchNode(id, weight) || this->searchNode(target_id, weight)){
 
@@ -111,7 +111,7 @@ void Graph::insertNode(int id, int target_id, float weight){
 }
 
 /*
-    
+
     Node* aux = this->first_node;
     Node* node = new Node(id);
     node->setWeight(weight);
@@ -178,4 +178,16 @@ Node* Graph::getNode(int id){
     }
 
     return aux;
+}
+
+void Graph::printGraph(){
+
+    for(Node* p = this->first_node; p->getNextNode() != nullptr; p = p->getNextNode()){
+        cout << p->getId();
+        for(Edge* e = p->getFirstEdge(); e->getNextEdge() != nullptr; e = e->getNextEdge()){
+            cout << " " << e->getTargetId;
+        }
+        cout << endl;
+    }
+
 }
