@@ -5,6 +5,7 @@
 #ifndef GRAPH_H_INCLUDED
 #define GRAPH_H_INCLUDED
 #include "Node.h"
+#include <fstream>
 
 using namespace std;
 
@@ -37,7 +38,7 @@ class Graph{
         void removeNode(int id);
         bool searchNode(int id);
         Node* getNode(int id);
-        void printGraph();
+        void printGraph(ofstream& output_file);
 
 
 };

@@ -8,8 +8,6 @@ using namespace std;
 
 int main(int argc, char const *argv[]) {
 
-    /*MAIN COMENTADA PARA SER USADA FUTURAMENTE. ENQUANTO ISSO SERVIRÁ PARA TESTES
-
     //Verificação se todos os parâmetros do programa foram entrados
     if (argc != 6) {
 
@@ -27,57 +25,15 @@ int main(int argc, char const *argv[]) {
     //Criação do arquivo de saída
     ofstream output_file(argv[2]);
 
-    //Variáveis para atributos do grafo
-    bool directed;
-    bool weighted_edge;
-    bool weighted_node;
-    //Variável para pegar número de vértices
-    int order;
-
-    //Verificando se o grafo é direcionado
-    if (argv[3] == 0) {
-
-        directed = false;
-
-    }else {
-
-        directed = true;
-
-    }
-
-    //Verificando se as arestas são ponderadas
-    if (argv[4] == 0) {
-
-        weighted_edge = false;
-
-    }else {
-
-        weighted_edge = true;
-    }
-
-    //Verificando se os nós são ponderados
-    if (argv[5] == 0) {
-
-        weighted_node = false;
-
-    }else {
-
-        weighted_node = true;
-    }
-
     //Leitura de arquivo:
-    if(input_file.is_open()){
-
-        input_file >> order;
-
-    }else {
+    if(!input_file.is_open()){
 
         cout << "Unable to open " << argv[1];
 
     }
 
     //Criando objeto grafo
-    Graph graph(order, directed, weighted_edge, weighted_node);
+    Graph graph(atoi(argv[3]), argv[4], argv[5], argv[6]);
 
     //Variáveis para auxiliar na criação dos nós no Grafo
     int idNodeSource;
@@ -86,59 +42,26 @@ int main(int argc, char const *argv[]) {
     //Leitura de dados a partir de arquivo
     while(input_file >> idNodeSource >> idNodeTarget) {
 
-        //Se o grafo for direcionado já serão adicionadas as arestas nos dois sentidos
-        if(directed == true){
-
-            //Caso o nó já esteja no grafo, só inserimos a aresta no nó
-            if(graph.search(idNodeSource) == true){
-
-                graph.getNode(idNodeSource).insertEdge(idNodeTarget);
-
-            //Caso o nó não esteja presente, ele cria o nó no grafo e adiciona a aresta
-            }else{
-
-                graph.insertNode(idNodeSource);
-                graph.getNode(idNodeSource).insertEdge(idNodeTarget);
-
-            }
-
-        }else{
-
-            //Caso os nós já estejam no grafo, só inserimos as arestas nos nós
-            if(graph.search(idNodeSource) == true && graph.search(idNodeTarget) == true){
-
-                graph.getNode(idNodeSource).insertEdge(idNodeTarget);
-                graph.getNode(idNodeTarget).insertEdge(idNodeSource);
-
-            //Caso o nó fonte, já esteja presente e o nó alvo não, criamos a aresta
-            //no nó fonte e criamos o nó alvo, adicionando a aresta neste
-            }else if(graph.search(idNodeSource) == true && graph.search(idNodeTarget) == false){
-
-                graph.getNode(idNodeSource).insertEdge(idNodeTarget);
-                graph.insertNode(idNodeTarget);
-                graph.getNode(idNodeTarget).insertEdge(idNodeSource);
-
-            //Caso nenhum dos nós estejam presente, ele cria os nós no grafo e adiciona as arestas
-            }else{
-
-                graph.insertNode(idNodeSource);
-                graph.getNode(idNodeSource).insertEdge(idNodeTarget);
-                graph.insertNode(idNodeTarget);
-                graph.getNode(idNodeTarget).insertEdge(idNodeSource);
-
-            }
-
-        }
+        graph.insertNode(idNodeSource, idNodeTarget);
 
     }
 
-
-
-    /*
-    Escrita em arquivo (exemplo):
     if(output_file.is_open()){
 
-        output_file << "Hello World!" << endl;
+        //Imprimindo funções básicas
+        output_file << "Ordem: " << graph.getOrder() << endl;
+        output_file << "Direcionado: " << graph.getDirected() << endl;
+        output_file << "Numero de arestas: " << graph.getNumberEdges() << endl;
+        output_file << "No id = 7 esta no grafo? " << graph.searchNode(7) << endl;
+        output_file << "No id = 4 esta no grafo? " << graph.searchNode(4) << endl;
+
+        //Imprimindo o Grafo
+        graph.printGraph(output_file);
+
+        //Removendo um nó
+        output_file << "Removendo nó id = 4" << endl;
+        graph.removeNode(4);
+        graph.printGraph(output_file);
 
     }else {
 
@@ -152,35 +75,7 @@ int main(int argc, char const *argv[]) {
 
     //Fechando arquivo de saída
     output_file.close();
-    */
 
-
-    //Criando objeto grafo
-    Graph graph(6, 0, 0, 0);
-
-    //Inserindo Nós
-    graph.insertNode(2, 3, 0);
-    graph.insertNode(1, 2, 0);
-    graph.insertNode(4, 1, 0);
-    graph.insertNode(5, 6, 0);
-    graph.insertNode(5, 4, 0);
-    graph.insertNode(6, 4, 0);
-    graph.insertNode(3, 4, 0);
-
-    //Imprimindo funções básicas
-    cout << "Ordem: " << graph.getOrder() << endl;
-    cout << "Direcionado: " << graph.getDirected() << endl;
-    cout << "Numero de arestas: " << graph.getNumberEdges() << endl;
-    cout << "No id = 7 esta no grafo? " << graph.searchNode(7) << endl;
-    cout << "No id = 4 esta no grafo? " << graph.searchNode(4) << endl;
-
-    //Imprimindo o Grafo
-    graph.printGraph();
-
-    //Removendo um nó
-    cout << "Removendo nó id = 4" << endl;
-    graph.removeNode(4);
-    graph.printGraph();
 
     return 0;
 }
