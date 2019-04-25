@@ -117,27 +117,6 @@ void Node::insertEdge(int target_id, float weight){
 
 }
 
-void Node::removeEdges(){
-
-    if(this->first_edge != nullptr){
-
-        Edge* previous = nullptr;
-        Edge* aux = this->first_edge;
-
-        while(aux != nullptr){
-
-            Node* target_node = getNode(aux->getTargetId());
-            target_node->removeEdge(this->getId());
-            previous = aux;
-            aux = aux->getNextEdge();
-            delete previous;
-
-        }
-
-    }
-
-}
-
 void Node::removeEdge(int id){
 
     if(this->searchEdge(id)){
