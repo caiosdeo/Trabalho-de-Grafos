@@ -8,6 +8,8 @@ using namespace std;
 
 int main(int argc, char const *argv[]) {
 
+    /*MAIN COMENTADA PARA SER USADA FUTURAMENTE. ENQUANTO ISSO SERVIRÁ PARA TESTES
+
     //Verificação se todos os parâmetros do programa foram entrados
     if (argc != 6) {
 
@@ -143,13 +145,42 @@ int main(int argc, char const *argv[]) {
         cout << "Unable to open " << argv[2];
 
     }
-    */
+
 
     //Fechando arquivo de entrada
     input_file.close();
 
     //Fechando arquivo de saída
     output_file.close();
+    */
+
+
+    //Criando objeto grafo
+    Graph graph(6, 0, 0, 0);
+
+    //Inserindo Nós
+    graph.insertNode(2, 3, 0);
+    graph.insertNode(1, 2, 0);
+    graph.insertNode(4, 1, 0);
+    graph.insertNode(5, 6, 0);
+    graph.insertNode(5, 4, 0);
+    graph.insertNode(6, 4, 0);
+    graph.insertNode(3, 4, 0);
+
+    //Imprimindo funções básicas
+    cout << "Ordem: " << graph.getOrder() << endl;
+    cout << "Direcionado: " << graph.getDirected() << endl;
+    cout << "Numero de arestas: " << graph.getNumberEdges() << endl;
+    cout << "No id = 7 esta no grafo? " << graph.searchNode(7) << endl;
+    cout << "No id = 4 esta no grafo? " << graph.searchNode(4) << endl;
+
+    //Imprimindo o Grafo
+    graph.printGraph();
+
+    //Removendo um nó
+    cout << "Removendo nó id = 4" << endl;
+    graph.removeNode(4);
+    graph.printGraph();
 
     return 0;
 }

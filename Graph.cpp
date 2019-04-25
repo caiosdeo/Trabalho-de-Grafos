@@ -1,5 +1,6 @@
 #include "Graph.h"
 #include "Node.h"
+#include "Edge.h"
 #include <iostream>
 
 using namespace std;
@@ -203,4 +204,16 @@ Node* Graph::getNode(int id){
     }
 
     return aux;
+}
+
+void Graph::printGraph(){
+
+    for(Node* p = this->first_node; p->getNextNode() != nullptr; p = p->getNextNode()){
+        cout << p->getId();
+        for(Edge* e = p->getFirstEdge(); e->getNextEdge() != nullptr; e = e->getNextEdge()){
+            cout << " " << e->getTargetId();
+        }
+        cout << endl;
+    }
+
 }
