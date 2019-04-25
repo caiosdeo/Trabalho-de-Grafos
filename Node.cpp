@@ -115,8 +115,6 @@ void Node::insertEdge(int target_id, float weight){
 
     }
 
-    this->degree++;
-
 }
 
 void Node::removeEdges(){
