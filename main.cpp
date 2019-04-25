@@ -11,8 +11,8 @@ int main(int argc, char const *argv[]) {
     //Verificação se todos os parâmetros do programa foram entrados
     if (argc != 6) {
 
-        cout << "ERROR: Expecting: ./<program_name> <input_file> <output_file> <directed> <weighted_edge> <weighted_node>";
-        return -1;
+        cout << "ERROR: Expecting: ./<program_name> <input_file> <output_file> <directed> <weighted_edge> <weighted_node> " << endl;
+        return 0;
 
     }
 
@@ -20,29 +20,43 @@ int main(int argc, char const *argv[]) {
     cout << "Running " << program_name << " ... " << endl;
 
     //Abrindo arquivo de entrada
-    ifstream input_file(argv[1]);
+    ifstream input_file;
+    input_file.open(argv[1], ios::in);
 
     //Criação do arquivo de saída
-    ofstream output_file(argv[2]);
-
-    //Leitura de arquivo:
-    if(!input_file.is_open()){
-
-        cout << "Unable to open " << argv[1];
-
-    }
-
-    //Criando objeto grafo
-    Graph graph(atoi(argv[3]), argv[4], argv[5], argv[6]);
+    ofstream output_file;
+    output_file.open(argv[2], ios::out | ios::trunc);
 
     //Variáveis para auxiliar na criação dos nós no Grafo
     int idNodeSource;
     int idNodeTarget;
 
-    //Leitura de dados a partir de arquivo
-    while(input_file >> idNodeSource >> idNodeTarget) {
+    int order;
 
-        graph.insertNode(idNodeSource, idNodeTarget);
+    if(input_file.is_open()){
+
+        input_file >> order;
+        output_file << order << endl;
+
+    }
+
+
+    //Criando objeto grafo
+    Graph graph(order, argv[3], argv[4], argv[5]);
+
+    //Leitura de arquivo:
+    if(input_file.is_open()){
+
+        //Leitura de dados a partir de arquivo
+        while(input_file >> idNodeSource >> idNodeTarget) {
+
+            graph.insertNode(idNodeSource, idNodeTarget, 0);
+
+        }
+
+    }else{
+
+        cout << "Unable to open " << argv[1];
 
     }
 
@@ -68,7 +82,6 @@ int main(int argc, char const *argv[]) {
         cout << "Unable to open " << argv[2];
 
     }
-
 
     //Fechando arquivo de entrada
     input_file.close();
