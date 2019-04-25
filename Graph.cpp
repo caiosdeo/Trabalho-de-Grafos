@@ -76,52 +76,77 @@ Node* Graph::getLastNode(){
 // Other methods
 void Graph::insertNode(int id, int target_id, float weight){
 
-    if(this->searchNode(id) && this->searchNode(target_id, weight)){
+    Node* source_node;
+    Node* target_node;
+    bool source = this->searchNode(id);
+    bool target = this->searchNode(target_id);
 
-        if(this->directed)
-            this->getNode(id)->insertEdge(target_id, weight);
+    if(source && target){
 
-        else{
-
-            this->getNode(id)->insertEdge(target_id, weight);
-            this->getNode(target_id)->insertEdge(id, weight);
-
-        }
+        source_node = this->getNode(id);
+        target_node = this->getNode(target_id);
            
     }
-    else if(this->searchNode(id, weight) || this->searchNode(target_id, weight)){
+    else if(source || target){
 
+        if(source){
 
+            source_node = this->getNode(id);
+            target_node = new Node(target_id);
+            this->last_node->setNextNode(target_node);
+            this->last_node = target_node;
+
+        }
+
+        if(target){
+
+            target_node = this->getNode(target_id);
+            source_node = new Node(id);
+            this->last_node->setNextNode(source_node);
+            this->last_node = source_node;
+
+        }
 
     }
     else{
 
-        Node* aux = this->first_node;
-        Node* node = new Node(id);
-        Node* target_node = new Node(target_id);
-        node->setWeight(weight);
+        source_node = new Node(id);
+        target_node = new Node(target_id);
 
-        while(aux->getNextNode() != nullptr)
-            aux = aux->getNextNode();
+        if(this->last_node != nullptr){
 
-        aux->setNextNode(node);
+            this->last_node->setNextNode(source_node);
+            source_node->setNextNode(target_node);
+            this->last_node = target_node;
+
+        } 
+        else{
+
+            this->last_node = source_node;
+            source_node->setNextNode(target_node);
+            this->last_node = target_node;
+
+        }       
+
+    }
+
+    if(this->directed){
+
+        source_node->insertEdge(target_id, weight);
+        source_node->incrementOutDegree();
+        target_node->incrementInDegree();
+
+    }
+    else{
+
+        source_node->insertEdge(target_id, weight);
+        target_node->insertEdge(id, weight);
+        source_node->incrementInDegree();
+        target_node->incrementInDegree();
 
     }
 
 }
-
-/*
-    
-    Node* aux = this->first_node;
-    Node* node = new Node(id);
-    node->setWeight(weight);
-
-    while(aux->getNextNode() != nullptr)
-        aux = aux->getNextNode();
-
-    aux->setNextNode(node);
-
-*/
 
 void Graph::removeNode(int id){
 
