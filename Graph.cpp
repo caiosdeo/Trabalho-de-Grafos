@@ -2,6 +2,7 @@
 #include "Node.h"
 #include "Edge.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -181,14 +182,14 @@ Node* Graph::getNode(int id){
     return aux;
 }
 
-void Graph::printGraph(){
+void Graph::printGraph(ofstream& output_file){
 
     for(Node* p = this->first_node; p->getNextNode() != nullptr; p = p->getNextNode()){
-        cout << p->getId();
+        output_file << p->getId();
         for(Edge* e = p->getFirstEdge(); e->getNextEdge() != nullptr; e = e->getNextEdge()){
-            cout << " " << e->getTargetId();
+            output_file << " " << e->getTargetId();
         }
-        cout << endl;
+        output_file << endl;
     }
 
 }
