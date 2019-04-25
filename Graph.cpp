@@ -173,7 +173,7 @@ void Graph::removeNode(int id){
             while(aux_edge != nullptr){
 
                 target_node = this->getNode(aux_edge->getTargetId());
-                target_node->removeEdge(aux_node->getId());
+                target_node->removeEdge(aux_node->getId(), this->directed, target_node);
                 aux_edge = aux_edge->getNextEdge();         
 
             }
