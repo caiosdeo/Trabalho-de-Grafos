@@ -194,11 +194,13 @@ void Graph::removeNode(int id){
 
 bool Graph::searchNode(int id){
 
-    Node* aux = this->first_node;
+    if(this->first_node != nullptr){
 
-    while(aux->getNextNode() != nullptr)
-        if(aux->getId() == id)
-            return true;
+        for(Node* aux = this->first_node; aux->getNextNode() != nullptr; aux = aux->getNextNode())
+            if(aux->getId() == id)
+                return true;
+
+    }
 
     return false;
 
