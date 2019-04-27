@@ -87,7 +87,7 @@ void Graph::insertNode(int id, int target_id, float weight){
 
         source_node = this->getNode(id);
         target_node = this->getNode(target_id);
-           
+
     }
     else if(source || target){
 
@@ -114,7 +114,7 @@ void Graph::insertNode(int id, int target_id, float weight){
 
         source_node = new Node(id);
         target_node = new Node(target_id);
-        
+
         if(this->first_node == nullptr){
 
             this->first_node = source_node;
@@ -130,7 +130,7 @@ void Graph::insertNode(int id, int target_id, float weight){
 
         }
 
-    }       
+    }
 
     if(this->directed){
 
@@ -176,7 +176,7 @@ void Graph::removeNode(int id){
 
                 target_node = this->getNode(aux_edge->getTargetId());
                 target_node->removeEdge(aux_node->getId(), this->directed, target_node);
-                aux_edge = aux_edge->getNextEdge();         
+                aux_edge = aux_edge->getNextEdge();
 
             }
 
