@@ -98,20 +98,17 @@ void Node::insertEdge(int target_id, float weight){
 
     if(this->first_edge != nullptr){
 
-        Edge* aux = this->first_edge;
         Edge* edge = new Edge(target_id);
         edge->setWeight(weight);
-
-        while(aux->getNextEdge() != nullptr)
-            aux = aux->getNextEdge();
-
-        aux->setNextEdge(edge);
+        this->last_edge->setNextEdge(edge);
+        this->last_edge = edge;
 
     }
     else{
 
         this->first_edge = new Edge(target_id);
         this->first_edge->setWeight(weight);
+        this->last_edge = this->first_edge;
 
     }
 

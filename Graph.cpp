@@ -148,6 +148,8 @@ void Graph::insertNode(int id, int target_id, float weight){
 
     }
 
+    this->number_edges++;
+
 }
 
 void Graph::removeNode(int id){
