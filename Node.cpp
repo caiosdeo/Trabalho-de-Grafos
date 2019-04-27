@@ -165,11 +165,13 @@ void Node::removeEdge(int id, bool directed, Node* target_node){
 
 bool Node::searchEdge(int target_id){
 
-    Edge* aux = this->first_edge;
+    if(this->first_node != nullptr){
 
-    while(aux->getNextEdge() != nullptr)
-        if(aux->getTargetId() == target_id)
-            return true;
+        for(Edge* aux = this->first_edge; aux != nullptr; aux = aux->getNextEdge())
+            if(aux->getTargetId() == id)
+                return true;
+
+    }
 
     return false;
 
