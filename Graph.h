@@ -20,6 +20,8 @@ class Graph{
         bool weighted_node;
         Node* first_node;
         Node* last_node;
+        //Auxiliar methods
+        int indexForNodes(int id);
 
     public:
         //Constructor

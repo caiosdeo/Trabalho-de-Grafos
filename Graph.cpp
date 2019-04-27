@@ -234,3 +234,21 @@ void Graph::printGraph(ofstream& output_file){
     }
 
 }
+
+//Auxiliar methods
+
+int Graph::indexForNodes(int id)
+{
+    int i = 0;
+    Node *aux = first_node;
+    while(aux!=NULL)
+    {
+        if(aux->getId()==id)
+        {
+            return i;
+        }
+        aux = aux->getNextNode();
+        i++;
+    }
+    
+} 
