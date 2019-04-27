@@ -36,13 +36,12 @@ int main(int argc, char const *argv[]) {
     if(input_file.is_open()){
 
         input_file >> order;
-        output_file << order << endl;
 
     }
 
 
     //Criando objeto grafo
-    Graph graph(order, argv[3], argv[4], argv[5]);
+    Graph graph(order, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
 
     //Leitura de arquivo:
     if(input_file.is_open()){
@@ -66,8 +65,8 @@ int main(int argc, char const *argv[]) {
         output_file << "Ordem: " << graph.getOrder() << endl;
         output_file << "Direcionado: " << graph.getDirected() << endl;
         output_file << "Numero de arestas: " << graph.getNumberEdges() << endl;
-        output_file << "No id = 7 esta no grafo? " << graph.searchNode(7) << endl;
-        output_file << "No id = 4 esta no grafo? " << graph.searchNode(4) << endl;
+        output_file << "No com id = 7 esta no grafo? " << graph.searchNode(7) << endl;
+        output_file << "No com id = 4 esta no grafo? " << graph.searchNode(4) << endl;
 
         //Imprimindo o Grafo
         graph.printGraph(output_file);
