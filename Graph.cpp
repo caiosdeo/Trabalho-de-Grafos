@@ -115,25 +115,22 @@ void Graph::insertNode(int id, int target_id, float weight){
         source_node = new Node(id);
         target_node = new Node(target_id);
         
-        if(this->first_node == nullptr)
-            this->first_node = source_node;
+        if(this->first_node == nullptr){
 
-        if(this->last_node != nullptr){
+            this->first_node = source_node;
+            this->last_node = target_node;
+            this->first_node->setNextNode(target_node);
+
+        }
+        else{
 
             this->last_node->setNextNode(source_node);
             source_node->setNextNode(target_node);
             this->last_node = target_node;
 
-        } 
-        else{
+        }
 
-            this->last_node = source_node;
-            source_node->setNextNode(target_node);
-            this->last_node = target_node;
-
-        }       
-
-    }
+    }       
 
     if(this->directed){
 
