@@ -224,9 +224,9 @@ Node* Graph::getNode(int id){
 
 void Graph::printGraph(ofstream& output_file){
 
-    for(Node* p = this->first_node; p->getNextNode() != nullptr; p = p->getNextNode()){
+    for(Node* p = this->first_node; p != nullptr; p = p->getNextNode()){
         output_file << p->getId();
-        for(Edge* e = p->getFirstEdge(); e->getNextEdge() != nullptr; e = e->getNextEdge()){
+        for(Edge* e = p->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
             output_file << " " << e->getTargetId();
         }
         output_file << endl;
