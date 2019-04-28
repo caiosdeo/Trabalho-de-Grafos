@@ -301,7 +301,7 @@ void Graph::printGraph(ofstream& output_file){
 bool Graph::depthFirstSearch(int initialId,int targetId)
 {
     bool *visited = new bool[order];
-    if(getNode(initialId)==NULL||getNode(targetId)==NULL)
+    if(getNode(initialId)==nullptr||getNode(targetId)==nullptr)
     {
         return false;
     }
@@ -319,7 +319,7 @@ int Graph::indexForNodes(int id)
 {
     int i = 0;
     Node *aux = first_node;
-    while(aux!=NULL)
+    while(aux!=nullptr)
     {
         if(aux->getId()==id)
         {
@@ -342,7 +342,7 @@ bool Graph::auxDepthFirstSearch(int initialId,int targetId,bool visited[])
     else
     {
         Edge *aux = getNode(initialId)->getFirstEdge();
-        while(aux!=NULL)
+        while(aux!=nullptr)
         {
             if(visited[indexForNodes(aux->getTargetId())] == false)
             {
