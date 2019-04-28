@@ -171,11 +171,12 @@ void Graph::removeNode(int id){
 
             previous_node->setNextNode(aux_node->getNextNode());
             Edge* aux_edge = aux_node->getFirstEdge();
+            int remove_id = aux_node->getId();
 
             while(aux_edge != nullptr){
 
                 target_node = this->getNode(aux_edge->getTargetId());
-                target_node->removeEdge(aux_node->getId(), this->directed, target_node);
+                target_node->removeEdge(remove_id, this->directed, target_node);
                 aux_edge = aux_edge->getNextEdge();
 
             }
@@ -188,6 +189,19 @@ void Graph::removeNode(int id){
             previous_node->setNextNode(aux_node->getNextNode());
 
             delete aux_node;
+
+            if(this->directed){
+
+                aux_node = this->first_node;
+
+                while(aux_node != nullptr){
+
+                    aux_node->removeEdge(remove_id, this->directed, aux_node);
+                    aux_node = aux_node->getNextNode();
+
+                }
+
+            }
 
         }
 
