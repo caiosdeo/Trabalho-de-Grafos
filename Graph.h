@@ -31,6 +31,7 @@ class Graph{
         int getNumberEdges();
         bool getDirected();
         bool getWeightedEdge();
+        bool getWeightedNode();
         Node* getFirstNode();
         Node* getLastNode();
         //Other methods

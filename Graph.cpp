@@ -63,6 +63,12 @@ bool Graph::getWeightedEdge(){
 
 }
 
+bool Graph::getWeightedNode(){
+
+    return this->weighted_node;
+
+}
+
 Node* Graph::getFirstNode(){
 
     return this->first_node;
@@ -181,7 +187,7 @@ void Graph::removeNode(int id){
             }
 
             aux_node->removeEdges();
-            
+
             if(this->last_node = aux_node)
                 this->last_node = previous_node;
 
@@ -230,12 +236,50 @@ Node* Graph::getNode(int id){
 
 void Graph::printGraph(ofstream& output_file){
 
-    for(Node* p = this->first_node; p != nullptr; p = p->getNextNode()){
-        output_file << p->getId();
-        for(Edge* e = p->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
-            output_file << " " << e->getTargetId();
+    if(!this->weighted_edge && !this->weighted_node){
+
+        output_file << "Nodes | Edges " << endl;
+        for(Node* p = this->first_node; p != nullptr; p = p->getNextNode()){
+            output_file << p->getId() << "     | ";
+            for(Edge* e = p->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
+                output_file << " " << e->getTargetId();
+            }
+            output_file << endl;
         }
-        output_file << endl;
+
+    }else if(this->weighted_edge && !this->weighted_node){
+
+        output_file << "Nodes | Edges[Weight] " << endl;
+        for(Node* p = this->first_node; p != nullptr; p = p->getNextNode()){
+            output_file << p->getId() << "     | ";
+            for(Edge* e = p->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
+                output_file << " " << e->getTargetId() << "[" << e->getWeight() << "]";
+            }
+            output_file << endl;
+        }
+
+    }else if(this->weighted_node && !this->weighted_edge){
+
+        output_file << "Nodes[Weight] | Edges " << endl;
+        for(Node* p = this->first_node; p != nullptr; p = p->getNextNode()){
+            output_file << p->getId() << "[" << p->getWeight() << "]" << " | ";
+            for(Edge* e = p->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
+                output_file << " " << e->getTargetId();
+            }
+            output_file << endl;
+        }
+
+    }else if(this->weighted_node && this->weighted_edge){
+
+        output_file << "Nodes[Weight] | Edges[Weight] " << endl;
+        for(Node* p = this->first_node; p != nullptr; p = p->getNextNode()){
+            output_file << p->getId() << "[" << p->getWeight() << "]" << " | ";
+            for(Edge* e = p->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
+                output_file << " " << e->getTargetId() << "[" << e->getWeight() << "]";
+            }
+            output_file << endl;
+        }
+
     }
 
 }
