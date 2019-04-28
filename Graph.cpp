@@ -235,6 +235,21 @@ void Graph::printGraph(ofstream& output_file){
 
 }
 
+bool Graph::depthFirstSearch(int initialId,int targetId)
+{
+    bool *visited = new bool[order];
+    if(getNode(initialId)==NULL||getNode(targetId)==NULL)
+    {
+        return false;
+    }
+    for(int i = 0;i < order;i++)
+    {
+        visited[i] = false;
+    }
+    return auxDepthFirstSearch(initialId,targetId,visited);
+
+}
+
 //Auxiliar methods
 
 int Graph::indexForNodes(int id)
@@ -251,4 +266,30 @@ int Graph::indexForNodes(int id)
         i++;
     }
     
-} 
+}
+
+bool Graph::auxDepthFirstSearch(int initialId,int targetId,bool visited[])
+{
+    visited[indexForNodes(initialId)] = true;
+    if(getNode(initialId)->searchEdge(targetId))
+    {
+        visited[indexForNodes(targetId)] = true;
+        return true;
+    }
+    else
+    {
+        Edge *aux = getNode(initialId)->getFirstEdge();
+        while(aux!=NULL)
+        {
+            if(visited[indexForNodes(aux->getTargetId())] == false)
+            {
+                if(auxDepthFirstSearch(aux->getTargetId(),targetId,visited))
+                {
+                    return true;
+                }
+            }
+            aux = aux->getNextEdge();
+        }
+        return false;
+    }
+}

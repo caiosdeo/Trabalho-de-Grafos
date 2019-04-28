@@ -22,6 +22,7 @@ class Graph{
         Node* last_node;
         //Auxiliar methods
         int indexForNodes(int id);
+        bool auxDepthFirstSearch(int initialId,int targetId,bool visited[]);
 
     public:
         //Constructor
@@ -41,6 +42,7 @@ class Graph{
         bool searchNode(int id);
         Node* getNode(int id);
         void printGraph(ofstream& output_file);
+        bool depthFirstSearch(int initialId,int targetId);
 
 
 };
