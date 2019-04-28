@@ -63,6 +63,12 @@ bool Graph::getWeightedEdge(){
 
 }
 
+bool Graph::getWeightedNode(){
+
+    return this->weighted_node;
+
+}
+
 Node* Graph::getFirstNode(){
 
     return this->first_node;
@@ -87,7 +93,7 @@ void Graph::insertNode(int id, int target_id, float weight){
 
         source_node = this->getNode(id);
         target_node = this->getNode(target_id);
-           
+
     }
     else if(source || target){
 
@@ -114,24 +120,21 @@ void Graph::insertNode(int id, int target_id, float weight){
 
         source_node = new Node(id);
         target_node = new Node(target_id);
-        
-        if(this->first_node == nullptr)
-            this->first_node = source_node;
 
-        if(this->last_node != nullptr){
+        if(this->first_node == nullptr){
+
+            this->first_node = source_node;
+            this->last_node = target_node;
+            this->first_node->setNextNode(target_node);
+
+        }
+        else{
 
             this->last_node->setNextNode(source_node);
             source_node->setNextNode(target_node);
             this->last_node = target_node;
 
-        } 
-        else{
-
-            this->last_node = source_node;
-            source_node->setNextNode(target_node);
-            this->last_node = target_node;
-
-        }       
+        }
 
     }
 
@@ -150,6 +153,8 @@ void Graph::insertNode(int id, int target_id, float weight){
         target_node->incrementInDegree();
 
     }
+
+    this->number_edges++;
 
 }
 
@@ -172,17 +177,37 @@ void Graph::removeNode(int id){
 
             previous_node->setNextNode(aux_node->getNextNode());
             Edge* aux_edge = aux_node->getFirstEdge();
+            int remove_id = aux_node->getId();
 
             while(aux_edge != nullptr){
 
                 target_node = this->getNode(aux_edge->getTargetId());
-                target_node->removeEdge(aux_node->getId(), this->directed, target_node);
-                aux_edge = aux_edge->getNextEdge();         
+                target_node->removeEdge(remove_id, this->directed, target_node);
+                aux_edge = aux_edge->getNextEdge();
 
             }
 
             aux_node->removeEdges();
+
+            if(this->last_node = aux_node)
+                this->last_node = previous_node;
+
+            previous_node->setNextNode(aux_node->getNextNode());
+
             delete aux_node;
+
+            if(this->directed){
+
+                aux_node = this->first_node;
+
+                while(aux_node != nullptr){
+
+                    aux_node->removeEdge(remove_id, this->directed, aux_node);
+                    aux_node = aux_node->getNextNode();
+
+                }
+
+            }
 
         }
 
@@ -196,7 +221,7 @@ bool Graph::searchNode(int id){
 
     if(this->first_node != nullptr){
 
-        for(Node* aux = this->first_node; aux->getNextNode() != nullptr; aux = aux->getNextNode())
+        for(Node* aux = this->first_node; aux != nullptr; aux = aux->getNextNode())
             if(aux->getId() == id)
                 return true;
 
@@ -225,15 +250,54 @@ Node* Graph::getNode(int id){
 
 void Graph::printGraph(ofstream& output_file){
 
-    for(Node* p = this->first_node; p->getNextNode() != nullptr; p = p->getNextNode()){
-        output_file << p->getId();
-        for(Edge* e = p->getFirstEdge(); e->getNextEdge() != nullptr; e = e->getNextEdge()){
-            output_file << " " << e->getTargetId();
+    if(!this->weighted_edge && !this->weighted_node){
+
+        output_file << "Nodes | Edges " << endl;
+        for(Node* p = this->first_node; p != nullptr; p = p->getNextNode()){
+            output_file << p->getId() << "     | ";
+            for(Edge* e = p->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
+                output_file << " " << e->getTargetId();
+            }
+            output_file << endl;
         }
-        output_file << endl;
+
+    }else if(this->weighted_edge && !this->weighted_node){
+
+        output_file << "Nodes | Edges[Weight] " << endl;
+        for(Node* p = this->first_node; p != nullptr; p = p->getNextNode()){
+            output_file << p->getId() << "     | ";
+            for(Edge* e = p->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
+                output_file << " " << e->getTargetId() << "[" << e->getWeight() << "]";
+            }
+            output_file << endl;
+        }
+
+    }else if(this->weighted_node && !this->weighted_edge){
+
+        output_file << "Nodes[Weight] | Edges " << endl;
+        for(Node* p = this->first_node; p != nullptr; p = p->getNextNode()){
+            output_file << p->getId() << "[" << p->getWeight() << "]" << " | ";
+            for(Edge* e = p->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
+                output_file << " " << e->getTargetId();
+            }
+            output_file << endl;
+        }
+
+    }else if(this->weighted_node && this->weighted_edge){
+
+        output_file << "Nodes[Weight] | Edges[Weight] " << endl;
+        for(Node* p = this->first_node; p != nullptr; p = p->getNextNode()){
+            output_file << p->getId() << "[" << p->getWeight() << "]" << " | ";
+            for(Edge* e = p->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
+                output_file << " " << e->getTargetId() << "[" << e->getWeight() << "]";
+            }
+            output_file << endl;
+        }
+
     }
 
 }
+<<<<<<< HEAD
 
 bool Graph::depthFirstSearch(int initialId,int targetId)
 {
@@ -293,3 +357,5 @@ bool Graph::auxDepthFirstSearch(int initialId,int targetId,bool visited[])
         return false;
     }
 }
+=======
+>>>>>>> master

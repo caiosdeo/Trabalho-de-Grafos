@@ -98,20 +98,17 @@ void Node::insertEdge(int target_id, float weight){
 
     if(this->first_edge != nullptr){
 
-        Edge* aux = this->first_edge;
         Edge* edge = new Edge(target_id);
         edge->setWeight(weight);
-
-        while(aux->getNextEdge() != nullptr)
-            aux = aux->getNextEdge();
-
-        aux->setNextEdge(edge);
+        this->last_edge->setNextEdge(edge);
+        this->last_edge = edge;
 
     }
     else{
 
         this->first_edge = new Edge(target_id);
         this->first_edge->setWeight(weight);
+        this->last_edge = this->first_edge;
 
     }
 
@@ -121,12 +118,12 @@ void Node::removeEdges(){
 
     if(this->first_edge != nullptr){
 
-        Edge* previous = nullptr;
+        Edge* next = nullptr;
         Edge* aux = this->first_edge;
 
-        while(aux != nullptr){
+        while(next != nullptr){
 
-            previous = aux->getNextEdge();
+            next = aux->getNextEdge();
             delete aux;
 
         }
@@ -149,7 +146,15 @@ void Node::removeEdge(int id, bool directed, Node* target_node){
 
         }
 
-        previous->setNextEdge(aux->getNextEdge());
+        if(previous != nullptr)
+            previous->setNextEdge(aux->getNextEdge());
+
+        else
+            this->first_edge = aux->getNextEdge();
+
+        if(aux = this->last_edge)
+            this->last_edge = previous;
+        
         delete aux;
 
         if(directed){
@@ -168,11 +173,13 @@ void Node::removeEdge(int id, bool directed, Node* target_node){
 
 bool Node::searchEdge(int target_id){
 
-    Edge* aux = this->first_edge;
+    if(this->first_edge != nullptr){
 
-    while(aux->getNextEdge() != nullptr)
-        if(aux->getTargetId() == target_id)
-            return true;
+        for(Edge* aux = this->first_edge; aux != nullptr; aux = aux->getNextEdge())
+            if(aux->getTargetId() == target_id)
+                return true;
+
+    }
 
     return false;
 

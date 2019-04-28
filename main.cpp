@@ -36,21 +36,57 @@ int main(int argc, char const *argv[]) {
     if(input_file.is_open()){
 
         input_file >> order;
-        output_file << order << endl;
 
     }
 
 
     //Criando objeto grafo
-    Graph graph(order, argv[3], argv[4], argv[5]);
+    Graph graph(order, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
 
     //Leitura de arquivo:
     if(input_file.is_open()){
 
-        //Leitura de dados a partir de arquivo
-        while(input_file >> idNodeSource >> idNodeTarget) {
+        if(!graph.getWeightedEdge() && !graph.getWeightedNode()){
 
-            graph.insertNode(idNodeSource, idNodeTarget, 0);
+            while(input_file >> idNodeSource >> idNodeTarget) {
+
+                graph.insertNode(idNodeSource, idNodeTarget, 0);
+
+            }
+
+        }else if(graph.getWeightedEdge() && !graph.getWeightedNode() ){
+
+            float edgeWeight;
+
+            while(input_file >> idNodeSource >> idNodeTarget >> edgeWeight) {
+
+                graph.insertNode(idNodeSource, idNodeTarget, edgeWeight);
+
+            }
+
+        }else if(graph.getWeightedNode() && !graph.getWeightedEdge()){
+
+            float nodeSourceWeight, nodeTargetWeight;
+
+            while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight) {
+
+                graph.insertNode(idNodeSource, idNodeTarget, 0);
+                graph.getNode(idNodeSource)->setWeight(nodeSourceWeight);
+                graph.getNode(idNodeTarget)->setWeight(nodeTargetWeight);
+
+            }
+
+        }else if(graph.getWeightedNode() && graph.getWeightedEdge()){
+
+            float nodeSourceWeight, nodeTargetWeight, edgeWeight;
+
+            while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight) {
+
+                graph.insertNode(idNodeSource, idNodeTarget, edgeWeight);
+                graph.getNode(idNodeSource)->setWeight(nodeSourceWeight);
+                graph.getNode(idNodeTarget)->setWeight(nodeTargetWeight);
+
+            }
 
         }
 
@@ -65,9 +101,11 @@ int main(int argc, char const *argv[]) {
         //Imprimindo funções básicas
         output_file << "Ordem: " << graph.getOrder() << endl;
         output_file << "Direcionado: " << graph.getDirected() << endl;
+        output_file << "Ponderado Arestas: " << graph.getWeightedEdge() << endl;
+        output_file << "Ponderado Nós: " << graph.getWeightedNode() << endl;
         output_file << "Numero de arestas: " << graph.getNumberEdges() << endl;
-        output_file << "No id = 7 esta no grafo? " << graph.searchNode(7) << endl;
-        output_file << "No id = 4 esta no grafo? " << graph.searchNode(4) << endl;
+        output_file << "No com id = 7 esta no grafo? " << graph.searchNode(7) << endl;
+        output_file << "No com id = 4 esta no grafo? " << graph.searchNode(4) << endl;
 
         //Imprimindo o Grafo
         graph.printGraph(output_file);
