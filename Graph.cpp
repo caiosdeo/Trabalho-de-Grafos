@@ -297,7 +297,6 @@ void Graph::printGraph(ofstream& output_file){
     }
 
 }
-<<<<<<< HEAD
 
 bool Graph::depthFirstSearch(int initialId,int targetId)
 {
@@ -357,5 +356,3 @@ bool Graph::auxDepthFirstSearch(int initialId,int targetId,bool visited[])
         return false;
     }
 }
-=======
->>>>>>> master
