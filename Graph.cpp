@@ -181,6 +181,12 @@ void Graph::removeNode(int id){
             }
 
             aux_node->removeEdges();
+            
+            if(this->last_node = aux_node)
+                this->last_node = previous_node;
+
+            previous_node->setNextNode(aux_node->getNextNode());
+
             delete aux_node;
 
         }

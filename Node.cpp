@@ -118,12 +118,12 @@ void Node::removeEdges(){
 
     if(this->first_edge != nullptr){
 
-        Edge* previous = nullptr;
+        Edge* next = nullptr;
         Edge* aux = this->first_edge;
 
-        while(aux != nullptr){
+        while(next != nullptr){
 
-            previous = aux->getNextEdge();
+            next = aux->getNextEdge();
             delete aux;
 
         }
@@ -146,7 +146,15 @@ void Node::removeEdge(int id, bool directed, Node* target_node){
 
         }
 
-        previous->setNextEdge(aux->getNextEdge());
+        if(previous != nullptr)
+            previous->setNextEdge(aux->getNextEdge());
+
+        else
+            this->first_edge = aux->getNextEdge();
+
+        if(aux = this->last_edge)
+            this->last_edge = previous;
+        
         delete aux;
 
         if(directed){
@@ -168,7 +176,7 @@ bool Node::searchEdge(int target_id){
     if(this->first_edge != nullptr){
 
         for(Edge* aux = this->first_edge; aux != nullptr; aux = aux->getNextEdge())
-            if(aux->getTargetId() == id)
+            if(aux->getTargetId() == target_id)
                 return true;
 
     }
