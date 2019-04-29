@@ -132,7 +132,7 @@ void Node::removeEdges(){
 
 }
 
-void Node::removeEdge(int id, bool directed, Node* target_node){
+int Node::removeEdge(int id, bool directed, Node* target_node){
 
     if(this->searchEdge(id)){
 
@@ -167,7 +167,11 @@ void Node::removeEdge(int id, bool directed, Node* target_node){
         this->decrementInDegree();
         target_node->decrementInDegree();
 
+        return 1;
+
     }
+
+    return 0;
 
 }
 
