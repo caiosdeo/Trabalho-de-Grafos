@@ -44,7 +44,7 @@ class Graph{
         Node* getNode(int id);
         void printGraph(ofstream& output_file);
         bool depthFirstSearch(int initialId,int targetId);
-
+        Node* connectedComponent(int initialId);
 
 };
 
