@@ -3,6 +3,7 @@
 #include "Edge.h"
 #include <iostream>
 #include <fstream>
+#include <stack>
 
 using namespace std;
 
@@ -11,6 +12,15 @@ using namespace std;
 **************************************************************************************************/
 
 // Constructor
+Graph::Graph(){
+    this->first_node = this->last_node = nullptr;
+}
+
+Graph::Graph(int order){
+    this->order = order;
+    this->first_node = this->last_node = nullptr;
+}
+
 Graph::Graph(int order, bool directed, bool weighted_edge, bool weighted_node){
 
     this->order = order;
@@ -313,7 +323,73 @@ bool Graph::depthFirstSearch(int initialId,int targetId)
 
 }
 
+//Used KosaraJU Algorithm
+int* Graph::stronglyConnectedComponents(){
+
+    //Stack for visited nodes
+    stack <int> explored;
+    bool *visited = new bool[order];
+    //Vector with the stronglyConnectedComponents
+    int *sc = new int[this->order];
+    //Int to indentify the SCCs
+    int rot = 0;
+
+    if(this->first_node == nullptr || this->last_node == nullptr){
+        return 0;
+    }
+
+    //Begin the DFS with every node as unvisited
+    for(int i = 0; i < order; i++){
+        visited[i] = false;
+    }
+
+    //Function to fill the stack with DFS visited nodes
+    exploreOrder(this->first_node->getId(), this->last_node->getId(), visited, &explored);
+
+    //Confirms that all the nodes were included in the stack
+    for(int i = 0; i < order; i++)
+        if(visited[indexForNodes(i)] == false)
+            exploreOrder(i, this->last_node->getId(), visited, &explored);
+
+    //Create a reverse graph
+    Graph gT = this->getTranspose();
+
+    //Define every node as univisited for the second DFS
+    for(int i = 0; i < order; i++){
+        visited[i] = false;
+    }
+
+    //DFS on the reverse graph by the stack order as its is running we find the SCCs of the graph
+    while(explored.empty() == false){
+
+        int v = explored.top();
+        explored.pop();
+
+        if (visited[indexForNodes(v)] == false){
+            auxStronglyConnectedComponents(v, gT.getLastNode()->getId(), visited, sc, rot);
+            rot++;
+        }
+    }
+
+    return sc;
+}
+
 //Auxiliar methods
+
+//A function that returns a reverse graph, which is a graph with the arcs have opposite directions to the original graph
+Graph Graph::getTranspose(){
+
+    //Create the reverse as the same order
+    int V = this->order;
+    Graph gT(V);
+
+    for(Node* n = this->first_node; n != nullptr; n = n->getNextNode()){
+        for(Edge* e = n->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
+            gT.insertNode(e->getTargetId(), n->getId(), e->getWeight());
+        }
+    }
+    return gT;
+}
 
 int Graph::indexForNodes(int id)
 {
@@ -328,7 +404,7 @@ int Graph::indexForNodes(int id)
         aux = aux->getNextNode();
         i++;
     }
-    
+
 }
 
 bool Graph::auxDepthFirstSearch(int initialId,int targetId,bool visited[])
@@ -353,6 +429,69 @@ bool Graph::auxDepthFirstSearch(int initialId,int targetId,bool visited[])
             }
             aux = aux->getNextEdge();
         }
+        return false;
+    }
+}
+
+bool Graph::exploreOrder(int initialId, int targetId, bool visited[], stack<int>* explored){
+
+    //As soon a node is visited, it is stacked
+    visited[indexForNodes(initialId)] = true;
+    (*explored).push(initialId);
+
+    if(initialId == targetId){
+        if(!visited[indexForNodes(targetId)]){
+            visited[indexForNodes(targetId)] = true;
+            (*explored).push(targetId);
+        }
+        return true;
+
+    }else{
+
+        for(Edge *aux = getNode(initialId)->getFirstEdge(); aux != nullptr; aux = aux->getNextEdge()){
+
+            if(visited[indexForNodes(aux->getTargetId())] == false){
+
+                if(exploreOrder(aux->getTargetId(), targetId, visited, explored)){
+
+                    return true;
+                }
+
+            }
+
+        }
+
+        return false;
+    }
+}
+
+bool Graph::auxStronglyConnectedComponents(int initialId, int targetId, bool visited[], int sc[], int rot){
+
+    visited[indexForNodes(initialId)] = true;
+    sc[indexForNodes(initialId)] = rot;
+
+    if(getNode(initialId)->searchEdge(targetId)){
+        if(!visited[indexForNodes(targetId)]){
+            visited[indexForNodes(targetId)] = true;
+            cout << targetId;
+        }
+        return true;
+
+    }else{
+
+        for(Edge *aux = getNode(initialId)->getFirstEdge(); aux != nullptr; aux = aux->getNextEdge()){
+
+            if(visited[indexForNodes(aux->getTargetId())] == false){
+
+                if(auxStronglyConnectedComponents(aux->getTargetId(), targetId, visited, sc, rot)){
+
+                    return true;
+                }
+
+            }
+
+        }
+
         return false;
     }
 }

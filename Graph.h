@@ -6,6 +6,7 @@
 #define GRAPH_H_INCLUDED
 #include "Node.h"
 #include <fstream>
+#include <stack>
 
 using namespace std;
 
@@ -20,12 +21,11 @@ class Graph{
         bool weighted_node;
         Node* first_node;
         Node* last_node;
-        //Auxiliar methods
-        int indexForNodes(int id);
-        bool auxDepthFirstSearch(int initialId,int targetId,bool visited[]);
 
     public:
         //Constructor
+        Graph();
+        Graph(int order);
         Graph(int order, bool directed, bool weighted_edge, bool weighted_node);
         //Destructor
         ~Graph();
@@ -44,6 +44,15 @@ class Graph{
         Node* getNode(int id);
         void printGraph(ofstream& output_file);
         bool depthFirstSearch(int initialId,int targetId);
+        int* stronglyConnectedComponents();
+        Graph getTranspose();
+
+    private:
+        //Auxiliar methods
+        int indexForNodes(int id);
+        bool auxDepthFirstSearch(int initialId,int targetId,bool visited[]);
+        bool exploreOrder(int initialId, int targetId, bool visited[], stack<int>* explored);
+        bool auxStronglyConnectedComponents(int initialId, int targetId, bool visited[], int sc[], int rot);
 
 
 };
