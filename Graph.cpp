@@ -313,6 +313,23 @@ bool Graph::depthFirstSearch(int initialId,int targetId)
 
 }
 
+Node* Graph::connectedComponent(int initialId)
+{
+    Node *cc = new Node[order];
+    Node* aux = getFirstNode();
+    int i = 0;
+    cc[i] = getNode(initialId);
+    for(; aux->getNextNode() == nullptr ; aux = aux->getNextNode())
+    {
+        if(depthFirstSearch(initialId, aux->getId()))
+        {
+            i++;
+            cc[i] = aux->getNode();
+        }
+    }
+    return *cc;
+}
+
 //Auxiliar methods
 
 int Graph::indexForNodes(int id)
