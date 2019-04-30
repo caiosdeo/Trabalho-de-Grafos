@@ -92,32 +92,39 @@ Node* Graph::getLastNode(){
 }
 
 // Other methods
+/*
+    The outdegree attribute of nodes is used as a counter for the number of edges in the graph. 
+    This allows the correct updating of the numbers of edges in the graph being directed or not.
+*/
 void Graph::insertNode(int id, int target_id, float weight){
 
     Node* source_node;
     Node* target_node;
+    // Searching for the nodes in the graph
     bool source = this->searchNode(id);
     bool target = this->searchNode(target_id);
 
+    // Verifies whether the source and the target nodes are in the graph
     if(source && target){
-
+        // Getting the source and target nodes
         source_node = this->getNode(id);
         target_node = this->getNode(target_id);
 
     }
+    // Verifies whether the source and the target nodes are in the graph
     else if(source || target){
-
+        // Verifies whether the source node is in the graph
         if(source){
-
+            // Getting the source node and allocating the target node
             source_node = this->getNode(id);
             target_node = new Node(target_id);
             this->last_node->setNextNode(target_node);
             this->last_node = target_node;
 
         }
-
+        // Verifies whether the target node is in the graph
         if(target){
-
+            // Getting the target node and allocating the source node
             target_node = this->getNode(target_id);
             source_node = new Node(id);
             this->last_node->setNextNode(source_node);
@@ -126,11 +133,12 @@ void Graph::insertNode(int id, int target_id, float weight){
         }
 
     }
+    // Occurs when the source and target nodes are not in the graph
     else{
-
+        // Allocating both nodes - source and target
         source_node = new Node(id);
         target_node = new Node(target_id);
-
+        // Occurs when there are no nodes in the graph
         if(this->first_node == nullptr){
 
             this->first_node = source_node;
@@ -138,6 +146,7 @@ void Graph::insertNode(int id, int target_id, float weight){
             this->first_node->setNextNode(target_node);
 
         }
+        // Occurs when there are nodes in the graph
         else{
 
             this->last_node->setNextNode(source_node);
@@ -147,84 +156,88 @@ void Graph::insertNode(int id, int target_id, float weight){
         }
 
     }
-
+    // Verifies whether the graph is directed
     if(this->directed){
-
+        // Inserting an edge of the source node for the target node
         source_node->insertEdge(target_id, weight);
         source_node->incrementOutDegree();
         target_node->incrementInDegree();
 
     }
     else{
-
+        // Inserting an edge in both nodes
         source_node->insertEdge(target_id, weight);
         target_node->insertEdge(id, weight);
         source_node->incrementInDegree();
         target_node->incrementInDegree();
 
     }
-
+    // Incrementing the number of edges in the graph
     this->number_edges++;
 
 }
 
 void Graph::removeNode(int id){
-
+    // Verifies whether there are at least one node in the graph
     if(this->first_node != nullptr){
-
+        // Verifies whether the node to remove is in the graph
         if(this->searchNode(id)){
-
+            // Necessary attributes
             int count_edges_removed = 0;
             Node* aux_node = this->first_node;
             Node* previous_node = nullptr;
             Node* target_node = nullptr;
-
+            // Searching for the node to be removed
             while(aux_node->getId() != id){
 
                 previous_node = aux_node;
                 aux_node = aux_node->getNextNode();
 
             }
-
+            // Keeping the integrity of the node list
             previous_node->setNextNode(aux_node->getNextNode());
+            // Getting the first edge of the node to be removed
             Edge* aux_edge = aux_node->getFirstEdge();
-            int remove_id = aux_node->getId();
-
+            // Traversing the edges of the node to be removed
             while(aux_edge != nullptr){
-
+                // Getting the node in the edges of the node to be removed
                 target_node = this->getNode(aux_edge->getTargetId());
-                count_edges_removed += target_node->removeEdge(remove_id, this->directed, target_node);
+                // Counting the number of edges removed and removing them if there are any
+                count_edges_removed += target_node->removeEdge(id, this->directed, target_node);
+                // Getting the next edge of the node to be removed
                 aux_edge = aux_edge->getNextEdge();
 
             }
 
+            // Incrementing the number of edges removed of the graph with the outdegree of the node to be removed
             count_edges_removed += aux_node->getOutDegree();
+            // Removing all edges of the node to be removed
             aux_node->removeEdges();
-
+            // Keeping the integrity of the node list
             if(this->last_node = aux_node)
                 this->last_node = previous_node;
 
             previous_node->setNextNode(aux_node->getNextNode());
 
             delete aux_node;
-
+            // Verifies whether the graph is directed
             if(this->directed){
 
                 aux_node = this->first_node;
-
+                // Visiting all nodes in the list of nodes
                 while(aux_node != nullptr){
-
-                    count_edges_removed += aux_node->removeEdge(remove_id, this->directed, aux_node);
+                    // Counting the number of edges removed and removing them if there are any
+                    count_edges_removed += aux_node->removeEdge(id, this->directed, aux_node);
                     aux_node = aux_node->getNextNode();
 
                 }
 
             }
-
+            // Decrementing the number of edges in the graph
             this->number_edges -= count_edges_removed;
 
         }
-
+        // Decrementing the order of the graph
         this->order--;
 
     }
@@ -232,9 +245,9 @@ void Graph::removeNode(int id){
 }
 
 bool Graph::searchNode(int id){
-
+    // Verifies whether there are at least one node in the graph
     if(this->first_node != nullptr){
-
+        // Searching for a specific node of id equal to id
         for(Node* aux = this->first_node; aux != nullptr; aux = aux->getNextNode())
             if(aux->getId() == id)
                 return true;
