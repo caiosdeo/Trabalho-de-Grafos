@@ -95,9 +95,9 @@ void Node::setWeight(float weight){
 
 // Other methods
 void Node::insertEdge(int target_id, float weight){
-
+    // Verifies whether there are at least one edge in the node
     if(this->first_edge != nullptr){
-
+        // Allocating the new edge and keeping the integrity of the edge list
         Edge* edge = new Edge(target_id);
         edge->setWeight(weight);
         this->last_edge->setNextEdge(edge);
@@ -105,7 +105,7 @@ void Node::insertEdge(int target_id, float weight){
 
     }
     else{
-
+         // Allocating the new edge and keeping the integrity of the edge list
         this->first_edge = new Edge(target_id);
         this->first_edge->setWeight(weight);
         this->last_edge = this->first_edge;
@@ -115,12 +115,12 @@ void Node::insertEdge(int target_id, float weight){
 }
 
 void Node::removeEdges(){
-
+    // Verifies whether there are at least one edge in the node
     if(this->first_edge != nullptr){
 
         Edge* next = nullptr;
         Edge* aux = this->first_edge;
-
+        // Removing all edges of the node
         while(next != nullptr){
 
             next = aux->getNextEdge();
@@ -130,22 +130,24 @@ void Node::removeEdges(){
 
     }
 
+    this->first_edge = this->last_edge = nullptr;
+
 }
 
 int Node::removeEdge(int id, bool directed, Node* target_node){
-
+    // Verifies whether the edge to remove is in the node
     if(this->searchEdge(id)){
 
         Edge* aux = this->first_edge;
         Edge* previous = nullptr;
-
+        // Searching for the edge to be removed
         while(aux->getTargetId() != id){
 
             previous = aux;
             aux = aux->getNextEdge();
 
         }
-
+        // Keeping the integrity of the edge list
         if(previous != nullptr)
             previous->setNextEdge(aux->getNextEdge());
 
@@ -156,7 +158,7 @@ int Node::removeEdge(int id, bool directed, Node* target_node){
             this->last_edge = previous;
         
         delete aux;
-
+        // Verifies whether the graph is directed
         if(directed){
 
             this->decrementOutDegree();
@@ -176,9 +178,9 @@ int Node::removeEdge(int id, bool directed, Node* target_node){
 }
 
 bool Node::searchEdge(int target_id){
-
+     // Verifies whether there are at least one edge in the node
     if(this->first_edge != nullptr){
-
+        // Searching for a specific edge of target id equal to target id
         for(Edge* aux = this->first_edge; aux != nullptr; aux = aux->getNextEdge())
             if(aux->getTargetId() == target_id)
                 return true;
