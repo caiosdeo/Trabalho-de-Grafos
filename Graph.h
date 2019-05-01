@@ -24,8 +24,6 @@ class Graph{
 
     public:
         //Constructor
-        Graph();
-        Graph(int order);
         Graph(int order, bool directed, bool weighted_edge, bool weighted_node);
         //Destructor
         ~Graph();
@@ -45,14 +43,14 @@ class Graph{
         void printGraph(ofstream& output_file);
         bool depthFirstSearch(int initialId,int targetId);
         int* stronglyConnectedComponents();
-        Graph getTranspose();
+        Graph* getTranspose();
 
     private:
         //Auxiliar methods
         int indexForNodes(int id);
         bool auxDepthFirstSearch(int initialId,int targetId,bool visited[]);
-        bool exploreOrder(int initialId, int targetId, bool visited[], stack<int>* explored);
-        bool auxStronglyConnectedComponents(int initialId, int targetId, bool visited[], int sc[], int rot);
+        void exploreOrder(int initialId, int targetId, bool visited[], stack<int>* explored);
+        void auxStronglyConnectedComponents(int initialId, int targetId, bool visited[], int sc[], int label);
 
 
 };

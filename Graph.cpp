@@ -12,15 +12,6 @@ using namespace std;
 **************************************************************************************************/
 
 // Constructor
-Graph::Graph(){
-    this->first_node = this->last_node = nullptr;
-}
-
-Graph::Graph(int order){
-    this->order = order;
-    this->first_node = this->last_node = nullptr;
-}
-
 Graph::Graph(int order, bool directed, bool weighted_edge, bool weighted_node){
 
     this->order = order;
@@ -93,7 +84,7 @@ Node* Graph::getLastNode(){
 
 // Other methods
 /*
-    The outdegree attribute of nodes is used as a counter for the number of edges in the graph. 
+    The outdegree attribute of nodes is used as a counter for the number of edges in the graph.
     This allows the correct updating of the numbers of edges in the graph being directed or not.
 */
 void Graph::insertNode(int id, int target_id, float weight){
@@ -345,7 +336,7 @@ bool Graph::depthFirstSearch(int initialId,int targetId)
 
 }
 
-//Used KosaraJU Algorithm
+//Used Kosaraju Algorithm
 int* Graph::stronglyConnectedComponents(){
 
     //Stack for visited nodes
@@ -353,8 +344,8 @@ int* Graph::stronglyConnectedComponents(){
     bool *visited = new bool[order];
     //Vector with the stronglyConnectedComponents
     int *sc = new int[this->order];
-    //Int to indentify the SCCs
-    int rot = 0;
+    //Int to label the SCCs
+    int label = 0;
 
     if(this->first_node == nullptr || this->last_node == nullptr){
         return 0;
@@ -366,17 +357,17 @@ int* Graph::stronglyConnectedComponents(){
     }
 
     //Function to fill the stack with DFS visited nodes
-    exploreOrder(this->first_node->getId(), this->last_node->getId(), visited, &explored);
+    exploreOrder(this->first_node->getId(), this->first_node->getId(), visited, &explored);
 
     //Confirms that all the nodes were included in the stack
-    for(int i = 0; i < order; i++)
-        if(visited[indexForNodes(i)] == false)
-            exploreOrder(i, this->last_node->getId(), visited, &explored);
+    for(Node* n = this->first_node; n != nullptr; n = n->getNextNode())
+        if(visited[indexForNodes(n->getId())] == false)
+            exploreOrder(n->getId(), n->getId(), visited, &explored);
 
     //Create a reverse graph
-    Graph gT = this->getTranspose();
+    Graph* gT = this->getTranspose();
 
-    //Define every node as univisited for the second DFS
+    //Define every node as unvisited for the second DFS
     for(int i = 0; i < order; i++){
         visited[i] = false;
     }
@@ -387,10 +378,33 @@ int* Graph::stronglyConnectedComponents(){
         int v = explored.top();
         explored.pop();
 
-        if (visited[indexForNodes(v)] == false){
-            auxStronglyConnectedComponents(v, gT.getLastNode()->getId(), visited, sc, rot);
-            rot++;
+        //If a node has outdegree equal to 0, means that it is impossible to exit that node, so if it
+        //was already visited, it will mark as unvisited in that manner, the function will correctly define
+        //it as a strongly connected component with itself only
+        if(gT->getNode(v)->getOutDegree() == 0){
+
+            visited[gT->indexForNodes(v)] = false;
+
         }
+
+        //If a node has indegree equals to 0, means that it is impossible to reach this node,
+        //so automatically it is marked as visited and belongs to an SCC which has only itself
+        if(gT->getNode(v)->getInDegree() == 0){
+
+            visited[gT->indexForNodes(v)] = true;
+            sc[gT->indexForNodes(v)] = label;
+            label++;
+
+        }
+
+        //DFS on the reverse graph that will find the SCCs
+        if(visited[gT->indexForNodes(v)] == false){
+
+            gT->auxStronglyConnectedComponents(v, v, visited, sc, label);
+            label++;
+
+        }
+
     }
 
     return sc;
@@ -399,15 +413,15 @@ int* Graph::stronglyConnectedComponents(){
 //Auxiliar methods
 
 //A function that returns a reverse graph, which is a graph with the arcs have opposite directions to the original graph
-Graph Graph::getTranspose(){
+Graph* Graph::getTranspose(){
 
     //Create the reverse as the same order
     int V = this->order;
-    Graph gT(V);
+    Graph* gT = new Graph(V, this->directed, this->weighted_edge, this->weighted_node);
 
     for(Node* n = this->first_node; n != nullptr; n = n->getNextNode()){
         for(Edge* e = n->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
-            gT.insertNode(e->getTargetId(), n->getId(), e->getWeight());
+            gT->insertNode(e->getTargetId(), n->getId(), e->getWeight());
         }
     }
     return gT;
@@ -462,49 +476,69 @@ bool Graph::auxDepthFirstSearch(int initialId,int targetId,bool visited[])
     }
 }
 
-bool Graph::exploreOrder(int initialId, int targetId, bool visited[], stack<int>* explored){
+void Graph::exploreOrder(int initialId, int targetId, bool visited[], stack<int>* explored){
 
     //As soon a node is visited, it is stacked
     visited[indexForNodes(initialId)] = true;
     (*explored).push(initialId);
 
-    if(initialId == targetId){
+    //If a node has an edge to the targetNode, then the targetNode
+    //is marked as visited and it is also stacked. Otherwise,
+    //it will keep searching for it on the adjacents nodes
+    if(getNode(initialId)->searchEdge(targetId)){
+
         if(!visited[indexForNodes(targetId)]){
+
             visited[indexForNodes(targetId)] = true;
             (*explored).push(targetId);
+
         }
-        return true;
+
+        return;
 
     }else{
 
+        //Here we ensure that we are walking through all the edges of a node
         for(Edge *aux = getNode(initialId)->getFirstEdge(); aux != nullptr; aux = aux->getNextEdge()){
 
             if(visited[indexForNodes(aux->getTargetId())] == false){
 
-                if(exploreOrder(aux->getTargetId(), targetId, visited, explored)){
-
-                    return true;
-                }
+                exploreOrder(aux->getTargetId(), targetId, visited, explored);
+                return;
 
             }
 
         }
 
-        return false;
+        return;
+
     }
+
 }
 
-bool Graph::auxStronglyConnectedComponents(int initialId, int targetId, bool visited[], int sc[], int rot){
+void Graph::auxStronglyConnectedComponents(int initialId, int targetId, bool visited[], int sc[], int label){
 
+    //As soon a node is visited, it is labeled with the current SCC id;
     visited[indexForNodes(initialId)] = true;
-    sc[indexForNodes(initialId)] = rot;
+    sc[indexForNodes(initialId)] = label;
 
+    //If a node has an edge to the targetNode, it is verified if any other
+    //adjacent node has also a path to the targetNode. Otherwise it will
+    //keep searching the targetNode
     if(getNode(initialId)->searchEdge(targetId)){
-        if(!visited[indexForNodes(targetId)]){
-            visited[indexForNodes(targetId)] = true;
-            cout << targetId;
+
+        for(Edge *aux = getNode(initialId)->getFirstEdge(); aux != nullptr; aux = aux->getNextEdge()){
+
+            if(visited[indexForNodes(aux->getTargetId())] == false){
+
+                auxStronglyConnectedComponents(aux->getTargetId(), targetId, visited, sc, label);
+                return;
+
+            }
+
         }
-        return true;
+
+        return;
 
     }else{
 
@@ -512,15 +546,15 @@ bool Graph::auxStronglyConnectedComponents(int initialId, int targetId, bool vis
 
             if(visited[indexForNodes(aux->getTargetId())] == false){
 
-                if(auxStronglyConnectedComponents(aux->getTargetId(), targetId, visited, sc, rot)){
-
-                    return true;
-                }
+                auxStronglyConnectedComponents(aux->getTargetId(), targetId, visited, sc, label);
+                return;
 
             }
 
         }
 
-        return false;
+        return;
+
     }
+
 }
