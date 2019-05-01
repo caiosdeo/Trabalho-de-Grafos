@@ -108,29 +108,42 @@ int main(int argc, char const *argv[]) {
         output_file << "No com id = 4 esta no grafo? " << graph.searchNode(4) << endl;
         output_file << "Busca de profundidade id = 6 " << graph.depthFirstSearch(1,6) << endl;
         output_file << "Busca de profundidade id = 8 " << graph.depthFirstSearch(1,8) << endl;
+        output_file << endl;
 
         //Imprimindo o Grafo
         graph.printGraph(output_file);
+        output_file << endl;
 
         //Imprimindo grafo transposto
-        Graph gT = graph.getTranspose();
+        Graph* gT = graph.getTranspose();
         output_file << "Transpose " << endl;
-        gT.printGraph(output_file);
-        cout << endl;
+        gT->printGraph(output_file);
+        output_file << endl;
 
-        output_file << "Componentes Fortemente Conexas: "  << endl;
-        int* scc = graph.stronglyConnectedComponents();
-        for(Node* n = graph.getFirstNode(); n != nullptr; n = n->getNextNode())
-            output_file << n->getId() << " ";
-        output_file << endl;
-        for(int i = 0; i < graph.getOrder(); i++)
-            output_file << scc[i] << " ";
-        output_file << endl;
+        //Imprimindo as componentes fortemente conexas se o grafo for direcionado
+        if(graph.getDirected()){
+
+            output_file << "Componentes Fortemente Conexas: "  << endl;
+            int* scc = graph.stronglyConnectedComponents();
+
+            output_file << "Node ";
+            for(Node* n = gT->getFirstNode(); n != nullptr; n = n->getNextNode())
+                output_file << n->getId() << " ";
+
+            output_file << endl << "SCC[Node] ";
+
+            for(int i = 0; i < graph.getOrder(); i++)
+                output_file << scc[i] << " ";
+
+            output_file << endl << endl;
+        }
 
         //Removendo um nó
         output_file << "Removendo nó id = 4" << endl;
         graph.removeNode(4);
         graph.printGraph(output_file);
+        output_file << "Numero de arestas: " << graph.getNumberEdges() << endl;
+        output_file << endl;
 
     }else {
 
