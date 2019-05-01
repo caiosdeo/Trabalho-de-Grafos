@@ -159,8 +159,8 @@ void Graph::insertNode(int id, int target_id, float weight){
         // Inserting an edge in both nodes
         source_node->insertEdge(target_id, weight);
         target_node->insertEdge(id, weight);
-        source_node->incrementInDegree();
-        target_node->incrementInDegree();
+        source_node->incrementOutDegree();
+        target_node->incrementOutDegree();
 
     }
     // Incrementing the number of edges in the graph
