@@ -405,6 +405,29 @@ int* Graph::stronglyConnectedComponents(){
     return sc;
 }
 
+void Graph::breadthFirstSearch(Graph graph){
+    int i = 0;
+    int* visited = new int[graph.getOrder]; // vector to keep the ids that are already analysed.
+    for(Node* auxNode = graph->getFirstNode(); auxNode == nullptr; auxNode = auxNode->getNextNode())
+    {   //Start the analysis of the nodes from the graph
+        if(Graph->auxBreadthFirstSearchVerify(visited, i, auxNode->getId()) == false) //checks if the node is already verified
+        {
+            cout << auxNode->getId() << " "; //print the Id of the Node
+            visited[i] = auxNode->getId(); // Add the node to visited
+            i++; //increase the range of the visited array.
+        }
+        for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge == nullptr; auxEdge = auxEdge->getNextEdge())
+        {   //Checks every edge of this node.
+            if(Graph->auxBreadthFirstSearchVerify(visited, i, auxEdge->getTargetId()) == false)//checks if the node is already verified
+            {
+                cout << auxEdge->getTargetId() << " "; //print the Id of the Node
+                visited[i] = auxEdge->getTargetId(); // Add the node to visited
+                i++; //increase the range of the visited array.
+            }
+        }
+    }
+}
+
 //Auxiliar methods
 
 //A function that returns a reverse graph, which is a graph with the arcs have opposite directions to the original graph
@@ -545,4 +568,16 @@ void Graph::auxStronglyConnectedComponents(int initialId, int targetId, bool vis
 
     }
 
+}
+
+bool Graph :: auxBreadthFirstSearchVerify(int *verify, int size, int targetId){
+    bool verified = false; // not found yet
+    for(int i = 0; i < size; i++)
+    {
+        if(verify[i] == targetId){ // check if the id has been already analysed
+            verified = true; //node founded
+            return verify; //no need to check the rest.    
+        }
+    }
+    return verify; //Node not founded
 }
