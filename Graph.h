@@ -44,6 +44,7 @@ class Graph{
         bool depthFirstSearch(int initialId,int targetId);
         int* stronglyConnectedComponents();
         Graph* getTranspose();
+        void breadthFirstSearch(Graph graph);
 
     private:
         //Auxiliar methods
@@ -51,7 +52,7 @@ class Graph{
         bool auxDepthFirstSearch(int initialId,int targetId,bool visited[]);
         void exploreOrder(int initialId, int targetId, bool visited[], stack<int>* explored);
         void auxStronglyConnectedComponents(int initialId, int targetId, bool visited[], int sc[], int label);
-
+        bool auxBreadthFirstSearchVerify(int *verify, int size, int targetId)
 
 };
 
