@@ -199,7 +199,7 @@ void Node::incrementInDegree(){
 
 void Node::incrementOutDegree(){
 
-    this->out_degree--;
+    this->out_degree++;
 
 }
 
@@ -211,6 +211,6 @@ void Node::decrementInDegree(){
 
 void Node::decrementOutDegree(){
 
-    this->out_degree++;
+    this->out_degree--;
 
 }
