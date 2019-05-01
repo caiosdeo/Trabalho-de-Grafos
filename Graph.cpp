@@ -442,6 +442,8 @@ int Graph::indexForNodes(int id)
         aux = aux->getNextNode();
         i++;
     }
+    //Returning -1 in case of invalid id 
+    return -1;
 
 }
 
