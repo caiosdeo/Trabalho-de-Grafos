@@ -126,7 +126,7 @@ int main(int argc, char const *argv[]) {
             output_file << "Componentes Fortemente Conexas: "  << endl;
             int* scc = graph.stronglyConnectedComponents();
 
-            output_file << "Node ";
+            output_file << "Node      ";
             for(Node* n = gT->getFirstNode(); n != nullptr; n = n->getNextNode())
                 output_file << n->getId() << " ";
 
