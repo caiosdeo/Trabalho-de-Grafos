@@ -410,12 +410,12 @@ int* Graph::stronglyConnectedComponents(){
     return sc;
 }
 
-void Graph::breadthFirstSearch(Graph graph){
+void Graph::breadthFirstSearch(){
     int i = 0;
-    int* visited = new int[graph.getOrder]; // vector to keep the ids that are already analysed.
-    for(Node* auxNode = graph->getFirstNode(); auxNode == nullptr; auxNode = auxNode->getNextNode())
+    int* visited = new int[this->getOrder()]; // vector to keep the ids that are already analysed.
+    for(Node* auxNode = this->getFirstNode(); auxNode == nullptr; auxNode = auxNode->getNextNode())
     {   //Start the analysis of the nodes from the graph
-        if(Graph->auxBreadthFirstSearchVerify(visited, i, auxNode->getId()) == false) //checks if the node is already verified
+        if(this->auxBreadthFirstSearchVerify(visited, i, auxNode->getId()) == false) //checks if the node is already verified
         {
             cout << auxNode->getId() << " "; //print the Id of the Node
             visited[i] = auxNode->getId(); // Add the node to visited
@@ -423,7 +423,7 @@ void Graph::breadthFirstSearch(Graph graph){
         }
         for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge == nullptr; auxEdge = auxEdge->getNextEdge())
         {   //Checks every edge of this node.
-            if(Graph->auxBreadthFirstSearchVerify(visited, i, auxEdge->getTargetId()) == false)//checks if the node is already verified
+            if(this->auxBreadthFirstSearchVerify(visited, i, auxEdge->getTargetId()) == false)//checks if the node is already verified
             {
                 cout << auxEdge->getTargetId() << " "; //print the Id of the Node
                 visited[i] = auxEdge->getTargetId(); // Add the node to visited
