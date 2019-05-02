@@ -316,17 +316,22 @@ void Graph::printGraph(ofstream& output_file){
 
 }
 
+//Function that verifies if there is a path between two nodes 
 bool Graph::depthFirstSearch(int initialId,int targetId)
 {
+    //Creating a bool vector to verify visited nodes
     bool *visited = new bool[order];
+    //Verifying if the nodes really exist
     if(getNode(initialId)==nullptr||getNode(targetId)==nullptr)
     {
         return false;
     }
+    //Mark all nodes as unvisited before start the dfs
     for(int i = 0;i < order;i++)
     {
         visited[i] = false;
     }
+    //Returning the result of the auxiliar method of this function
     return auxDepthFirstSearch(initialId,targetId,visited);
 
 }
@@ -445,10 +450,12 @@ Graph* Graph::getTranspose(){
     return gT;
 }
 
+//A function that fixate ordinal indexes for a node list
 int Graph::indexForNodes(int id)
 {
     int i = 0;
     Node *aux = first_node;
+    //Based on the node id, the function will find and return its position on the list
     while(aux!=nullptr)
     {
         if(aux->getId()==id)
@@ -458,19 +465,25 @@ int Graph::indexForNodes(int id)
         aux = aux->getNextNode();
         i++;
     }
+    //Returning -1 in case of invalid id 
+    return -1;
 
 }
 
 bool Graph::auxDepthFirstSearch(int initialId,int targetId,bool visited[])
 {
+    //First mark the current node as visited in the vector
     visited[indexForNodes(initialId)] = true;
+    //Base case: see if there is an Edge that connects the current node to the target node
     if(getNode(initialId)->searchEdge(targetId))
     {
+        //Mark the target node as visited and return the answer
         visited[indexForNodes(targetId)] = true;
         return true;
     }
     else
     {
+        //Try to search in every unvisited node for the target node
         Edge *aux = getNode(initialId)->getFirstEdge();
         while(aux!=nullptr)
         {
@@ -483,6 +496,7 @@ bool Graph::auxDepthFirstSearch(int initialId,int targetId,bool visited[])
             }
             aux = aux->getNextEdge();
         }
+        //In case there is no path for the target node, return false
         return false;
     }
 }
