@@ -154,21 +154,24 @@ int Node::removeEdge(int id, bool directed, Node* target_node){
         else
             this->first_edge = aux->getNextEdge();
 
-        if(aux = this->last_edge)
+        if(aux == this->last_edge)
             this->last_edge = previous;
+
+        if(aux->getNextEdge() == this->last_edge)
+            this->last_edge = aux->getNextEdge();
         
         delete aux;
         // Verifies whether the graph is directed
-        if(directed){
-
+        if(directed)
             this->decrementOutDegree();
+            
+        else{
+
+            this->decrementInDegree();
             target_node->decrementInDegree();
-
+            
         }
-
-        this->decrementInDegree();
-        target_node->decrementInDegree();
-
+        
         return 1;
 
     }

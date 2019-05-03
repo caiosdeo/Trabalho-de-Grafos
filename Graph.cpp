@@ -229,6 +229,8 @@ void Graph::removeNode(int id){
                 }
 
             }
+            else
+                count_edges_removed /= 2;
             // Decrementing the number of edges in the graph
             this->number_edges -= count_edges_removed;
 
