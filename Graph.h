@@ -36,7 +36,8 @@ class Graph{
         Node* getFirstNode();
         Node* getLastNode();
         //Other methods
-        void insertNode(int id, int target_id, float weight);
+        void insertNode(int id);
+        void makeGraph(int id, int target_id, float weight);
         void removeNode(int id);
         bool searchNode(int id);
         Node* getNode(int id);

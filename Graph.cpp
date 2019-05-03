@@ -87,7 +87,28 @@ Node* Graph::getLastNode(){
     The outdegree attribute of nodes is used as a counter for the number of edges in the graph.
     This allows the correct updating of the numbers of edges in the graph being directed or not.
 */
-void Graph::insertNode(int id, int target_id, float weight){
+void Graph::insertNode(int id){
+    // Verifies if the graph has at least one node
+    if(this->first_node != nullptr){
+
+        if(!this->searchNode(id)){
+            // Allocating the new node and setting it as the last node
+            Node* new_node = new Node(id);
+            this->last_node->setNextNode(new_node);
+            this->last_node = new_node;
+
+        }
+
+    }
+    else{
+        // Setting the first and the last nodes with the new node
+        this->first_node = this->last_node = new Node(id);
+
+    }
+
+}
+
+void Graph::makeGraph(int id, int target_id, float weight){
 
     Node* source_node;
     Node* target_node;
@@ -108,18 +129,16 @@ void Graph::insertNode(int id, int target_id, float weight){
         if(source){
             // Getting the source node and allocating the target node
             source_node = this->getNode(id);
-            target_node = new Node(target_id);
-            this->last_node->setNextNode(target_node);
-            this->last_node = target_node;
+            this->insertNode(target_id);
+            target_node = this->last_node;
 
         }
         // Verifies whether the target node is in the graph
         if(target){
             // Getting the target node and allocating the source node
             target_node = this->getNode(target_id);
-            source_node = new Node(id);
-            this->last_node->setNextNode(source_node);
-            this->last_node = source_node;
+            this->insertNode(id);
+            source_node = this->last_node;
 
         }
 
@@ -127,24 +146,10 @@ void Graph::insertNode(int id, int target_id, float weight){
     // Occurs when the source and target nodes are not in the graph
     else{
         // Allocating both nodes - source and target
-        source_node = new Node(id);
-        target_node = new Node(target_id);
-        // Occurs when there are no nodes in the graph
-        if(this->first_node == nullptr){
-
-            this->first_node = source_node;
-            this->last_node = target_node;
-            this->first_node->setNextNode(target_node);
-
-        }
-        // Occurs when there are nodes in the graph
-        else{
-
-            this->last_node->setNextNode(source_node);
-            source_node->setNextNode(target_node);
-            this->last_node = target_node;
-
-        }
+        this->insertNode(id);
+        source_node = this->last_node;
+        this->insertNode(target_id);
+        target_node = this->last_node;
 
     }
     // Verifies whether the graph is directed
