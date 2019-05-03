@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -648,4 +649,25 @@ bool Graph :: auxBreadthFirstSearchVerify(int *verify, int size, int targetId){
         }
     }
     return verify; //Node not founded
+}
+
+int* Graph::topologicalSort(){
+
+    if(this->hasCircuit())
+        return nullptr;
+
+    else{
+
+        int *vec = new int(this->order);
+        queue<int> topologial_queue;
+        
+        for(Node* aux_node = this->first_node; aux_node != nullptr; aux_node = aux_node->getNextNode()){
+
+            if(aux_node->getInDegree() == 0)
+                topologial_queue.push(aux_node->getId());
+
+        }
+
+    }
+
 }

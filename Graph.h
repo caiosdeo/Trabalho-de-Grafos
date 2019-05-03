@@ -48,6 +48,7 @@ class Graph{
         void breadthFirstSearch();
         Graph* getComplement();
         int* degreeDescendingSequence();
+        int* topologicalSort();
 
     private:
         //Auxiliar methods
