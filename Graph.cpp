@@ -438,6 +438,29 @@ void Graph::breadthFirstSearch(){
     }
 }
 
+int* Graph::degreeDescendingSequence(){
+    int* sequence = new int [this->getOrder()]; // create array for the sequence
+    for(Node* auxNode = this->getFirstNode(), int i = 0; aux != nullptr; aux = aux->getNextNode(), i++)
+    {   
+        //The variable will control the position of the degrees int the array,
+        //while auxNode will move in the graph picking all Nodes
+        //and stops when all nodes has been visited.
+        sequence[i] = aux->getOutDegree(); // adds the degree to the array
+        int j = 0;
+        while(sequence[i-j] > sequence[i-(j+1)] || i-j == 0) 
+        {
+            // checks if the array is already descending, if not, the degree will change position until its degreed,
+            // if yes, it will go back to the for.
+            int aux = sequence[i-j];
+            sequence[i-j] = sequence[i-(j+1)];
+            sequence[i-(j+1)] = aux;
+            j++;
+        }
+    }
+    return sequence; 
+    //return the sequence of degrees in descending order.
+}
+
 //Auxiliar methods
 
 //A function that returns a reverse graph, which is a graph with the arcs have opposite directions to the original graph
