@@ -166,8 +166,10 @@ int Node::removeEdge(int id, bool directed, Node* target_node){
             this->decrementOutDegree();
             
         else{
+
             this->decrementInDegree();
             target_node->decrementInDegree();
+            
         }
         
         return 1;
