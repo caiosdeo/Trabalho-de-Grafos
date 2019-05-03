@@ -138,6 +138,11 @@ int main(int argc, char const *argv[]) {
             output_file << endl << endl;
         }
 
+        output_file << "Complement" << endl;
+        Graph* gC = graph.getComplement();
+        gC->printGraph(output_file);
+        output_file << endl;
+
         //Removendo um nó
         output_file << "Removendo nó id = 4" << endl;
         graph.removeNode(4);

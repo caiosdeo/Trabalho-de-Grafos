@@ -321,7 +321,7 @@ void Graph::printGraph(ofstream& output_file){
 
 }
 
-//Function that verifies if there is a path between two nodes 
+//Function that verifies if there is a path between two nodes
 bool Graph::depthFirstSearch(int initialId,int targetId)
 {
     //Creating a bool vector to verify visited nodes
@@ -439,13 +439,16 @@ void Graph::breadthFirstSearch(){
 }
 
 Graph* Graph::getComplement()
-{   
+{
+    // Creating the complement graph to be returned and coping the nodes from the orignal graph
     Graph* complement = new Graph(this->order, this->directed, this->weighted_edge, this->weighted_node);
 
     for(Node* nodeI = this->first_node; nodeI != nullptr; nodeI = nodeI->getNextNode()) {
         complement->insertNode(nodeI->getId());
     }
 
+    // Comparing the target edges in each node with every other node
+    // Inserting edges to the complement graph whenever they don't exist in the original graph
     Node* nodeComplement = complement->first_node; 
 
     for(Node* nodeI = this->first_node; nodeI != nullptr;
@@ -492,7 +495,7 @@ int Graph::indexForNodes(int id)
         aux = aux->getNextNode();
         i++;
     }
-    //Returning -1 in case of invalid id 
+    //Returning -1 in case of invalid id
     return -1;
 
 }
@@ -617,7 +620,7 @@ bool Graph :: auxBreadthFirstSearchVerify(int *verify, int size, int targetId){
     {
         if(verify[i] == targetId){ // check if the id has been already analysed
             verified = true; //node founded
-            return verify; //no need to check the rest.    
+            return verify; //no need to check the rest.
         }
     }
     return verify; //Node not founded
