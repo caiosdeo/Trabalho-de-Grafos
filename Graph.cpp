@@ -464,6 +464,8 @@ Graph* Graph::getComplement()
 
     return complement;
 
+}
+
 int* Graph::degreeDescendingSequence(){
     int* sequence = new int [this->getOrder()]; // create array for the sequence
     for(Node* auxNode = this->getFirstNode(), int i = 0; aux != nullptr; aux = aux->getNextNode(), i++)
