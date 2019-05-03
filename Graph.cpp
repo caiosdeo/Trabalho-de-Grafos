@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <stack>
+#include <list>
 
 using namespace std;
 
@@ -487,7 +488,25 @@ int* Graph::degreeDescendingSequence(){
 }
 
 //Auxiliar methods
+bool Graph::hasCircuit(){
 
+    int* scc = this->stronglyConnectedComponents();
+    list<int> aux;
+
+    for(int i = 0; i < this->order; i++){
+        aux.push_back(scc[i]);
+    }
+
+    aux.sort();
+
+    for(aux.iterator i = aux.begin(); i != aux.end(); i++){
+        if(i == i + 1)
+            return true;
+    }
+
+    return false;
+    
+}
 //A function that returns a reverse graph, which is a graph with the arcs have opposite directions to the original graph
 Graph* Graph::getTranspose(){
 
