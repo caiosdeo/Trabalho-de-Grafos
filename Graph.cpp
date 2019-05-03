@@ -466,7 +466,7 @@ Graph* Graph::getComplement()
 
 }
 
-int* Graph::degreeDescendingSequence(){
+/*int* Graph::degreeDescendingSequence(){
     int* sequence = new int [this->getOrder()]; // create array for the sequence
     for(Node* auxNode = this->getFirstNode(), int i = 0; aux != nullptr; aux = aux->getNextNode(), i++)
     {
@@ -487,7 +487,7 @@ int* Graph::degreeDescendingSequence(){
     }
     return sequence;
     //return the sequence of degrees in descending order.
-}
+}*/
 
 //Auxiliar methods
 bool Graph::hasCircuit(){
@@ -501,13 +501,13 @@ bool Graph::hasCircuit(){
 
     aux.sort();
 
-    for(aux.iterator i = aux.begin(); i != aux.end(); i++){
-        if(i == i + 1)
+    for(list<int>::iterator i = aux.begin(); i != aux.end();){
+        if(*i == *(i++))
             return true;
     }
 
     return false;
-    
+
 }
 //A function that returns a reverse graph, which is a graph with the arcs have opposite directions to the original graph
 Graph* Graph::getTranspose(){

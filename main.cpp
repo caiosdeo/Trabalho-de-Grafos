@@ -143,6 +143,8 @@ int main(int argc, char const *argv[]) {
         gC->printGraph(output_file);
         output_file << endl;
 
+        output_file << "Graph has circuit: " << graph.hasCircuit() << endl << endl;
+
         //Removendo um nó
         output_file << "Removendo nó id = 4" << endl;
         graph.removeNode(4);
