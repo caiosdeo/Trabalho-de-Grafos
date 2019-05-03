@@ -114,14 +114,14 @@ int main(int argc, char const *argv[]) {
         graph.printGraph(output_file);
         output_file << endl;
 
-        //Imprimindo grafo transposto
-        Graph* gT = graph.getTranspose();
-        output_file << "Transpose " << endl;
-        gT->printGraph(output_file);
-        output_file << endl;
-
         //Imprimindo as componentes fortemente conexas se o grafo for direcionado
         if(graph.getDirected()){
+
+            //Imprimindo grafo transposto
+            Graph* gT = graph.getTranspose();
+            output_file << "Transpose " << endl;
+            gT->printGraph(output_file);
+            output_file << endl;
 
             output_file << "Componentes Fortemente Conexas: "  << endl;
             int* scc = graph.stronglyConnectedComponents();
