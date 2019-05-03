@@ -438,6 +438,28 @@ void Graph::breadthFirstSearch(){
     }
 }
 
+Graph* Graph::getComplement()
+{   
+    Graph* complement = new Graph(this->order, this->directed, this->weighted_edge, this->weighted_node);
+
+    for(Node* nodeI = this->first_node; nodeI != nullptr; nodeI = nodeI->getNextNode()) {
+        complement->insertNode(nodeI->getId());
+    }
+
+    Node* nodeComplement = complement->first_node; 
+
+    for(Node* nodeI = this->first_node; nodeI != nullptr;
+    nodeI = nodeI->getNextNode(), nodeComplement = nodeComplement->getNextNode()) {
+        for(Node* nodeJ = this->first_node; nodeJ != nullptr; nodeJ = nodeJ->getNextNode()) {
+            if(nodeI != nodeJ && !nodeI->searchEdge(nodeJ->getId()))
+                nodeComplement->insertEdge(nodeJ->getId(), 0);
+        }
+    }
+
+    return complement;
+
+}
+
 //Auxiliar methods
 
 //A function that returns a reverse graph, which is a graph with the arcs have opposite directions to the original graph

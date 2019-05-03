@@ -46,6 +46,7 @@ class Graph{
         int* stronglyConnectedComponents();
         Graph* getTranspose();
         void breadthFirstSearch();
+        Graph* getComplement();
 
     private:
         //Auxiliar methods
