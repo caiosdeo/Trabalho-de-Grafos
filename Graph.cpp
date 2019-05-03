@@ -321,7 +321,7 @@ void Graph::printGraph(ofstream& output_file){
 
 }
 
-//Function that verifies if there is a path between two nodes 
+//Function that verifies if there is a path between two nodes
 bool Graph::depthFirstSearch(int initialId,int targetId)
 {
     //Creating a bool vector to verify visited nodes
@@ -444,8 +444,7 @@ void Graph::breadthFirstSearch(){
 Graph* Graph::getTranspose(){
 
     //Create the reverse as the same order
-    int V = this->order;
-    Graph* gT = new Graph(V, this->directed, this->weighted_edge, this->weighted_node);
+    Graph* gT = new Graph(this->order, this->directed, this->weighted_edge, this->weighted_node);
 
     for(Node* n = this->first_node; n != nullptr; n = n->getNextNode()){
         for(Edge* e = n->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
@@ -470,7 +469,7 @@ int Graph::indexForNodes(int id)
         aux = aux->getNextNode();
         i++;
     }
-    //Returning -1 in case of invalid id 
+    //Returning -1 in case of invalid id
     return -1;
 
 }
@@ -595,7 +594,7 @@ bool Graph :: auxBreadthFirstSearchVerify(int *verify, int size, int targetId){
     {
         if(verify[i] == targetId){ // check if the id has been already analysed
             verified = true; //node founded
-            return verify; //no need to check the rest.    
+            return verify; //no need to check the rest.
         }
     }
     return verify; //Node not founded
