@@ -50,7 +50,7 @@ int main(int argc, char const *argv[]) {
 
             while(input_file >> idNodeSource >> idNodeTarget) {
 
-                graph.insertNode(idNodeSource, idNodeTarget, 0);
+                graph.makeGraph(idNodeSource, idNodeTarget, 0);
 
             }
 
@@ -60,7 +60,7 @@ int main(int argc, char const *argv[]) {
 
             while(input_file >> idNodeSource >> idNodeTarget >> edgeWeight) {
 
-                graph.insertNode(idNodeSource, idNodeTarget, edgeWeight);
+                graph.makeGraph(idNodeSource, idNodeTarget, edgeWeight);
 
             }
 
@@ -70,7 +70,7 @@ int main(int argc, char const *argv[]) {
 
             while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight) {
 
-                graph.insertNode(idNodeSource, idNodeTarget, 0);
+                graph.makeGraph(idNodeSource, idNodeTarget, 0);
                 graph.getNode(idNodeSource)->setWeight(nodeSourceWeight);
                 graph.getNode(idNodeTarget)->setWeight(nodeTargetWeight);
 
@@ -82,7 +82,7 @@ int main(int argc, char const *argv[]) {
 
             while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight) {
 
-                graph.insertNode(idNodeSource, idNodeTarget, edgeWeight);
+                graph.makeGraph(idNodeSource, idNodeTarget, edgeWeight);
                 graph.getNode(idNodeSource)->setWeight(nodeSourceWeight);
                 graph.getNode(idNodeTarget)->setWeight(nodeTargetWeight);
 

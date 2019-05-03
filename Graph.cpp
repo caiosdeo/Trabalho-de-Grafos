@@ -449,7 +449,7 @@ Graph* Graph::getTranspose(){
 
     for(Node* n = this->first_node; n != nullptr; n = n->getNextNode()){
         for(Edge* e = n->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
-            gT->insertNode(e->getTargetId(), n->getId(), e->getWeight());
+            gT->makeGraph(e->getTargetId(), n->getId(), e->getWeight());
         }
     }
     return gT;
