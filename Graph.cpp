@@ -652,19 +652,19 @@ bool Graph :: auxBreadthFirstSearchVerify(int *verify, int size, int targetId){
 }
 
 int* Graph::topologicalSort(){
-
+    // Verifies if the graph has a circuit or not
     if(this->hasCircuit())
         return nullptr;
 
     else{
 
-        int *vec = new int(this->order);
-        queue<int> topologial_queue;
-        
+        int *vec = new int(this->order); // Allocating the vector that will contains the topological sort
+        queue<int> topologial_queue; // Declaring the auxiliar queue for the source nodes
+        // Searching for nodes with indegree equal to zero
         for(Node* aux_node = this->first_node; aux_node != nullptr; aux_node = aux_node->getNextNode()){
 
             if(aux_node->getInDegree() == 0)
-                topologial_queue.push(aux_node->getId());
+                topologial_queue.push(aux_node->getId()); // Pushing the correct nodes in the queue
 
         }
 
