@@ -229,6 +229,8 @@ void Graph::removeNode(int id){
                 }
 
             }
+            else
+                count_edges_removed /= 2;
             // Decrementing the number of edges in the graph
             this->number_edges -= count_edges_removed;
 
@@ -438,6 +440,7 @@ void Graph::breadthFirstSearch(){
     }
 }
 
+<<<<<<< HEAD
 Graph* Graph::getComplement()
 {
     // Creating the complement graph to be returned and coping the nodes from the orignal graph
@@ -461,6 +464,29 @@ Graph* Graph::getComplement()
 
     return complement;
 
+=======
+int* Graph::degreeDescendingSequence(){
+    int* sequence = new int [this->getOrder()]; // create array for the sequence
+    for(Node* auxNode = this->getFirstNode(), int i = 0; aux != nullptr; aux = aux->getNextNode(), i++)
+    {   
+        //The variable will control the position of the degrees int the array,
+        //while auxNode will move in the graph picking all Nodes
+        //and stops when all nodes has been visited.
+        sequence[i] = aux->getOutDegree(); // adds the degree to the array
+        int j = 0;
+        while(sequence[i-j] > sequence[i-(j+1)] || i-j == 0) 
+        {
+            // checks if the array is already descending, if not, the degree will change position until its degreed,
+            // if yes, it will go back to the for.
+            int aux = sequence[i-j];
+            sequence[i-j] = sequence[i-(j+1)];
+            sequence[i-(j+1)] = aux;
+            j++;
+        }
+    }
+    return sequence; 
+    //return the sequence of degrees in descending order.
+>>>>>>> master
 }
 
 //Auxiliar methods

@@ -47,6 +47,7 @@ class Graph{
         Graph* getTranspose();
         void breadthFirstSearch();
         Graph* getComplement();
+        int* degreeDescendingSequence();
 
     private:
         //Auxiliar methods
