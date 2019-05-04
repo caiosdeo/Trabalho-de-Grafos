@@ -45,7 +45,7 @@ class Graph{
         bool depthFirstSearch(int initialId,int targetId);
         int* stronglyConnectedComponents();
         Graph* getTranspose();
-        void breadthFirstSearch();
+        void breadthFirstSearch(ofstream& output_file);
         Graph* getComplement();
         int* degreeDescendingSequence();
         bool hasCircuit();

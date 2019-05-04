@@ -388,25 +388,6 @@ int* Graph::stronglyConnectedComponents(){
         int v = explored.top();
         explored.pop();
 
-        //If a node has outdegree equal to 0, means that it is impossible to exit that node, so if it
-        //was already visited, it will mark as unvisited in that manner, the function will correctly define
-        //it as a strongly connected component with itself only
-        if(gT->getNode(v)->getOutDegree() == 0){
-
-            visited[gT->indexForNodes(v)] = false;
-
-        }
-
-        //If a node has indegree equals to 0, means that it is impossible to reach this node,
-        //so automatically it is marked as visited and belongs to an SCC which has only itself
-        if(gT->getNode(v)->getInDegree() == 0){
-
-            visited[gT->indexForNodes(v)] = true;
-            sc[gT->indexForNodes(v)] = label;
-            label++;
-
-        }
-
         //DFS on the reverse graph that will find the SCCs
         if(visited[gT->indexForNodes(v)] == false){
 
@@ -420,14 +401,14 @@ int* Graph::stronglyConnectedComponents(){
     return sc;
 }
 
-void Graph::breadthFirstSearch(){
+void Graph::breadthFirstSearch(ofstream& output_file){
     int i = 0;
     int* visited = new int[this->getOrder()]; // vector to keep the ids that are already analysed.
     for(Node* auxNode = this->getFirstNode(); auxNode == nullptr; auxNode = auxNode->getNextNode())
     {   //Start the analysis of the nodes from the graph
         if(this->auxBreadthFirstSearchVerify(visited, i, auxNode->getId()) == false) //checks if the node is already verified
         {
-            cout << auxNode->getId() << " "; //print the Id of the Node
+            output_file << auxNode->getId() << " "; //print the Id of the Node
             visited[i] = auxNode->getId(); // Add the node to visited
             i++; //increase the range of the visited array.
         }
@@ -435,7 +416,7 @@ void Graph::breadthFirstSearch(){
         {   //Checks every edge of this node.
             if(this->auxBreadthFirstSearchVerify(visited, i, auxEdge->getTargetId()) == false)//checks if the node is already verified
             {
-                cout << auxEdge->getTargetId() << " "; //print the Id of the Node
+                output_file << auxEdge->getTargetId() << " "; //print the Id of the Node
                 visited[i] = auxEdge->getTargetId(); // Add the node to visited
                 i++; //increase the range of the visited array.
             }
@@ -497,6 +478,7 @@ bool Graph::hasCircuit(){
     int* scc = this->stronglyConnectedComponents();
     list<int> aux;
 
+
     for(int i = 0; i < this->order; i++){
         aux.push_back(scc[i]);
     }
@@ -504,7 +486,9 @@ bool Graph::hasCircuit(){
     aux.sort();
 
     for(list<int>::iterator i = aux.begin(); i != aux.end();){
-        if(*i == *(i++))
+        int prev = *i;
+        i++;
+        if(prev == *i)
             return true;
     }
 
@@ -580,7 +564,6 @@ void Graph::exploreOrder(int initialId, int targetId, bool visited[], stack<int>
 
     //As soon a node is visited, it is stacked
     visited[indexForNodes(initialId)] = true;
-    (*explored).push(initialId);
 
     //If a node has an edge to the targetNode, then the targetNode
     //is marked as visited and it is also stacked. Otherwise,
@@ -604,12 +587,11 @@ void Graph::exploreOrder(int initialId, int targetId, bool visited[], stack<int>
             if(visited[indexForNodes(aux->getTargetId())] == false){
 
                 exploreOrder(aux->getTargetId(), targetId, visited, explored);
-                return;
 
             }
 
         }
-
+        (*explored).push(initialId);
         return;
 
     }
@@ -674,8 +656,6 @@ bool Graph :: auxBreadthFirstSearchVerify(int *verify, int size, int targetId){
 // Kahn's algorithm adapted
 int* Graph::topologicalSort(){
 
-    int *vec = new int(this->order); // Allocating the vector that will contains the topological sort
-
     // Verifies if the graph has a circuit or not
     if(this->hasCircuit())
         return nullptr;
@@ -685,6 +665,7 @@ int* Graph::topologicalSort(){
         int i = 0;
         Edge* aux_edge;
         Node* aux_node;
+        int *vec = new int(this->order); // Allocating the vector that will contains the topological sort
         queue<Node*> topological_queue; // Declaring the auxiliar queue for the source nodes
         // Searching for nodes with indegree equal to zero
         for(aux_node = this->first_node; aux_node != nullptr; aux_node = aux_node->getNextNode()){
@@ -716,8 +697,8 @@ int* Graph::topologicalSort(){
 
         }
 
-    }
+        return vec; // Returning the indexes correlated to the topological sort in a vector
 
-    return vec; // Returning the indexes correlated to the topological sort in a vector
+    }
 
 }
