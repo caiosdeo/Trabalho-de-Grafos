@@ -49,6 +49,7 @@ class Graph{
         Graph* getComplement();
         int* degreeDescendingSequence();
         bool hasCircuit();
+        int* topologicalSort();
 
     private:
         //Auxiliar methods
