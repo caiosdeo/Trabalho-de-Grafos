@@ -673,6 +673,9 @@ bool Graph :: auxBreadthFirstSearchVerify(int *verify, int size, int targetId){
 
 // Kahn's algorithm adapted
 int* Graph::topologicalSort(){
+
+    int *vec = new int(this->order); // Allocating the vector that will contains the topological sort
+
     // Verifies if the graph has a circuit or not
     if(this->hasCircuit())
         return nullptr;
@@ -682,7 +685,6 @@ int* Graph::topologicalSort(){
         int i = 0;
         Edge* aux_edge;
         Node* aux_node;
-        int *vec = new int(this->order); // Allocating the vector that will contains the topological sort
         queue<Node*> topological_queue; // Declaring the auxiliar queue for the source nodes
         // Searching for nodes with indegree equal to zero
         for(aux_node = this->first_node; aux_node != nullptr; aux_node = aux_node->getNextNode()){
