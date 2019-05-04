@@ -143,6 +143,12 @@ int main(int argc, char const *argv[]) {
         gC->printGraph(output_file);
         output_file << endl;
 
+        output_file << "Ordenacao Topologica "  << endl;
+        int* topSort = graph.topologicalSort();
+        for(int i = 0; i < graph.getOrder(); i++)
+            output_file << topSort[i] << " ";
+
+
         output_file << "Graph has circuit: " << graph.hasCircuit() << endl << endl;
 
         //Removendo um nó
