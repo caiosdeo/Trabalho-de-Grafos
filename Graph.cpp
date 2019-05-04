@@ -651,6 +651,7 @@ bool Graph :: auxBreadthFirstSearchVerify(int *verify, int size, int targetId){
     return verify; //Node not founded
 }
 
+// Kahn's algorithm adapted
 int* Graph::topologicalSort(){
     // Verifies if the graph has a circuit or not
     if(this->hasCircuit())
@@ -658,16 +659,43 @@ int* Graph::topologicalSort(){
 
     else{
 
+        int i = 0;
+        Edge* aux_edge;
+        Node* aux_node;
         int *vec = new int(this->order); // Allocating the vector that will contains the topological sort
-        queue<int> topologial_queue; // Declaring the auxiliar queue for the source nodes
+        queue<Node*> topological_queue; // Declaring the auxiliar queue for the source nodes
         // Searching for nodes with indegree equal to zero
-        for(Node* aux_node = this->first_node; aux_node != nullptr; aux_node = aux_node->getNextNode()){
-
+        for(aux_node = this->first_node; aux_node != nullptr; aux_node = aux_node->getNextNode()){
+            // Verifies whether the indegree is equal to zero
             if(aux_node->getInDegree() == 0)
-                topologial_queue.push(aux_node->getId()); // Pushing the correct nodes in the queue
+                topological_queue.push(aux_node); // Pushing the correct nodes in the queue
+
+        }
+        // Verifies if the queue is empty
+        while(!topological_queue.empty()){
+
+            vec[i] = topological_queue.front()->getId(); // Pushing the id of the node to be popped of the queue
+            aux_edge = topological_queue.front()->getFirstEdge(); // Getting the first edge of the node to be popped
+            topological_queue.pop(); // Popping the node
+            // Verifies whether an edge exists
+            while(aux_edge != nullptr){
+
+                aux_node = this->getNode(aux_edge->getTargetId()); // Picking up the neighboring node
+                aux_node->decrementInDegree(); // Decrementing indegree
+                // Verifies whether the indegree is equal to zero
+                if(aux_node->getInDegree() == 0)
+                    topological_queue.push(aux_node);
+
+                aux_edge = aux_edge->getNextEdge();
+
+            }
+
+            i++;
 
         }
 
     }
+
+    return vec; // Returning the indexes correlated to the topological sort in a vector
 
 }
