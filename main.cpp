@@ -106,12 +106,16 @@ int main(int argc, char const *argv[]) {
         output_file << "Numero de arestas: " << graph.getNumberEdges() << endl;
         output_file << "No com id = 7 esta no grafo? " << graph.searchNode(7) << endl;
         output_file << "No com id = 4 esta no grafo? " << graph.searchNode(4) << endl;
-        output_file << "Busca de profundidade id = 6 " << graph.depthFirstSearch(1,6) << endl;
-        output_file << "Busca de profundidade id = 8 " << graph.depthFirstSearch(1,8) << endl;
+        output_file << "Busca em profundidade id = 6 " << graph.depthFirstSearch(1,6) << endl;
+        output_file << "Busca em profundidade id = 8 " << graph.depthFirstSearch(1,8) << endl;
         output_file << endl;
 
         //Imprimindo o Grafo
         graph.printGraph(output_file);
+        output_file << endl;
+
+        output_file << "BFS" <<endl;
+        graph.breadthFirstSearch(output_file);
         output_file << endl;
 
         //Imprimindo as componentes fortemente conexas se o grafo for direcionado
@@ -136,20 +140,23 @@ int main(int argc, char const *argv[]) {
                 output_file << scc[i] << " ";
 
             output_file << endl << endl;
+
+            output_file << "Graph has circuit: " << graph.hasCircuit() << endl;
+
+            int* topSort = graph.topologicalSort();
+            if(topSort != nullptr){
+                output_file << "Ordenacao Topologica "  << endl;
+                for(int i = 0; i < graph.getOrder(); i++)
+                    output_file << topSort[i] << " ";
+                output_file << endl;
+            }
+            output_file << endl;
         }
 
         output_file << "Complement" << endl;
         Graph* gC = graph.getComplement();
         gC->printGraph(output_file);
         output_file << endl;
-
-        output_file << "Ordenacao Topologica "  << endl;
-        int* topSort = graph.topologicalSort();
-        for(int i = 0; i < graph.getOrder(); i++)
-            output_file << topSort[i] << " ";
-
-
-        output_file << "Graph has circuit: " << graph.hasCircuit() << endl << endl;
 
         //Removendo um nó
         output_file << "Removendo nó id = 4" << endl;
