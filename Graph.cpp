@@ -366,7 +366,7 @@ int* Graph::stronglyConnectedComponents(){
         visited[i] = false;
     }
 
-    //Function to fill the stack with DFS visited nodes
+    //Function to fill the stack with DFS visited nodes in post order
     exploreOrder(this->first_node->getId(), this->first_node->getId(), visited, &explored);
 
     //Confirms that all the nodes were included in the stack
@@ -478,20 +478,25 @@ bool Graph::hasCircuit(){
     int* scc = this->stronglyConnectedComponents();
     list<int> aux;
 
-
+    //We get the graph SCCs and add it to a list
     for(int i = 0; i < this->order; i++){
         aux.push_back(scc[i]);
     }
 
+    //Then the list is sorted
     aux.sort();
 
+    //
     for(list<int>::iterator i = aux.begin(); i != aux.end();){
         int prev = *i;
         i++;
+        //If there are equals labels SCCs the graph is cyclic,
+        //in this manner is returned that this graph has a circuit
         if(prev == *i)
             return true;
     }
 
+    //If all the labels are different among them, this graph does not have a circuit
     return false;
 
 }
@@ -562,7 +567,7 @@ bool Graph::auxDepthFirstSearch(int initialId,int targetId,bool visited[])
 
 void Graph::exploreOrder(int initialId, int targetId, bool visited[], stack<int>* explored){
 
-    //As soon a node is visited, it is stacked
+    //The node is marked that it was visited
     visited[indexForNodes(initialId)] = true;
 
     //If a node has an edge to the targetNode, then the targetNode
@@ -591,6 +596,8 @@ void Graph::exploreOrder(int initialId, int targetId, bool visited[], stack<int>
             }
 
         }
+
+        //After all the edges of a node are visited, it is stacked
         (*explored).push(initialId);
         return;
 
