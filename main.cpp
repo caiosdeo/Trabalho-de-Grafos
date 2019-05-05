@@ -103,20 +103,36 @@ int main(int argc, char const *argv[]) {
         output_file << "Direcionado: " << graph.getDirected() << endl;
         output_file << "Ponderado Arestas: " << graph.getWeightedEdge() << endl;
         output_file << "Ponderado Nós: " << graph.getWeightedNode() << endl;
+        output_file << "Conexo: " << graph.connectedGraph() << endl;
         output_file << "Numero de arestas: " << graph.getNumberEdges() << endl;
         output_file << "No com id = 7 esta no grafo? " << graph.searchNode(7) << endl;
         output_file << "No com id = 4 esta no grafo? " << graph.searchNode(4) << endl;
-        output_file << "Busca em profundidade id = 6 " << graph.depthFirstSearch(1,6) << endl;
-        output_file << "Busca em profundidade id = 8 " << graph.depthFirstSearch(1,8) << endl;
+        output_file << "Busca em profundidade id = 6 apartir do primeiro nó inserido? " << graph.depthFirstSearch(1,6) << endl;
         output_file << endl;
 
         //Imprimindo o Grafo
         graph.printGraph(output_file);
         output_file << endl;
 
-        output_file << "BFS" <<endl;
+        //Teste BFS
+        output_file << "BFS" << endl;
         graph.breadthFirstSearch(output_file);
         output_file << endl;
+
+        //Teste CC
+        output_file << "Connected Components" << endl;
+        int* cc = graph.connectedComponent(graph.getFirstNode()->getId());
+
+        output_file << "Node      ";
+        for(Node* n = graph.getFirstNode(); n != nullptr; n = n->getNextNode())
+            output_file << n->getId() << " ";
+
+        output_file << endl << "CC[Node] ";
+
+        for(int i = 0; i < graph.getOrder(); i++)
+            output_file << cc[i] << " ";
+
+        output_file << endl << endl;
 
         //Imprimindo as componentes fortemente conexas se o grafo for direcionado
         if(graph.getDirected()){
