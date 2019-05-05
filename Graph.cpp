@@ -534,7 +534,7 @@ bool Graph::hasCircuit(){
     return false;
 
 }
-//A function that returns a reverse graph, which is a graph with the arcs have opposite directions to the original graph
+//A function that returns a reverse graph, which is a graph which the arcs have opposite directions to the original graph
 Graph* Graph::getTranspose(){
 
     //Create the reverse as the same order
