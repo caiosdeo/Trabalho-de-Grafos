@@ -489,7 +489,7 @@ bool Graph::connectedGraph(){
 }
 
 //function that finds the connected component of a node
-int Graph::connectedComponent(int initialId)
+int* Graph::connectedComponent(int initialId)
 {
     int *cc = new int[order];
     Node* aux = getFirstNode();
@@ -503,7 +503,7 @@ int Graph::connectedComponent(int initialId)
             cc[i] = aux->getId();
         }
     }
-    return *cc;
+    return cc;
 }
 
 //Auxiliar methods

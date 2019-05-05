@@ -50,7 +50,7 @@ class Graph{
         int* degreeDescendingSequence();
         bool hasCircuit();
         int* topologicalSort();
-        int connectedComponent(int initialId);
+        int* connectedComponent(int initialId);
         bool connectedGraph();
 
     private:
