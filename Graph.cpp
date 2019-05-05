@@ -406,7 +406,7 @@ void Graph::breadthFirstSearch(ofstream& output_file){
     Node* auxNode = this->getFirstNode();
     Edge* auxEdge = auxNode->getFirstEdge();
     int* visited = new int[this->getOrder()]; // vector to keep the ids that are already analysed.
-    for(; auxNode == nullptr; auxNode = auxNode->getNextNode())
+    for(; auxNode != nullptr; auxNode = auxNode->getNextNode())
     {   //Start the analysis of the nodes from the graph
         if(this->auxBreadthFirstSearchVerify(visited, i, auxNode->getId()) == false) //checks if the node is already verified
         {
@@ -414,7 +414,7 @@ void Graph::breadthFirstSearch(ofstream& output_file){
             visited[i] = auxNode->getId(); // Add the node to visited
             i++; //increase the range of the visited array.
         }
-        for(; auxEdge == nullptr; auxEdge = auxEdge->getNextEdge())
+        for(; auxEdge != nullptr; auxEdge = auxEdge->getNextEdge())
         {   //Checks every edge of this node.
             if(this->auxBreadthFirstSearchVerify(visited, i, auxEdge->getTargetId()) == false)//checks if the node is already verified
             {
