@@ -359,62 +359,68 @@ bool Graph::depthFirstSearch(int initialId, int targetId)
 }
 
 //Used Kosaraju Algorithm
-int *Graph::stronglyConnectedComponents()
-{
+int* Graph::stronglyConnectedComponents(){
 
-    //Stack for visited nodes
-    stack<int> explored;
-    bool *visited = new bool[order];
-    //Vector with the stronglyConnectedComponents
-    int *sc = new int[this->order];
-    //Int to label the SCCs
-    int label = 0;
+    if(!this->connectedGraph()){
+        return nullptr;
 
-    if (this->first_node == nullptr || this->last_node == nullptr)
-    {
-        return 0;
-    }
+    }else{
 
-    //Begin the DFS with every node as unvisited
-    for (int i = 0; i < order; i++)
-    {
-        visited[i] = false;
-    }
+        //Stack for visited nodes
+        stack<int> explored;
+        bool *visited = new bool[order];
+        //Vector with the stronglyConnectedComponents
+        int *sc = new int[this->order];
+        //Int to label the SCCs
+        int label = 0;
 
-    //Function to fill the stack with DFS visited nodes in post order
-    exploreOrder(this->first_node->getId(), this->first_node->getId(), visited, &explored);
+        if (this->first_node == nullptr || this->last_node == nullptr){
+            return 0;
+        }
 
-    //Confirms that all the nodes were included in the stack
-    for (Node *n = this->first_node; n != nullptr; n = n->getNextNode())
-        if (visited[indexForNodes(n->getId())] == false)
-            exploreOrder(n->getId(), n->getId(), visited, &explored);
+        //Begin the DFS with every node as unvisited
+        for (int i = 0; i < order; i++){
+            visited[i] = false;
+        }
 
-    //Create a reverse graph
-    Graph *gT = this->getTranspose();
+        //Function to fill the stack with DFS visited nodes in post order
+        exploreOrder(this->first_node->getId(), this->first_node->getId(), visited, &explored);
 
-    //Define every node as unvisited for the second DFS
-    for (int i = 0; i < order; i++)
-    {
-        visited[i] = false;
-    }
+        //Confirms that all the nodes were included in the stack
+        for (Node *n = this->first_node; n != nullptr; n = n->getNextNode())
+            if (visited[indexForNodes(n->getId())] == false)
+                exploreOrder(n->getId(), n->getId(), visited, &explored);
 
-    //DFS on the reverse graph by the stack order as its is running we find the SCCs of the graph
-    while (explored.empty() == false)
-    {
+        //Create a reverse graph
+        Graph *gT = this->getTranspose();
 
-        int v = explored.top();
-        explored.pop();
+        //Define every node as unvisited for the second DFS
+        for (int i = 0; i < order; i++)
+        {
+            visited[i] = false;
+        }
 
-        //DFS on the reverse graph that will find the SCCs
-        if (visited[gT->indexForNodes(v)] == false)
+        //DFS on the reverse graph by the stack order as its is running we find the SCCs of the graph
+        while (explored.empty() == false)
         {
 
-            gT->auxStronglyConnectedComponents(v, v, visited, sc, label);
-            label++;
+            int v = explored.top();
+            explored.pop();
+
+            //DFS on the reverse graph that will find the SCCs
+            if (visited[gT->indexForNodes(v)] == false){
+
+                gT->auxComponents(v, v, visited, sc, label);
+                label++;
+
+            }
+
         }
+
+        return sc;
+
     }
 
-    return sc;
 }
 
 void Graph::breadthFirstSearch(ofstream &output_file)
@@ -498,11 +504,10 @@ bool Graph::connectedGraph()
     if (this->directed)
     {
         Graph *gS = getSubjacent();
-        Node *aux = gS->getFirstNode();
-        aux = aux->getNextNode();
-        while (aux->getNextNode() != nullptr)
+        Node *aux = gS->getFirstNode()->getNextNode();
+        while (aux != nullptr)
         {
-            if (depthFirstSearch(gS->first_node->getId(), aux->getId()))
+            if (gS->depthFirstSearch(gS->getFirstNode()->getId(), aux->getId()))
             {
                 aux = aux->getNextNode();
             }
@@ -517,7 +522,7 @@ bool Graph::connectedGraph()
     {
         Node *aux = this->getFirstNode();
         aux = aux->getNextNode();
-        while (aux->getNextNode() != nullptr)
+        while (aux != nullptr)
         {
             if (depthFirstSearch(this->first_node->getId(), aux->getId()))
             {
@@ -533,19 +538,28 @@ bool Graph::connectedGraph()
 }
 
 //function that finds the connected component of a node
-int *Graph::connectedComponent(int initialId)
-{
-    int *cc = new int[order];
-    Node *aux = getFirstNode();
-    int i = 0;
-    cc[i] = initialId;
-    for (; aux->getNextNode() == nullptr; aux = aux->getNextNode())
-    {
-        if (depthFirstSearch(initialId, aux->getId()))
-        {
-            i++;
-            cc[i] = aux->getId();
+int* Graph::connectedComponents(){
+
+    bool *visited = new bool[this->order];
+    //Vector with the connectedComponents
+    int *cc = new int[this->order];
+    //Int to label the CCs
+    int label = 0;
+
+    //Begin the DFS with every node as unvisited
+    for (int i = 0; i < order; i++){
+        visited[i] = false;
+    }
+
+    for (Node* aux = this->getFirstNode(); aux != nullptr; aux = aux->getNextNode()){
+
+        if(visited[indexForNodes(aux->getId())] == false){
+
+            this->auxComponents(aux->getId(), this->getLastNode()->getId(), visited, cc, label);
+            label++;
+
         }
+
     }
     return cc;
 }
@@ -669,83 +683,33 @@ void Graph::exploreOrder(int initialId, int targetId, bool visited[], stack<int>
     //The node is marked that it was visited
     visited[indexForNodes(initialId)] = true;
 
-    //If a node has an edge to the targetNode, then the targetNode
-    //is marked as visited and it is also stacked. Otherwise,
-    //it will keep searching for it on the adjacents nodes
-    if (getNode(initialId)->searchEdge(targetId))
-    {
+    //Every node adjacent to it is stacked before
+    for (Edge *aux = getNode(initialId)->getFirstEdge(); aux != nullptr; aux = aux->getNextEdge())
 
-        if (!visited[indexForNodes(targetId)])
-        {
+        if (visited[indexForNodes(aux->getTargetId())] == false)
 
-            visited[indexForNodes(targetId)] = true;
-            (*explored).push(targetId);
-        }
+            exploreOrder(aux->getTargetId(), targetId, visited, explored);
 
-        return;
-    }
-    else
-    {
-
-        //Here we ensure that we are walking through all the edges of a node
-        for (Edge *aux = getNode(initialId)->getFirstEdge(); aux != nullptr; aux = aux->getNextEdge())
-        {
-
-            if (visited[indexForNodes(aux->getTargetId())] == false)
-            {
-
-                exploreOrder(aux->getTargetId(), targetId, visited, explored);
-            }
-        }
-
-        //After all the edges of a node are visited, it is stacked
-        (*explored).push(initialId);
-        return;
-    }
+    //After all the edges of a node are visited, it is stacked
+    (*explored).push(initialId);
+    
 }
 
-void Graph::auxStronglyConnectedComponents(int initialId, int targetId, bool visited[], int sc[], int label)
+void Graph::auxComponents(int initialId, int targetId, bool visited[], int c[], int label)
 {
 
-    //As soon a node is visited, it is labeled with the current SCC id;
+    //As soon a node is visited, it is labeled with the current component id;
     visited[indexForNodes(initialId)] = true;
-    sc[indexForNodes(initialId)] = label;
+    c[indexForNodes(initialId)] = label;
 
-    //If a node has an edge to the targetNode, it is verified if any other
-    //adjacent node has also a path to the targetNode. Otherwise it will
-    //keep searching the targetNode
-    if (getNode(initialId)->searchEdge(targetId))
-    {
+    //And the same is done for every node adjacent to it
+    for (Edge *aux = getNode(initialId)->getFirstEdge(); aux != nullptr; aux = aux->getNextEdge())
 
-        for (Edge *aux = getNode(initialId)->getFirstEdge(); aux != nullptr; aux = aux->getNextEdge())
-        {
+        if (visited[indexForNodes(aux->getTargetId())] == false)
 
-            if (visited[indexForNodes(aux->getTargetId())] == false)
-            {
+            auxComponents(aux->getTargetId(), targetId, visited, c, label);
 
-                auxStronglyConnectedComponents(aux->getTargetId(), targetId, visited, sc, label);
-                return;
-            }
-        }
 
-        return;
-    }
-    else
-    {
-
-        for (Edge *aux = getNode(initialId)->getFirstEdge(); aux != nullptr; aux = aux->getNextEdge())
-        {
-
-            if (visited[indexForNodes(aux->getTargetId())] == false)
-            {
-
-                auxStronglyConnectedComponents(aux->getTargetId(), targetId, visited, sc, label);
-                return;
-            }
-        }
-
-        return;
-    }
 }
 
 bool Graph ::auxBreadthFirstSearchVerify(int *verify, int size, int targetId)

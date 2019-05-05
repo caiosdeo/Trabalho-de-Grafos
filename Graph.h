@@ -51,7 +51,7 @@ class Graph{
         int* degreeDescendingSequence();
         bool hasCircuit();
         int* topologicalSort();
-        int* connectedComponent(int initialId);
+        int* connectedComponents();
         bool connectedGraph();
 
     private:
@@ -59,7 +59,7 @@ class Graph{
         int indexForNodes(int id);
         bool auxDepthFirstSearch(int initialId,int targetId,bool visited[]);
         void exploreOrder(int initialId, int targetId, bool visited[], stack<int>* explored);
-        void auxStronglyConnectedComponents(int initialId, int targetId, bool visited[], int sc[], int label);
+        void auxComponents(int initialId, int targetId, bool visited[], int c[], int label);
         bool auxBreadthFirstSearchVerify(int *verify, int size, int targetId);
 
 };
