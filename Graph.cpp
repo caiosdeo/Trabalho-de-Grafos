@@ -551,6 +551,7 @@ int* Graph::connectedComponents(){
         visited[i] = false;
     }
 
+    //Label all nodes from the beginning
     for (Node* aux = this->getFirstNode(); aux != nullptr; aux = aux->getNextNode()){
 
         if(visited[indexForNodes(aux->getId())] == false){
@@ -692,7 +693,7 @@ void Graph::exploreOrder(int initialId, int targetId, bool visited[], stack<int>
 
     //After all the edges of a node are visited, it is stacked
     (*explored).push(initialId);
-    
+
 }
 
 void Graph::auxComponents(int initialId, int targetId, bool visited[], int c[], int label)
