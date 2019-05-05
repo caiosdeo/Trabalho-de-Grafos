@@ -47,6 +47,7 @@ class Graph{
         Graph* getTranspose();
         void breadthFirstSearch(ofstream& output_file);
         Graph* getComplement();
+        Graph* getSubjacent();
         int* degreeDescendingSequence();
         bool hasCircuit();
         int* topologicalSort();
