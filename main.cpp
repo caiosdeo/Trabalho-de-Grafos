@@ -117,58 +117,82 @@ int main(int argc, char const *argv[]) {
         //Teste BFS
         output_file << "BFS" << endl;
         graph.breadthFirstSearch(output_file);
-        output_file << endl;
+        output_file << endl << endl;
 
         //Teste CC
-        output_file << "Connected Components" << endl;
-        int* cc = graph.connectedComponent(graph.getFirstNode()->getId());
+        //Imprime as componentes conexas se o grafo for não direcionado
+        if(!graph.getDirected()){
+            output_file << "Connected Components" << endl;
+            int* cc = graph.connectedComponents();
 
-        output_file << "Node      ";
-        for(Node* n = graph.getFirstNode(); n != nullptr; n = n->getNextNode())
-            output_file << n->getId() << " ";
+            output_file << "Node     ";
+            for(Node* n = graph.getFirstNode(); n != nullptr; n = n->getNextNode())
+                output_file << n->getId() << " ";
 
-        output_file << endl << "CC[Node] ";
+            output_file << endl << "CC[Node] ";
 
-        for(int i = 0; i < graph.getOrder(); i++)
-            output_file << cc[i] << " ";
+            for(int i = 0; i < graph.getOrder(); i++)
+                output_file << cc[i] << " ";
 
-        output_file << endl << endl;
+            output_file << endl << endl;
+
+        }else{
+
+            output_file << "Grafo direcionado não tem CC" << endl << endl;
+
+        }
 
         //Imprimindo as componentes fortemente conexas se o grafo for direcionado
         if(graph.getDirected()){
 
-            //Imprimindo grafo transposto
-            Graph* gT = graph.getTranspose();
-            output_file << "Transpose " << endl;
-            gT->printGraph(output_file);
-            output_file << endl;
-
-            output_file << "Componentes Fortemente Conexas: "  << endl;
             int* scc = graph.stronglyConnectedComponents();
+            if(scc != nullptr){
 
-            output_file << "Node      ";
-            for(Node* n = gT->getFirstNode(); n != nullptr; n = n->getNextNode())
-                output_file << n->getId() << " ";
+                output_file << "Componentes Fortemente Conexas: "  << endl;
 
-            output_file << endl << "SCC[Node] ";
+                output_file << "Node      ";
+                for(Node* n = graph.getFirstNode(); n != nullptr; n = n->getNextNode())
+                    output_file << n->getId() << " ";
 
-            for(int i = 0; i < graph.getOrder(); i++)
-                output_file << scc[i] << " ";
+                output_file << endl << "SCC[Node] ";
 
-            output_file << endl << endl;
-
-            output_file << "Graph has circuit: " << graph.hasCircuit() << endl;
-
-            int* topSort = graph.topologicalSort();
-            if(topSort != nullptr){
-                output_file << "Ordenacao Topologica "  << endl;
                 for(int i = 0; i < graph.getOrder(); i++)
-                    output_file << topSort[i] << " ";
+                    output_file << scc[i] << " ";
+
+                output_file << endl << endl;
+
+                output_file << "Graph has circuit: " << graph.hasCircuit() << endl;
+
+                int* topSort = graph.topologicalSort();
+
+                if(topSort != nullptr){
+
+                    output_file << "Ordenacao Topologica "  << endl;
+                    for(int i = 0; i < graph.getOrder(); i++)
+                        output_file << topSort[i] << " ";
+                    output_file << endl;
+
+                }else{
+
+                    output_file << "Grafo possui circuito(s), portanto não é um DAG para ter ordenção Topológica" << endl;
+
+                }
+
                 output_file << endl;
+
+            }else{
+
+                output_file << "Grafo não conexo, sem componentes fortemente conexas" << endl << endl;
+
             }
-            output_file << endl;
+
+        }else{
+
+            output_file << "Grafo não direcionado, não possui SCC" << endl << endl;
+
         }
 
+        //Imprimindo o complementar
         output_file << "Complement" << endl;
         Graph* gC = graph.getComplement();
         gC->printGraph(output_file);
