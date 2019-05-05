@@ -472,6 +472,38 @@ Graph* Graph::getComplement()
     //return the sequence of degrees in descending order.
 }*/
 
+bool Graph::connectedGraph(){
+    Node* aux = this->getFirstNode();
+    aux = aux->getNextNode();
+    while(aux->getNextNode() != nullptr){
+        if(depthFirstSearch(this->first_node->getId(),aux->getId())){
+            aux = aux->getNextNode();
+        }else{
+            return false;
+        }
+    }
+    return true;
+
+}
+
+//function that finds the connected component of a node
+int Graph::connectedComponent(int initialId)
+{
+    int *cc = new int[order];
+    Node* aux = getFirstNode();
+    int i = 0;
+    cc[i] = initialId;
+    for(; aux->getNextNode() == nullptr ; aux = aux->getNextNode())
+    {
+        if(depthFirstSearch(initialId, aux->getId()))
+        {
+            i++;
+            cc[i] = aux->getId();
+        }
+    }
+    return *cc;
+}
+
 //Auxiliar methods
 bool Graph::hasCircuit(){
 
