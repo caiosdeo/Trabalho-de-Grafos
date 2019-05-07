@@ -48,7 +48,7 @@ class Graph{
         void breadthFirstSearch(ofstream& output_file);
         Graph* getComplement();
         Graph* getSubjacent();
-        int* degreeDescendingSequence();
+        int* degreeSequence();
         bool hasCircuit();
         int* topologicalSort();
         int* connectedComponents();

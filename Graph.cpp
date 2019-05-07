@@ -476,14 +476,15 @@ Graph *Graph::getComplement()
     return complement;
 }
 
-/*int* Graph::degreeDescendingSequence(){
-    int* sequence = new int [this->getOrder()]; // create array for the sequence
-    for(Node* auxNode = this->getFirstNode(), int i = 0; aux != nullptr; aux = aux->getNextNode(), i++)
+int* Graph::degreeSequence(){
+    int* sequence = new int [this->getOrder()]; // create array for the sequence.
+    Node* auxNode = this->getFirstNode(); // auxiliar node to pass on the nodes of the graph.
+    for(int i = 0; auxNode != nullptr; i++)
     {
         //The variable will control the position of the degrees int the array,
         //while auxNode will move in the graph picking all Nodes
         //and stops when all nodes has been visited.
-        sequence[i] = aux->getOutDegree(); // adds the degree to the array
+        sequence[i] = auxNode->getOutDegree(); // adds the degree to the array
         int j = 0;
         while(sequence[i-j] > sequence[i-(j+1)] || i-j == 0)
         {
@@ -494,10 +495,11 @@ Graph *Graph::getComplement()
             sequence[i-(j+1)] = aux;
             j++;
         }
+        auxNode = auxNode->getNextNode(); //Moving to the next node.
     }
     return sequence;
     //return the sequence of degrees in descending order.
-}*/
+}
 
 bool Graph::connectedGraph()
 {
