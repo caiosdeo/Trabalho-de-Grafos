@@ -778,3 +778,10 @@ int *Graph::topologicalSort()
         return vec; // Returning the indexes correlated to the topological sort in a vector
     }
 }
+
+// This function returns the Minimum Connected Dominant Set
+int* Graph::greedyMinimumConnectedDominantSet(){
+
+    
+
+}
