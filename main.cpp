@@ -117,6 +117,13 @@ int main(int argc, char const *argv[]) {
         //Teste Greedy
         //graph.greedyMinimumConnectedDominantSet();
 
+        //Teste sequencia de graph
+        output_file << "Sequencia de grau" << endl;
+        int* seqDeg = graph.degreeSequence();
+        for(int i = 0; i < graph.getOrder(); i++)
+            output_file << seqDeg[i] << " ";
+        output_file << endl << endl;
+
         //Teste BFS
         output_file << "BFS" << endl;
         graph.breadthFirstSearch(output_file);
