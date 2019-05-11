@@ -53,6 +53,7 @@ class Graph{
         int* topologicalSort();
         int* connectedComponents();
         bool connectedGraph();
+        int* greedyMinimumConnectedDominantSet();
 
     private:
         //Auxiliar methods
