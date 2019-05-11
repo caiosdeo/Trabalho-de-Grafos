@@ -114,6 +114,9 @@ int main(int argc, char const *argv[]) {
         graph.printGraph(output_file);
         output_file << endl;
 
+        //Teste Greedy
+        //graph.greedyMinimumConnectedDominantSet();
+
         //Teste BFS
         output_file << "BFS" << endl;
         graph.breadthFirstSearch(output_file);
