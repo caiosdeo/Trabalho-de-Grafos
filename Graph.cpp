@@ -782,6 +782,49 @@ int *Graph::topologicalSort()
 // This function returns the Minimum Connected Dominant Set
 int* Graph::greedyMinimumConnectedDominantSet(){
 
-    
+    /*
+    //Vector with nodes descending outdegrees
+    Node* sortedOutdegree = this->sortByOutDegree();
+    //List with the MCDS
+    list<Node*> MCDS;
+    */
+
+    //Queue for visiting nodes
+    queue<Node*> toVisit;
+    //Vector to know if a node was visited and marking all as unvisited
+    bool *visited = new bool[this->order];
+    for(int i = 0; i < this->order; i++)
+        visited[i] = false;
+
+    Node* auxNode;
+
+    //The first node (change it to major outdegree, it is the first node at sortedOutdegree) is already visited
+    visited[this->indexForNodes(this->getFirstNode()->getId())] = true;
+    toVisit.push(this->getFirstNode());
+
+    while(!toVisit.empty()){
+
+        //Auxilar to the node in the queue front
+        auxNode = toVisit.front();
+        //Then its is removed from the queue
+        toVisit.pop();
+
+        //Recur all of his adjacents
+        for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
+
+            int targetId = auxEdge->getTargetId();
+
+            //If a adjacent was not visited it is marked as visited and added to the queue
+            if(!visited[indexForNodes(targetId)]){
+
+                visited[indexForNodes(targetId)] = true;
+                toVisit.push(this->getNode(targetId));
+
+            }
+
+        }
+
+    }
+
 
 }
