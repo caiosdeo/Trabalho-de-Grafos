@@ -779,6 +779,20 @@ int *Graph::topologicalSort()
     }
 }
 
+// This function return the Node with the highest degree
+Node* Graph::getHighestDegreeNode() {
+
+    Node* highestDegreeNode = this->first_node;
+
+    for (Node *nodeI = this->first_node; nodeI != nullptr; nodeI = nodeI->getNextNode()) {
+        if(highestDegreeNode->getOutDegree() < nodeI->getOutDegree())
+            highestDegreeNode = nodeI;
+    }
+
+    return highestDegreeNode;
+}
+
+
 // This function returns the Minimum Connected Dominant Set
 list<int> Graph::greedyMinimumConnectedDominantSet(){
 

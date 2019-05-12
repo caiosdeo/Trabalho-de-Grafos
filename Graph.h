@@ -55,6 +55,7 @@ class Graph{
         int* connectedComponents();
         bool connectedGraph();
         list<int> greedyMinimumConnectedDominantSet();
+        Node* getHighestDegreeNode();
 
     private:
         //Auxiliar methods
