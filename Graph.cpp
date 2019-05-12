@@ -830,4 +830,6 @@ list<int> Graph::greedyMinimumConnectedDominantSet(){
 
     }
 
+    return minimun_connected_dominant_set;
+
 }
