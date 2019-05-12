@@ -780,15 +780,15 @@ int *Graph::topologicalSort()
 }
 
 // This function returns the Minimum Connected Dominant Set
-int* Graph::greedyMinimumConnectedDominantSet(){
+list<int> Graph::greedyMinimumConnectedDominantSet(){
 
     /*
-    //Vector with nodes descending outdegrees
+    //Pointer with the node of the bigger degree 
     Node* sortedOutdegree = this->sortByOutDegree();
-    //List with the MCDS
-    list<Node*> MCDS;
     */
 
+    //List for the Minimum Connected Dominant Set
+    list<int> minimun_connected_dominant_set;
     //Queue for visiting nodes
     queue<Node*> toVisit;
     //Vector to know if a node was visited and marking all as unvisited
@@ -806,6 +806,8 @@ int* Graph::greedyMinimumConnectedDominantSet(){
 
         //Auxilar to the node in the queue front
         auxNode = toVisit.front();
+        // Adding the node id in the solution list
+        list.insert(auxNode->getId());
         //Then its is removed from the queue
         toVisit.pop();
 
@@ -818,13 +820,14 @@ int* Graph::greedyMinimumConnectedDominantSet(){
             if(!visited[indexForNodes(targetId)]){
 
                 visited[indexForNodes(targetId)] = true;
-                toVisit.push(this->getNode(targetId));
+                aux_node = this->getNode(targetId); 
+                if(!aux_node->isLeaf(visited))
+                    toVisit.push(aux_node);
 
             }
 
         }
 
     }
-
 
 }

@@ -7,6 +7,7 @@
 #include "Node.h"
 #include <fstream>
 #include <stack>
+#include <list>
 
 using namespace std;
 
@@ -53,7 +54,7 @@ class Graph{
         int* topologicalSort();
         int* connectedComponents();
         bool connectedGraph();
-        int* greedyMinimumConnectedDominantSet();
+        list<int> greedyMinimumConnectedDominantSet();
 
     private:
         //Auxiliar methods
