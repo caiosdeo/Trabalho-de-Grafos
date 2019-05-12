@@ -220,16 +220,23 @@ void Node::decrementOutDegree(){
 
 bool Node::isLeaf(bool *visited){
 
-    if(this->first_edge != nullptr)
+    if(this->first_edge != nullptr){
+        
         Edge* aux_edge = this->first_edge;
 
-    while(aux_edge != nullptr){
+        while(aux_edge != nullptr){
 
-        if(!visited[aux_edge->getTargetId()])
-            return false;
+            if(!visited[aux_edge->getTargetId()])
+                return false;
+
+            aux_edge = aux_edge->getNextEdge();
+
+        }
+
+        return true;
 
     }
 
-    return true;
+    return false;
 
 }
