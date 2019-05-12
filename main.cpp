@@ -115,7 +115,12 @@ int main(int argc, char const *argv[]) {
         output_file << endl;
 
         //Teste Greedy
-        //graph.greedyMinimumConnectedDominantSet();
+        list<int> mcds = graph.greedyMinimumConnectedDominantSet();
+        for (list<int>::iterator i = mcds.begin(); i != mcds.end(); i++){
+
+            cout << *i << " ";
+
+        }
 
         //Teste sequencia de graph
         output_file << "Sequencia de grau" << endl;

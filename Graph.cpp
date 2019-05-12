@@ -783,7 +783,7 @@ int *Graph::topologicalSort()
 list<int> Graph::greedyMinimumConnectedDominantSet(){
 
     /*
-    //Pointer with the node of the bigger degree 
+    //Pointer with the node of the bigger degree
     Node* sortedOutdegree = this->sortByOutDegree();
     */
 
@@ -807,7 +807,7 @@ list<int> Graph::greedyMinimumConnectedDominantSet(){
         //Auxilar to the node in the queue front
         auxNode = toVisit.front();
         // Adding the node id in the solution list
-        list.insert(auxNode->getId());
+        minimun_connected_dominant_set.push_front(auxNode->getId());
         //Then its is removed from the queue
         toVisit.pop();
 
@@ -820,9 +820,9 @@ list<int> Graph::greedyMinimumConnectedDominantSet(){
             if(!visited[indexForNodes(targetId)]){
 
                 visited[indexForNodes(targetId)] = true;
-                aux_node = this->getNode(targetId); 
-                if(!aux_node->isLeaf(visited))
-                    toVisit.push(aux_node);
+                auxNode = this->getNode(targetId);
+                if(!auxNode->isLeaf(visited))
+                    toVisit.push(auxNode);
 
             }
 
