@@ -217,3 +217,19 @@ void Node::decrementOutDegree(){
     this->out_degree--;
 
 }
+
+bool Node::isLeaf(bool *visited){
+
+    if(this->first_edge != nullptr)
+        Edge* aux_edge = this->first_edge;
+
+    while(aux_edge != nullptr){
+
+        if(!visited[aux_edge->getTargetId()])
+            return false;
+
+    }
+
+    return true;
+
+}

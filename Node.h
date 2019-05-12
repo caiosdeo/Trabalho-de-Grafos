@@ -46,6 +46,8 @@ class Node{
         void decrementOutDegree();
         void incrementInDegree();
         void decrementInDegree();
+        // Auxiliar methods
+        bool isLeaf(bool *visited);
 
 }; 
 
