@@ -178,8 +178,8 @@ list<int> Graph::greedyMinimumConnectedDominantSet(){
             //Queue for visiting nodes
             queue<Node*> toVisit;
             //Vector to know if a node was visited and marking all as unvisited
-            bool *visited = new bool[gS->order];
-            for(int i = 0; i < gS->order; i++)
+            bool *visited = new bool[gS->getOrder()];
+            for(int i = 0; i < gS->getOrder(); i++)
                 visited[i] = false;
 
             Node* auxNode;
@@ -203,11 +203,11 @@ list<int> Graph::greedyMinimumConnectedDominantSet(){
                     int targetId = auxEdge->getTargetId();
 
                     //If a adjacent was not visited it is marked as visited and added to the queue
-                    if(!visited[indexForNodes(targetId)]){
+                    if(!visited[gS->indexForNodes(targetId)]){
 
-                        visited[indexForNodes(targetId)] = true;
+                        visited[gS->indexForNodes(targetId)] = true;
                         auxNode = gS->getNode(targetId);
-                        if(!auxNode->isLeaf(visited))
+                        if(!gS->isLeafNode(auxNode, visited))
                             toVisit.push(auxNode);
 
                     }
@@ -257,7 +257,7 @@ list<int> Graph::greedyMinimumConnectedDominantSet(){
 
                         visited[indexForNodes(targetId)] = true;
                         auxNode = this->getNode(targetId);
-                        if(!auxNode->isLeaf(visited))
+                        if(!this->isLeafNode(auxNode, visited))
                             toVisit.push(auxNode);
 
                     }
