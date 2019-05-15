@@ -105,22 +105,11 @@ int main(int argc, char const *argv[]) {
         output_file << "Ponderado Nós: " << graph.getWeightedNode() << endl;
         output_file << "Conexo: " << graph.connectedGraph() << endl;
         output_file << "Numero de arestas: " << graph.getNumberEdges() << endl;
-        output_file << "No com id = 7 esta no grafo? " << graph.searchNode(7) << endl;
-        output_file << "No com id = 4 esta no grafo? " << graph.searchNode(4) << endl;
-        output_file << "Busca em profundidade id = 6 apartir do primeiro nó inserido? " << graph.depthFirstSearch(1,6) << endl;
         output_file << endl;
 
         //Imprimindo o Grafo
         graph.printGraph(output_file);
         output_file << endl;
-
-        //Teste Greedy
-        list<int> mcds = graph.greedyMinimumConnectedDominantSet();
-        for (list<int>::iterator i = mcds.begin(); i != mcds.end(); i++){
-
-            cout << *i << " ";
-
-        }
 
         //Teste sequencia de graph
         output_file << "Sequencia de grau" << endl;
@@ -212,6 +201,18 @@ int main(int argc, char const *argv[]) {
         Graph* gC = graph.getComplement();
         gC->printGraph(output_file);
         output_file << endl;
+
+        //Teste Greedy
+        list<int> mcds = graph.greedyMinimumConnectedDominantSet();
+        if(!mcds.empty()){
+            output_file << "Subconjunto Dominante Minimo Conexo" << endl;
+            for (list<int>::iterator i = mcds.begin(); i != mcds.end(); i++){
+                output_file << *i << " ";
+            }
+        }else{
+            output_file << "Grafo não conexo, sem Subconjunto Dominante Minimo Conexo";
+        }
+        output_file << endl << endl;
 
         //Removendo um nó
         output_file << "Removendo nó id = 4" << endl;
