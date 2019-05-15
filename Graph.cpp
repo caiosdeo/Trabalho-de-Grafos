@@ -649,3 +649,26 @@ Node* Graph::getHighestDegreeNode() {
 
     return highestDegreeNode;
 }
+
+bool Graph::isLeafNode(Node* node, bool *visited){
+
+    if(node->getFirstEdge() != nullptr){
+
+        Edge* aux_edge = node->getFirstEdge();
+
+        while(aux_edge != nullptr){
+
+            if(!visited[this->indexForNodes(aux_edge->getTargetId())])
+                return false;
+
+            aux_edge = aux_edge->getNextEdge();
+
+        }
+
+        return true;
+
+    }
+
+    return false;
+
+}
