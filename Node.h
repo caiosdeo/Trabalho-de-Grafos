@@ -13,7 +13,7 @@ class Node{
 
     // Attributes
     private:
-        Edge* first_edge;  
+        Edge* first_edge;
         Edge* last_edge;
         int id;
         unsigned int in_degree;
@@ -47,8 +47,7 @@ class Node{
         void incrementInDegree();
         void decrementInDegree();
         // Auxiliar methods
-        bool isLeaf(bool *visited);
 
-}; 
+};
 
 #endif // NODE_H_INCLUDED

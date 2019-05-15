@@ -159,19 +159,19 @@ int Node::removeEdge(int id, bool directed, Node* target_node){
 
         if(aux->getNextEdge() == this->last_edge)
             this->last_edge = aux->getNextEdge();
-        
+
         delete aux;
         // Verifies whether the graph is directed
         if(directed)
             this->decrementOutDegree();
-            
+
         else{
 
             this->decrementInDegree();
             target_node->decrementInDegree();
-            
+
         }
-        
+
         return 1;
 
     }
@@ -215,28 +215,5 @@ void Node::decrementInDegree(){
 void Node::decrementOutDegree(){
 
     this->out_degree--;
-
-}
-
-bool Node::isLeaf(bool *visited){
-
-    if(this->first_edge != nullptr){
-        
-        Edge* aux_edge = this->first_edge;
-
-        while(aux_edge != nullptr){
-
-            if(!visited[aux_edge->getTargetId()])
-                return false;
-
-            aux_edge = aux_edge->getNextEdge();
-
-        }
-
-        return true;
-
-    }
-
-    return false;
 
 }
