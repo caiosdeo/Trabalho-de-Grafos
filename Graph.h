@@ -54,8 +54,8 @@ class Graph{
         int* topologicalSort();
         int* connectedComponents();
         bool connectedGraph();
-        list<int> greedyMinimumConnectedDominantSet();
         Node* getHighestDegreeNode();
+        list<int> greedyMinimumConnectedDominantSet();
 
     private:
         //Auxiliar methods
@@ -65,6 +65,7 @@ class Graph{
         void auxComponents(int initialId, int targetId, bool visited[], int c[], int label);
         bool auxBreadthFirstSearchVerify(int *verify, int size, int targetId);
         bool isLeafNode(Node* node, bool *visited);
+        list<int> auxGreedyMinimumConnectedDominantSet();
 
 };
 

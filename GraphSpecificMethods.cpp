@@ -156,8 +156,7 @@ int *Graph::topologicalSort()
     }
 }
 
-
-// This function returns the Minimum Connected Dominant Set
+//This function is just to decide which way the greey will act if is a graph is directed or not
 list<int> Graph::greedyMinimumConnectedDominantSet(){
 
     if(!this->connectedGraph()){
@@ -165,111 +164,70 @@ list<int> Graph::greedyMinimumConnectedDominantSet(){
         return empty;
 
     }else{
-
         if(this->directed){
-
             Graph* gS = this->getSubjacent();
-
-            //Pointer to the highest degree node
-            Node* highestDegreeNode = gS->getHighestDegreeNode();
-
-            //List for the Minimum Connected Dominant Set
-            list<int> minimun_connected_dominant_set;
-            //Queue for visiting nodes
-            queue<Node*> toVisit;
-            //Vector to know if a node was visited and marking all as unvisited
-            bool *visited = new bool[gS->getOrder()];
-            for(int i = 0; i < gS->getOrder(); i++)
-                visited[i] = false;
-
-            Node* auxNode;
-
-            //The highestDegreeNode is already visited and is our root for the BFS
-            visited[gS->indexForNodes(highestDegreeNode->getId())] = true;
-            toVisit.push(highestDegreeNode);
-
-            while(!toVisit.empty()){
-
-                //Auxilar to the node in the queue front
-                auxNode = toVisit.front();
-                // Adding the node id in the solution list
-                minimun_connected_dominant_set.push_front(auxNode->getId());
-                //Then its is removed from the queue
-                toVisit.pop();
-
-                //Recur all of his adjacents
-                for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
-
-                    int targetId = auxEdge->getTargetId();
-
-                    //If a adjacent was not visited it is marked as visited and added to the queue
-                    if(!visited[gS->indexForNodes(targetId)]){
-
-                        visited[gS->indexForNodes(targetId)] = true;
-                        auxNode = gS->getNode(targetId);
-                        if(!gS->isLeafNode(auxNode, visited))
-                            toVisit.push(auxNode);
-
-                    }
-
-                }
-
-            }
-
-            return minimun_connected_dominant_set;
+            list<int> MCDS = gS->auxGreedyMinimumConnectedDominantSet();
+            return MCDS;
 
         }else{
-
-            //Pointer to the highest degree node
-            Node* highestDegreeNode = this->getHighestDegreeNode();
-
-            //List for the Minimum Connected Dominant Set
-            list<int> minimun_connected_dominant_set;
-            //Queue for visiting nodes
-            queue<Node*> toVisit;
-            //Vector to know if a node was visited and marking all as unvisited
-            bool *visited = new bool[this->order];
-            for(int i = 0; i < this->order; i++)
-                visited[i] = false;
-
-            Node* auxNode;
-
-            //The highestDegreeNode is already visited and is our root for the BFS
-            visited[this->indexForNodes(highestDegreeNode->getId())] = true;
-            toVisit.push(highestDegreeNode);
-
-            while(!toVisit.empty()){
-
-                //Auxilar to the node in the queue front
-                auxNode = toVisit.front();
-                // Adding the node id in the solution list
-                minimun_connected_dominant_set.push_front(auxNode->getId());
-                //Then its is removed from the queue
-                toVisit.pop();
-
-                //Recur all of his adjacents
-                for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
-
-                    int targetId = auxEdge->getTargetId();
-
-                    //If a adjacent was not visited it is marked as visited and added to the queue
-                    if(!visited[indexForNodes(targetId)]){
-
-                        visited[indexForNodes(targetId)] = true;
-                        auxNode = this->getNode(targetId);
-                        if(!this->isLeafNode(auxNode, visited))
-                            toVisit.push(auxNode);
-
-                    }
-
-                }
-
-            }
-
-            return minimun_connected_dominant_set;
+            list<int> MCDS = this->auxGreedyMinimumConnectedDominantSet();
+            return MCDS;
 
         }
 
     }
+
+}
+
+// This function returns the Minimum Connected Dominant Set
+list<int> Graph::auxGreedyMinimumConnectedDominantSet(){
+
+    //Pointer to the highest degree node
+    Node* highestDegreeNode = this->getHighestDegreeNode();
+
+    //List for the Minimum Connected Dominant Set
+    list<int> minimun_connected_dominant_set;
+    //Queue for visiting nodes
+    queue<Node*> toVisit;
+    //Vector to know if a node was visited and marking all as unvisited
+    bool *visited = new bool[this->order];
+    for(int i = 0; i < this->order; i++)
+        visited[i] = false;
+
+    Node* auxNode;
+
+    //The highestDegreeNode is already visited and is our root for the BFS
+    visited[this->indexForNodes(highestDegreeNode->getId())] = true;
+    toVisit.push(highestDegreeNode);
+
+    while(!toVisit.empty()){
+
+        //Auxilar to the node in the queue front
+        auxNode = toVisit.front();
+        // Adding the node id in the solution list
+        minimun_connected_dominant_set.push_front(auxNode->getId());
+        //Then its is removed from the queue
+        toVisit.pop();
+
+        //Recur all of his adjacents
+        for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
+
+            int targetId = auxEdge->getTargetId();
+
+            //If a adjacent was not visited it is marked as visited and added to the queue
+            if(!visited[this->indexForNodes(targetId)]){
+
+                visited[this->indexForNodes(targetId)] = true;
+                auxNode = this->getNode(targetId);
+                if(!this->isLeafNode(auxNode, visited))
+                    toVisit.push(auxNode);
+
+            }
+
+        }
+
+    }
+
+    return minimun_connected_dominant_set;
 
 }
