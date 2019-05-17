@@ -213,11 +213,11 @@ list<int> Graph::auxGreedyMinimumConnectedDominantSet(){
         for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
 
             int targetId = auxEdge->getTargetId();
-
+            int respectiveId = this->indexForNodes(targetId);
             //If a adjacent was not visited it is marked as visited and added to the queue
-            if(!visited[this->indexForNodes(targetId)]){
+            if(!visited[respectiveId]){
 
-                visited[this->indexForNodes(targetId)] = true;
+                visited[respectiveId] = true;
                 auxNode = this->getNode(targetId);
                 if(!this->isLeafNode(auxNode, visited))
                     toVisit.push(auxNode);
