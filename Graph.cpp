@@ -6,6 +6,7 @@
 #include <stack>
 #include <queue>
 #include <list>
+#include <math.h>
 
 using namespace std;
 
@@ -670,5 +671,11 @@ bool Graph::isLeafNode(Node* node, bool *visited){
     }
 
     return false;
+
+}
+
+Node* Graph::getAlphaNode(float alpha){
+
+    int sizeAlphaRange = 
 
 }

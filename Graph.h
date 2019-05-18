@@ -66,6 +66,7 @@ class Graph{
         bool auxBreadthFirstSearchVerify(int *verify, int size, int targetId);
         bool isLeafNode(Node* node, bool *visited);
         list<int> auxGreedyMinimumConnectedDominantSet();
+        Node* getAlphaNode(float alpha);
 
 };
 
