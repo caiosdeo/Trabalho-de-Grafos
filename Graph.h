@@ -68,6 +68,8 @@ class Graph{
         list<int> auxGreedyMinimumConnectedDominantSet();
         Node* getAlphaNode(float alpha);
         void quickSort(Node** arr, int low, int high);
+        int partition(Node** arr, int low, int high);
+        void swap(Node* x, Node* y);
 
 };
 

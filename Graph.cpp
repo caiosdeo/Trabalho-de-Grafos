@@ -682,12 +682,12 @@ Node* Graph::getAlphaNode(float alpha){
     int sizeAlphaRange = ceil(this->order * alpha);
     int alphaId = rand() % sizeAlphaRange;
     Node** nodesSortedByOutDegree = new Node*[this->order];
-    quickSort(nodesSortedByOutDegree, 0, this->order - 1);
+    this->quickSort(nodesSortedByOutDegree, 0, this->order - 1);
     return nodesSortedByOutDegree[alphaId];
 
 }
 
-void swap(Node* x, Node* y){
+void Graph::swap(Node* x, Node* y){
 
     Node* z = x;
     x = y;
@@ -695,7 +695,7 @@ void swap(Node* x, Node* y){
 
 }
 
-int partition(Node** arr, int low, int high){ 
+int Graph::partition(Node** arr, int low, int high){ 
 
     Node* pivot = arr[high]; 
     int i = (low - 1);  
