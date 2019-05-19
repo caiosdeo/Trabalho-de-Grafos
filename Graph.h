@@ -67,6 +67,7 @@ class Graph{
         bool isLeafNode(Node* node, bool *visited);
         list<int> auxGreedyMinimumConnectedDominantSet();
         Node* getAlphaNode(float alpha);
+        void quickSort(Node** arr, int low, int high);
 
 };
 
