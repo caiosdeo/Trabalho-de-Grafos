@@ -7,6 +7,7 @@
 #include <queue>
 #include <list>
 #include <math.h>
+#include <cstdlib>
 
 using namespace std;
 
@@ -651,6 +652,7 @@ Node* Graph::getHighestDegreeNode() {
     return highestDegreeNode;
 }
 
+// The node is marked as leaf if all of his sons were visited
 bool Graph::isLeafNode(Node* node, bool *visited){
 
     if(node->getFirstEdge() != nullptr){
@@ -674,8 +676,20 @@ bool Graph::isLeafNode(Node* node, bool *visited){
 
 }
 
+// Returns the correspondent node choosed through the alpha coefficient and a random number of a range
 Node* Graph::getAlphaNode(float alpha){
 
-    int sizeAlphaRange = 
+    int sizeAlphaRange = ceil(this->order * alpha);
+    int alphaId = rand() % sizeAlphaRange;
+    Node** nodesSortedByOutDegree = new Node*[this->order];
+
+
+}
+
+void swap(Node* x, Node* y){
+
+    Node* z = x;
+    x = y;
+    y = z;
 
 }
