@@ -227,6 +227,12 @@ int main(int argc, char const *argv[]) {
 
     }
 
+    Node** m = graph.sortNodesByOutDegree();
+
+    for(int i = 0; i < graph.getOrder();  i++)
+        cout << m[i]->getOutDegree() << " ";
+    cout << endl;
+
     //Fechando arquivo de entrada
     input_file.close();
 

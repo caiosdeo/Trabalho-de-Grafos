@@ -681,9 +681,21 @@ Node* Graph::getAlphaNode(float alpha){
 
     int sizeAlphaRange = ceil(this->order * alpha);
     int alphaId = rand() % sizeAlphaRange;
-    Node** nodesSortedByOutDegree = new Node*[this->order];
-    this->quickSort(nodesSortedByOutDegree, 0, this->order - 1);
+    Node** nodesSortedByOutDegree = this->sortNodesByOutDegree();
     return nodesSortedByOutDegree[alphaId];
+
+}
+
+Node** Graph::sortNodesByOutDegree(){
+
+    Node** nodesSortedByOutDegree = new Node*[this->order];
+    Node* aux_node = this->first_node;
+
+    for(int i = 0; aux_node != nullptr; i++, aux_node = aux_node->getNextNode())
+        nodesSortedByOutDegree[i] = aux_node;
+
+    quickSort(nodesSortedByOutDegree, 0, this->order - 1);
+    return nodesSortedByOutDegree;
 
 }
 
@@ -704,12 +716,12 @@ int Graph::partition(Node** arr, int low, int high){
 
         if(arr[j]->getOutDegree() <= pivot->getOutDegree()) { 
             i++;    
-            swap(arr[i], arr[j]); 
+            this->swap(arr[i], arr[j]); 
         } 
 
     } 
 
-    swap(arr[i + 1], arr[high]); 
+    this->swap(arr[i + 1], arr[high]); 
     return (i + 1); 
 
 } 
@@ -719,8 +731,8 @@ void Graph::quickSort(Node** arr, int low, int high){
     if(low < high){
 
         int pi = partition(arr, low, high); 
-        quickSort(arr, low, pi - 1); 
-        quickSort(arr, pi + 1, high); 
+        this->quickSort(arr, low, pi - 1); 
+        this->quickSort(arr, pi + 1, high); 
 
     }
 
