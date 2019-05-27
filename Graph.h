@@ -68,10 +68,9 @@ class Graph{
         bool auxBreadthFirstSearchVerify(int *verify, int size, int targetId);
         bool isLeafNode(Node* node, bool *visited);
         list<int> auxGreedyMinimumConnectedDominantSet();
-        //Node** getAlphaNode(float alpha);
         void quickSort(Node** arr, int low, int high);
         int partition(Node** arr, int low, int high);
-        void swap(Node* x, Node* y);
+        void swap(Node** arr, int i, int j);
 
 };
 

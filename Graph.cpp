@@ -694,16 +694,16 @@ Node** Graph::sortNodesByOutDegree(){
     for(int i = 0; aux_node != nullptr; i++, aux_node = aux_node->getNextNode())
         nodesSortedByOutDegree[i] = aux_node;
 
-    quickSort(nodesSortedByOutDegree, 0, this->order - 1);
+    this->quickSort(nodesSortedByOutDegree, 0, this->order - 1);
     return nodesSortedByOutDegree;
 
 }
 
-void Graph::swap(Node* x, Node* y){
+void Graph::swap(Node** arr, int i, int j){
 
-    Node* z = x;
-    x = y;
-    y = z;
+    Node* z = arr[i];
+    arr[i] = arr[j];
+    arr[j] = z;
 
 }
 
@@ -714,14 +714,14 @@ int Graph::partition(Node** arr, int low, int high){
   
     for(int j = low; j <= high - 1; j++){ 
 
-        if(arr[j]->getOutDegree() <= pivot->getOutDegree()) { 
+        if(arr[j]->getOutDegree() >= pivot->getOutDegree()) { 
             i++;    
-            this->swap(arr[i], arr[j]); 
+            this->swap(arr, i, j); 
         } 
 
     } 
 
-    this->swap(arr[i + 1], arr[high]); 
+    this->swap(arr, i + 1, high); 
     return (i + 1); 
 
 } 
