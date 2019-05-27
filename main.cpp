@@ -203,7 +203,7 @@ int main(int argc, char const *argv[]) {
         output_file << endl;
 
         //Teste Greedy
-        list<int> mcds = graph.greedyMinimumConnectedDominantSet();
+        list<int> mcds = graph.randomizedGreedy(1000000, 0.3);
         if(!mcds.empty()){
             output_file << "Subconjunto Dominante Minimo Conexo" << endl;
             for (list<int>::iterator i = mcds.begin(); i != mcds.end(); i++){
@@ -226,12 +226,6 @@ int main(int argc, char const *argv[]) {
         cout << "Unable to open " << argv[2];
 
     }
-
-    Node** m = graph.sortNodesByOutDegree();
-
-    for(int i = 0; i < graph.getOrder();  i++)
-        cout << m[i]->getOutDegree() << " ";
-    cout << endl;
 
     //Fechando arquivo de entrada
     input_file.close();

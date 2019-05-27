@@ -157,7 +157,7 @@ int *Graph::topologicalSort()
 }
 
 //This function is just to decide which way the greey will act if is a graph is directed or not
-list<int> Graph::greedyMinimumConnectedDominantSet(){
+list<int> Graph::greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha){
 
     if(!this->connectedGraph()){
         list<int> empty;
@@ -166,11 +166,11 @@ list<int> Graph::greedyMinimumConnectedDominantSet(){
     }else{
         if(this->directed){
             Graph* gS = this->getSubjacent();
-            list<int> MCDS = gS->auxGreedyMinimumConnectedDominantSet();
+            list<int> MCDS = gS->auxGreedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
             return MCDS;
 
         }else{
-            list<int> MCDS = this->auxGreedyMinimumConnectedDominantSet();
+            list<int> MCDS = this->auxGreedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
             return MCDS;
 
         }
@@ -180,10 +180,7 @@ list<int> Graph::greedyMinimumConnectedDominantSet(){
 }
 
 // This function returns the Minimum Connected Dominant Set
-list<int> Graph::auxGreedyMinimumConnectedDominantSet(){
-
-    //Pointer to the highest degree node
-    Node* highestDegreeNode = this->getHighestDegreeNode();
+list<int> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha){
 
     //List for the Minimum Connected Dominant Set
     list<int> minimun_connected_dominant_set;
@@ -196,9 +193,12 @@ list<int> Graph::auxGreedyMinimumConnectedDominantSet(){
 
     Node* auxNode;
 
+    // Get the alpha node which is already selected via rand and a given alpha
+    Node* alphaNode = this->getAlphaNode(nodesSortedByOutDegree, alpha); 
+
     //The highestDegreeNode is already visited and is our root for the BFS
-    visited[this->indexForNodes(highestDegreeNode->getId())] = true;
-    toVisit.push(highestDegreeNode);
+    visited[this->indexForNodes(alphaNode->getId())] = true;
+    toVisit.push(alphaNode);
 
     while(!toVisit.empty()){
 
@@ -229,5 +229,29 @@ list<int> Graph::auxGreedyMinimumConnectedDominantSet(){
     }
 
     return minimun_connected_dominant_set;
+
+}
+
+list<int> Graph::randomizedGreedy(int iterations, float alpha){
+
+    Node** nodesSortedByOutDegree = this->sortNodesByOutDegree();
+    list<int> starList = this->greedyMinimumConnectedDominantSet(nodesSortedByOutDegree, 0); 
+    int starSize = starList.size();
+    list<int> auxList;
+
+    for(int i =0; i < iterations; i++){
+
+        auxList = this->greedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
+
+        if(auxList.size() < starSize){
+
+            starSize = auxList.size();
+            starList = auxList;
+
+        }
+
+    } 
+
+    return starList;
 
 }

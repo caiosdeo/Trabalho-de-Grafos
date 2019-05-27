@@ -55,9 +55,10 @@ class Graph{
         int* connectedComponents();
         bool connectedGraph();
         Node* getHighestDegreeNode();
-        list<int> greedyMinimumConnectedDominantSet();
+        list<int> greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha);
+        list<int> randomizedGreedy(int iterations, float alpha);
         Node** sortNodesByOutDegree();
-        Node* getAlphaNode(float alpha);
+        Node* getAlphaNode(Node** nodesSortedByOutDegree, float alpha);
 
     private:
         //Auxiliar methods
@@ -67,7 +68,7 @@ class Graph{
         void auxComponents(int initialId, int targetId, bool visited[], int c[], int label);
         bool auxBreadthFirstSearchVerify(int *verify, int size, int targetId);
         bool isLeafNode(Node* node, bool *visited);
-        list<int> auxGreedyMinimumConnectedDominantSet();
+        list<int> auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha);
         void quickSort(Node** arr, int low, int high);
         int partition(Node** arr, int low, int high);
         void swap(Node** arr, int i, int j);

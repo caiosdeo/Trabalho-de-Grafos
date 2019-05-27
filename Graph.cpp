@@ -676,12 +676,17 @@ bool Graph::isLeafNode(Node* node, bool *visited){
 
 }
 
-// Returns the correspondent node choosed through the alpha coefficient and a random number of a range
-Node* Graph::getAlphaNode(float alpha){
+// Returns the correspondent node chosen through the alpha coefficient and a random number of a range
+Node* Graph::getAlphaNode(Node** nodesSortedByOutDegree, float alpha){
 
-    int sizeAlphaRange = ceil(this->order * alpha);
-    int alphaId = rand() % sizeAlphaRange;
-    Node** nodesSortedByOutDegree = this->sortNodesByOutDegree();
+    int alphaId;
+    int sizeAlphaRange = floor(this->order * alpha);
+
+    if(sizeAlphaRange == 0)
+        alphaId = 0;
+    else
+        alphaId = rand() % sizeAlphaRange;
+
     return nodesSortedByOutDegree[alphaId];
 
 }
