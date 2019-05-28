@@ -6,6 +6,7 @@
 #include <stack>
 #include <queue>
 #include <list>
+#include <math.h>
 
 using namespace std;
 
@@ -252,3 +253,40 @@ list<Node*> Graph::randomizedGreedy(Node** nodesSortedByOutDegree, int iteration
     return starList;
 
 }
+<<<<<<< HEAD
+=======
+
+pair<list<Node*>, float> Graph::reactiveRandomizedGreedy(float maxAlpha, float alphaStep){
+
+    /*
+        alphasInfo matrix description
+
+        0 - alpha values
+        1 - alpha occurrences
+        2 - alpha solutions sizes sum
+        3 - alpha average of the sum solutions sizes in occurrences
+        4 - alpha q - relation between star solution size and 3
+        5 - alpha probability
+    
+    */
+
+    Node** sortNodesByOutDegree = this->sortNodesByOutDegree();
+    int vectorsSize = ceil(maxAlpha / alphaStep);
+    float alphasInfo[6][vectorsSize];
+    // Starting the starList with the randomized greedy solution
+    list<Node*> starList = this->randomizedGreedy(1, 0.0);
+
+    // Loop to initialize the elements of the alphasInfo matrix
+    for(int i = 0; i < vectorsSize; i++, alphaStep += alphaStep){
+
+        alphasInfo[0][i] = alphaStep;
+        alphasInfo[1][i] = 1;
+        alphasInfo[2][i] = 0;
+        alphasInfo[3][i] = 0;
+        alphasInfo[4][i] = 0;
+        alphasInfo[5][i] = 1 / vectorsSize;
+
+    }
+
+}
+>>>>>>> 041e9d162c201805385bbf5db60ab714642f66bd
