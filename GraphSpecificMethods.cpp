@@ -270,6 +270,7 @@ pair<list<Node*>, float> Graph::reactiveRandomizedGreedy(float maxAlpha, float a
 
     Node** sortNodesByOutDegree = this->sortNodesByOutDegree();
     int vectorsSize = ceil(maxAlpha / alphaStep);
+    int maxIterations = vectorsSize * 1000; 
     float alphasInfo[6][vectorsSize];
     // Starting the starList with the randomized greedy solution
     list<Node*> starList = this->randomizedGreedy(1, 0.0);
@@ -283,6 +284,13 @@ pair<list<Node*>, float> Graph::reactiveRandomizedGreedy(float maxAlpha, float a
         alphasInfo[3][i] = 0;
         alphasInfo[4][i] = 0;
         alphasInfo[5][i] = 1 / vectorsSize;
+
+    }
+
+    // External loop to run the randomized greedy for each alpha 
+    for(int i = 0; i < maxIterations; i++){
+
+        //Roleta chamada apos rand de prob desejada
 
     }
 
