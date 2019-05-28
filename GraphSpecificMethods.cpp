@@ -194,9 +194,9 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutD
     Node* auxNode;
 
     // Get the alpha node which is already selected via rand and a given alpha
-    Node* alphaNode = this->getAlphaNode(nodesSortedByOutDegree, alpha); 
+    Node* alphaNode = this->getAlphaNode(nodesSortedByOutDegree, alpha);
 
-    //The highestDegreeNode is already visited and is our root for the BFS
+    //The alphaNode is already visited and is our root for the BFS
     visited[this->indexForNodes(alphaNode->getId())] = true;
     toVisit.push(alphaNode);
 
@@ -234,18 +234,23 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutD
 
 list<Node*> Graph::randomizedGreedy(int iterations, float alpha){
 
+    //Degree sequence
     Node** nodesSortedByOutDegree = this->sortNodesByOutDegree();
-    list<Node*> starList = this->greedyMinimumConnectedDominantSet(nodesSortedByOutDegree, 0); 
+
+    //The best solution is initialized with the greedy solution
+    list<Node*> starList = this->greedyMinimumConnectedDominantSet(nodesSortedByOutDegree, 0);
+
     list<Node*> auxList;
 
-    for(int i =0; i < iterations; i++){
+    //The best solution is the one with lesser size
+    for(int i = 0; i < iterations; i++){
 
         auxList = this->greedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
 
         if(auxList.size() < starList.size())
             starList = auxList;
 
-    } 
+    }
 
     return starList;
 
