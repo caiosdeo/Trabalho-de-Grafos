@@ -157,20 +157,20 @@ int *Graph::topologicalSort()
 }
 
 //This function is just to decide which way the greey will act if is a graph is directed or not
-list<int> Graph::greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha){
+list<Node*> Graph::greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha){
 
     if(!this->connectedGraph()){
-        list<int> empty;
+        list<Node*> empty;
         return empty;
 
     }else{
         if(this->directed){
             Graph* gS = this->getSubjacent();
-            list<int> MCDS = gS->auxGreedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
+            list<Node*> MCDS = gS->auxGreedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
             return MCDS;
 
         }else{
-            list<int> MCDS = this->auxGreedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
+            list<Node*> MCDS = this->auxGreedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
             return MCDS;
 
         }
@@ -180,10 +180,10 @@ list<int> Graph::greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree
 }
 
 // This function returns the Minimum Connected Dominant Set
-list<int> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha){
+list<Node*> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha){
 
     //List for the Minimum Connected Dominant Set
-    list<int> minimun_connected_dominant_set;
+    list<Node*> minimun_connected_dominant_set;
     //Queue for visiting nodes
     queue<Node*> toVisit;
     //Vector to know if a node was visited and marking all as unvisited
@@ -205,7 +205,7 @@ list<int> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutDeg
         //Auxilar to the node in the queue front
         auxNode = toVisit.front();
         // Adding the node id in the solution list
-        minimun_connected_dominant_set.push_front(auxNode->getId());
+        minimun_connected_dominant_set.push_front(auxNode);
         //Then its is removed from the queue
         toVisit.pop();
 
@@ -232,23 +232,18 @@ list<int> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutDeg
 
 }
 
-list<int> Graph::randomizedGreedy(int iterations, float alpha){
+list<Node*> Graph::randomizedGreedy(int iterations, float alpha){
 
     Node** nodesSortedByOutDegree = this->sortNodesByOutDegree();
-    list<int> starList = this->greedyMinimumConnectedDominantSet(nodesSortedByOutDegree, 0); 
-    int starSize = starList.size();
-    list<int> auxList;
+    list<Node*> starList = this->greedyMinimumConnectedDominantSet(nodesSortedByOutDegree, 0); 
+    list<Node*> auxList;
 
     for(int i =0; i < iterations; i++){
 
         auxList = this->greedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
 
-        if(auxList.size() < starSize){
-
-            starSize = auxList.size();
+        if(auxList.size() < starList.size())
             starList = auxList;
-
-        }
 
     } 
 
