@@ -203,11 +203,11 @@ int main(int argc, char const *argv[]) {
         output_file << endl;
 
         //Teste Greedy
-        list<int> mcds = graph.randomizedGreedy(1000000, 0.3);
+        list<Node*> mcds = graph.randomizedGreedy(1000000, 0.3);
         if(!mcds.empty()){
             output_file << "Subconjunto Dominante Minimo Conexo" << endl;
-            for (list<int>::iterator i = mcds.begin(); i != mcds.end(); i++){
-                output_file << *i << " ";
+            for (list<Node*>::iterator i = mcds.begin(); i != mcds.end(); i++){
+                output_file << (*i)->getId() << " ";
             }
         }else{
             output_file << "Grafo não conexo, sem Subconjunto Dominante Minimo Conexo";
