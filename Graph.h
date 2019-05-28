@@ -56,7 +56,7 @@ class Graph{
         bool connectedGraph();
         Node* getHighestDegreeNode();
         list<Node*> greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha);
-        list<Node*> randomizedGreedy(int iterations, float alpha);
+        list<Node*> randomizedGreedy(Node** nodesSortedByOutDegree, int iterations, float alpha);
         Node** sortNodesByOutDegree();
         Node* getAlphaNode(Node** nodesSortedByOutDegree, float alpha);
 

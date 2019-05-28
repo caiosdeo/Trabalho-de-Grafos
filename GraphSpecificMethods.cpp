@@ -232,10 +232,7 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutD
 
 }
 
-list<Node*> Graph::randomizedGreedy(int iterations, float alpha){
-
-    //Degree sequence
-    Node** nodesSortedByOutDegree = this->sortNodesByOutDegree();
+list<Node*> Graph::randomizedGreedy(Node** nodesSortedByOutDegree, int iterations, float alpha){
 
     //The best solution is initialized with the greedy solution
     list<Node*> starList = this->greedyMinimumConnectedDominantSet(nodesSortedByOutDegree, 0);
