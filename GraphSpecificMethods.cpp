@@ -253,8 +253,6 @@ list<Node*> Graph::randomizedGreedy(Node** nodesSortedByOutDegree, int iteration
     return starList;
 
 }
-<<<<<<< HEAD
-=======
 
 pair<list<Node*>, float> Graph::reactiveRandomizedGreedy(float maxAlpha, float alphaStep){
 
@@ -289,4 +287,3 @@ pair<list<Node*>, float> Graph::reactiveRandomizedGreedy(float maxAlpha, float a
     }
 
 }
->>>>>>> 041e9d162c201805385bbf5db60ab714642f66bd
