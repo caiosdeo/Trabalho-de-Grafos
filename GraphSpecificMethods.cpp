@@ -268,29 +268,35 @@ pair<list<Node*>, float> Graph::reactiveRandomizedGreedy(float maxAlpha, float a
     
     */
 
-    Node** sortNodesByOutDegree = this->sortNodesByOutDegree();
+    Node** nodesSortedByOutDegree = this->sortNodesByOutDegree();
     int vectorsSize = ceil(maxAlpha / alphaStep);
     int maxIterations = vectorsSize * 1000; 
     float alphasInfo[6][vectorsSize];
     // Starting the starList with the randomized greedy solution
-    list<Node*> starList = this->randomizedGreedy(1, 0.0);
+    list<Node*> starList = this->randomizedGreedy(nodesSortedByOutDegree, 1, 0.0);
+    list<Node*> auxList;
 
     // Loop to initialize the elements of the alphasInfo matrix
     for(int i = 0; i < vectorsSize; i++, alphaStep += alphaStep){
 
         alphasInfo[0][i] = alphaStep;
+        auxList = this->randomizedGreedy(nodesSortedByOutDegree, 1, alphasInfo[0][i]);
         alphasInfo[1][i] = 1;
-        alphasInfo[2][i] = 0;
-        alphasInfo[3][i] = 0;
+        alphasInfo[2][i] = (float)(auxList.size());
+        alphasInfo[3][i] = alphasInfo[2][i] / alphasInfo[1][i];
         alphasInfo[4][i] = 0;
         alphasInfo[5][i] = 1 / vectorsSize;
+
+        if(auxList.size() < starList.size())
+            starList = auxList;
 
     }
 
     // External loop to run the randomized greedy for each alpha 
-    for(int i = 0; i < maxIterations; i++){
+    for(int i = 1; i < maxIterations; i++){
 
-        //Roleta chamada apos rand de prob desejada
+        float randProbability = rand() / 
+        int alphadId = this->roulette(alphasInfo[5][i], )
 
     }
 
