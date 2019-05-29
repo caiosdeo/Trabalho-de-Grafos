@@ -744,13 +744,13 @@ void Graph::quickSort(Node** arr, int low, int high){
 } 
 
 // Function to select a alpha by its probability
-int Graph::roulette(float alphaProbabilities, float desiredProbability, int vectorSize){
+int Graph::roulette(float* alphaProbabilities, int desiredProbability, int vectorSize){
 
     float probabilityByNow = 0;
+    int i;
 
-    for(int i = 0; probabilityByNow < desiredProbability; i++)
-        probabilityByNow += alphaProbabilities[i];
-
+    for(i = 0; probabilityByNow < desiredProbability; i++)
+        probabilityByNow += alphaProbabilities[i] * 100;
 
     return i;
 
