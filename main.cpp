@@ -202,7 +202,7 @@ int main(int argc, char const *argv[]) {
         gC->printGraph(output_file);
         output_file << endl;
 
-        //Teste Greedy
+        /*//Teste Greedy
         list<Node*> mcds = graph.randomizedGreedy(1000000, 0.3);
         if(!mcds.empty()){
             output_file << "Subconjunto Dominante Minimo Conexo" << endl;
@@ -212,7 +212,7 @@ int main(int argc, char const *argv[]) {
         }else{
             output_file << "Grafo não conexo, sem Subconjunto Dominante Minimo Conexo";
         }
-        output_file << endl << endl;
+        output_file << endl << endl;*/
 
         //Removendo um nó
         output_file << "Removendo nó id = 4" << endl;
