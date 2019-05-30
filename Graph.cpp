@@ -755,3 +755,19 @@ int Graph::roulette(float* alphaProbabilities, int desiredProbability, int vecto
     return i;
 
 }
+
+// Update the q vector
+float Graph::updateQ(float* qVector, float* averageVector, int vectorSize, int starSize){
+
+    float sumQ = 0;
+
+    for(int i = 0; i < vectorSize; i++){
+
+        qVector[i] = starSize / averageVector[i];
+        sumQ += qVector[i];
+
+    }
+
+    return sumQ;
+
+}
