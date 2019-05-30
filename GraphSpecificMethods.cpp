@@ -7,6 +7,8 @@
 #include <queue>
 #include <list>
 #include <math.h>
+#include <random>
+#include <utility>
 
 using namespace std;
 
@@ -254,7 +256,7 @@ list<Node*> Graph::randomizedGreedy(Node** nodesSortedByOutDegree, int iteration
 
 }
 
-pair<list<Node*>, float> Graph::reactiveRandomizedGreedy(float maxAlpha, float alphaStep){
+pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(float maxAlpha, float alphaStep){
 
     /*
         alphasInfo matrix description
@@ -268,22 +270,59 @@ pair<list<Node*>, float> Graph::reactiveRandomizedGreedy(float maxAlpha, float a
     
     */
 
-    Node** sortNodesByOutDegree = this->sortNodesByOutDegree();
+    Node** nodesSortedByOutDegree = this->sortNodesByOutDegree();
     int vectorsSize = ceil(maxAlpha / alphaStep);
-    float alphasInfo[6][vectorsSize];
+    int maxIterations = vectorsSize * 1000; 
+
+    // Alocatting the alphasInfo matrix
+    float** alphasInfo = new float*[6];
+    for(int i = 0; i < 6; i++)
+        alphasInfo[i] = new float[vectorsSize];
+
     // Starting the starList with the randomized greedy solution
-    list<Node*> starList = this->randomizedGreedy(1, 0.0);
+    list<Node*> starList = this->randomizedGreedy(nodesSortedByOutDegree, 1, 0.0);
+    list<Node*> auxList;
 
     // Loop to initialize the elements of the alphasInfo matrix
     for(int i = 0; i < vectorsSize; i++, alphaStep += alphaStep){
 
         alphasInfo[0][i] = alphaStep;
+        auxList = this->randomizedGreedy(nodesSortedByOutDegree, 1, alphasInfo[0][i]);
         alphasInfo[1][i] = 1;
-        alphasInfo[2][i] = 0;
-        alphasInfo[3][i] = 0;
+        alphasInfo[2][i] = (float)(auxList.size());
+        alphasInfo[3][i] = alphasInfo[2][i] / alphasInfo[1][i];
         alphasInfo[4][i] = 0;
         alphasInfo[5][i] = 1 / vectorsSize;
 
+        if(auxList.size() < starList.size())
+            starList = auxList;
+
     }
+
+    // External loop to run the randomized greedy for each alpha 
+    for(int i = 1; i < maxIterations; i++){
+
+        int randProbability = rand() % 100;
+        int alphadId = this->roulette(alphasInfo[5], randProbability, vectorsSize);
+        auxList = this->randomizedGreedy(nodesSortedByOutDegree, 1, alphasInfo[0][alphadId]);
+        alphasInfo[1][alphadId]++;
+        alphasInfo[2][alphadId] += (float)(auxList.size());
+        alphasInfo[3][alphadId] = alphasInfo[2][alphadId] / alphasInfo[1][alphadId];
+
+        // Updating the star solution
+        if(auxList.size() < starList.size())
+            starList = auxList;
+
+        // Updating the q and p vector for each block of 100
+        if(i % 100 == 0){
+
+            float sumQ = this->updateQ(alphasInfo[4], alphasInfo[3], vectorsSize, starList.size());
+            this->updateP(alphasInfo[5], alphasInfo[4], vectorsSize, sumQ);
+
+        }
+
+    }
+
+    return make_pair(starList, alphasInfo);
 
 }

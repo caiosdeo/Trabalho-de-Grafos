@@ -742,3 +742,41 @@ void Graph::quickSort(Node** arr, int low, int high){
     }
 
 } 
+
+// Function to select a alpha by its probability
+int Graph::roulette(float* alphaProbabilities, int desiredProbability, int vectorSize){
+
+    float probabilityByNow = 0;
+    int i;
+
+    for(i = 0; probabilityByNow < desiredProbability; i++)
+        probabilityByNow += alphaProbabilities[i] * 100;
+
+    return i;
+
+}
+
+// Update the q vector
+float Graph::updateQ(float* qVector, float* averageVector, int vectorSize, int starSize){
+
+    float sumQ = 0;
+
+    for(int i = 0; i < vectorSize; i++){
+
+        qVector[i] = starSize / averageVector[i];
+        sumQ += qVector[i];
+
+    }
+
+    return sumQ;
+
+}
+
+// Update the p vector
+
+void Graph::updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ){
+
+    for(int i =0; i < vectorSize; i++)
+        vectorP[i] = vectorQ[i] / sumQ;
+
+}

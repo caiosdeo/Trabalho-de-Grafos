@@ -55,7 +55,7 @@ class Graph{
         int* connectedComponents();
         bool connectedGraph();
         Node* getHighestDegreeNode();
-        pair<list<Node*>, float> reactiveRandomizedGreedy(float maxAlpha, float alphaStep);
+        pair<list<Node*>, float**> reactiveRandomizedGreedy(float maxAlpha, float alphaStep);
         list<Node*> greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha);
         list<Node*> randomizedGreedy(Node** nodesSortedByOutDegree, int iterations, float alpha);
         Node** sortNodesByOutDegree();
@@ -73,6 +73,9 @@ class Graph{
         void quickSort(Node** arr, int low, int high);
         int partition(Node** arr, int low, int high);
         void swap(Node** arr, int i, int j);
+        int roulette(float* alphaProbabilities, int desiredProbability, int vectorSize);
+        float updateQ(float* qVector, float* averageVector, int vectorSize, int starSize);
+        void updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ);
 
 };
 
