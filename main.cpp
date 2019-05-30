@@ -3,6 +3,7 @@
 #include <string>
 #include <math.h>
 #include <utility>
+#include <tuple>
 #include "Graph.h"
 #include "Node.h"
 
@@ -205,23 +206,36 @@ int main(int argc, char const *argv[]) {
         output_file << endl;
 
         //Teste Greedy
-        output_file << "CHEGO AQUI";
-        pair<list<Node*>, float**>  solution = graph.reactiveRandomizedGreedy(0.5, 0.05);
-        cout << " PASSO DO GULOSO";
-        if(!solution.first.empty()){
+
+        //Retorno de pair é dividido em duas variaveis
+        list<Node*> cds;
+        float** alphasInfo;
+        tie(cds, alphasInfo) = graph.reactiveRandomizedGreedy(0.5, 0.05);
+
+        if(!cds.empty()){
             output_file << "Subconjunto Dominante Minimo Conexo" << endl;
 
-            for (list<Node*>::iterator i = solution.first.begin(); i != solution.first.end(); i++){
+            for (list<Node*>::iterator i = cds.begin(); i != cds.end(); i++){
                 output_file << (*i)->getId() << " ";
             }
 
             int bestAlphaId = 0;
             for(int i = 0; i < ceil(0.5/0.05); i++)
-                if(solution.second[3][i] < solution.second[3][bestAlphaId])
-                    if(solution.second[5][i] > solution.second[5][bestAlphaId])
+                if(alphasInfo[3][i] < alphasInfo[3][bestAlphaId])
+                    if(alphasInfo[5][i] > alphasInfo[5][bestAlphaId])
                         bestAlphaId = i;
 
-            output_file << endl << "Melhor alpha: " << bestAlphaId << endl;
+            output_file << endl << "Melhor alpha: " << alphasInfo[0][bestAlphaId] << endl << endl;
+
+            //Imprimindo todos os dados sem formatação
+            for(int i = 0; i < 6; i++){
+                output_file << i << " - ";
+                for(int j = 0; j < ceil(0.5/0.05); j++){
+                    output_file << alphasInfo[i][j] << " ";
+                }
+                output_file << endl;
+            }
+
 
 
         }else{
