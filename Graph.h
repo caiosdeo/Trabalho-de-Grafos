@@ -74,7 +74,8 @@ class Graph{
         int partition(Node** arr, int low, int high);
         void swap(Node** arr, int i, int j);
         int roulette(float* alphaProbabilities, int desiredProbability, int vectorSize);
-        float updateQ(float* vectorQ, int vectorSize);
+        float updateQ(float* qVector, float* averageVector, int vectorSize, int starSize);
+        void updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ);
 
 };
 

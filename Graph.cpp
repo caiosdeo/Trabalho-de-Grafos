@@ -771,3 +771,12 @@ float Graph::updateQ(float* qVector, float* averageVector, int vectorSize, int s
     return sumQ;
 
 }
+
+// Update the p vector
+
+void Graph::updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ){
+
+    for(int i =0; i < vectorSize; i++)
+        vectorP[i] = vectorQ[i] / sumQ;
+
+}
