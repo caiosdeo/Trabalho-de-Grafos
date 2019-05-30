@@ -309,13 +309,15 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(float maxAlpha, float
         alphasInfo[2][alphadId] += (float)(auxList.size());
         alphasInfo[3][alphadId] = alphasInfo[2][alphadId] / alphasInfo[1][alphadId];
 
+        // Updating the star solution
         if(auxList.size() < starList.size())
             starList = auxList;
 
+        // Updating the q and p vector for each block of 100
         if(i % 100 == 0){
 
-            alphasInfo[4][i] =  0;// update q;
-            alphasInfo[5][i] = 0;// update p;
+            float sumQ = this->updateQ(alphasInfo[4], alphasInfo[3], vectorsSize, starList.size());
+            this->updateP(alphasInfo[5], alphasInfo[4], vectorsSize, sumQ);
 
         }
 
