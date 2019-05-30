@@ -267,12 +267,12 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(float maxAlpha, float
         3 - alpha average of the sum solutions sizes in occurrences
         4 - alpha q - relation between star solution size and 3
         5 - alpha probability
-    
+
     */
 
     Node** nodesSortedByOutDegree = this->sortNodesByOutDegree();
     int vectorsSize = ceil(maxAlpha / alphaStep);
-    int maxIterations = vectorsSize * 1000; 
+    int maxIterations = vectorsSize * 1000;
 
     // Alocatting the alphasInfo matrix
     float** alphasInfo = new float*[6];
@@ -283,10 +283,12 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(float maxAlpha, float
     list<Node*> starList = this->randomizedGreedy(nodesSortedByOutDegree, 1, 0.0);
     list<Node*> auxList;
 
-    // Loop to initialize the elements of the alphasInfo matrix
-    for(int i = 0; i < vectorsSize; i++, alphaStep += alphaStep){
+    float auxAlphaStep = alphaStep;
 
-        alphasInfo[0][i] = alphaStep;
+    // Loop to initialize the elements of the alphasInfo matrix
+    for(int i = 0; i < vectorsSize; i++, auxAlphaStep += alphaStep){
+
+        alphasInfo[0][i] = auxAlphaStep;
         auxList = this->randomizedGreedy(nodesSortedByOutDegree, 1, alphasInfo[0][i]);
         alphasInfo[1][i] = 1;
         alphasInfo[2][i] = (float)(auxList.size());
@@ -299,7 +301,7 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(float maxAlpha, float
 
     }
 
-    // External loop to run the randomized greedy for each alpha 
+    // External loop to run the randomized greedy for each alpha
     for(int i = 1; i < maxIterations; i++){
 
         int randProbability = rand() % 100;
