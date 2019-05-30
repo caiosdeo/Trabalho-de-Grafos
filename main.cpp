@@ -203,15 +203,30 @@ int main(int argc, char const *argv[]) {
         output_file << endl;
 
         //Teste Greedy
-        list<Node*> mcds = graph.randomizedGreedy(1000000, 0.3);
-        if(!mcds.empty()){
+        pair<list<Node*>, float**>  solution = graph.reactiveRandomizedGreedy(0.5, 0.05);
+
+        if(!solution.first.empty()){
             output_file << "Subconjunto Dominante Minimo Conexo" << endl;
-            for (list<Node*>::iterator i = mcds.begin(); i != mcds.end(); i++){
+
+            for (list<Node*>::iterator i = solution.first.begin(); i != solution.first.end(); i++){
                 output_file << (*i)->getId() << " ";
             }
+
+            float bestAlphaId = 0;
+            for(int i = 0; i < ceil(0.5/0.05); i++)
+                if(solution.second[3][i] < solution.second[3][bestAlphaId])
+                    if(solution.second[5][i] > solution.second[5][bestAlphaId])
+                        bestAlphaId = i;
+
+            output_file << endl << "Melhor alpha: " << bestAlphaId << endl;
+
+
         }else{
+
             output_file << "Grafo não conexo, sem Subconjunto Dominante Minimo Conexo";
+
         }
+
         output_file << endl << endl;
 
         //Removendo um nó
