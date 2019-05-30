@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <math.h>
+#include <utility>
 #include "Graph.h"
 #include "Node.h"
 
@@ -203,8 +205,9 @@ int main(int argc, char const *argv[]) {
         output_file << endl;
 
         //Teste Greedy
+        output_file << "CHEGO AQUI";
         pair<list<Node*>, float**>  solution = graph.reactiveRandomizedGreedy(0.5, 0.05);
-
+        cout << " PASSO DO GULOSO";
         if(!solution.first.empty()){
             output_file << "Subconjunto Dominante Minimo Conexo" << endl;
 
@@ -212,7 +215,7 @@ int main(int argc, char const *argv[]) {
                 output_file << (*i)->getId() << " ";
             }
 
-            float bestAlphaId = 0;
+            int bestAlphaId = 0;
             for(int i = 0; i < ceil(0.5/0.05); i++)
                 if(solution.second[3][i] < solution.second[3][bestAlphaId])
                     if(solution.second[5][i] > solution.second[5][bestAlphaId])
