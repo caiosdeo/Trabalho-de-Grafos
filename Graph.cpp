@@ -752,7 +752,7 @@ int Graph::roulette(float* alphaProbabilities, int desiredProbability, int vecto
     for(i = 0; probabilityByNow < desiredProbability; i++)
         probabilityByNow += alphaProbabilities[i] * 100;
 
-    return i;
+    return i - 1;
 
 }
 
