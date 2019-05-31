@@ -712,36 +712,36 @@ void Graph::swap(Node** arr, int i, int j){
 
 }
 
-int Graph::partition(Node** arr, int low, int high){ 
+int Graph::partition(Node** arr, int low, int high){
 
-    Node* pivot = arr[high]; 
-    int i = (low - 1);  
-  
-    for(int j = low; j <= high - 1; j++){ 
+    Node* pivot = arr[high];
+    int i = (low - 1);
 
-        if(arr[j]->getOutDegree() >= pivot->getOutDegree()) { 
-            i++;    
-            this->swap(arr, i, j); 
-        } 
+    for(int j = low; j <= high - 1; j++){
 
-    } 
-
-    this->swap(arr, i + 1, high); 
-    return (i + 1); 
-
-} 
-
-void Graph::quickSort(Node** arr, int low, int high){ 
-
-    if(low < high){
-
-        int pi = partition(arr, low, high); 
-        this->quickSort(arr, low, pi - 1); 
-        this->quickSort(arr, pi + 1, high); 
+        if(arr[j]->getOutDegree() >= pivot->getOutDegree()) {
+            i++;
+            this->swap(arr, i, j);
+        }
 
     }
 
-} 
+    this->swap(arr, i + 1, high);
+    return (i + 1);
+
+}
+
+void Graph::quickSort(Node** arr, int low, int high){
+
+    if(low < high){
+
+        int pi = partition(arr, low, high);
+        this->quickSort(arr, low, pi - 1);
+        this->quickSort(arr, pi + 1, high);
+
+    }
+
+}
 
 // Function to select a alpha by its probability
 int Graph::roulette(float* alphaProbabilities, int desiredProbability, int vectorSize){
@@ -749,10 +749,14 @@ int Graph::roulette(float* alphaProbabilities, int desiredProbability, int vecto
     float probabilityByNow = 0;
     int i;
 
-    for(i = 0; probabilityByNow < desiredProbability; i++)
+    for(i = 0; i < vectorSize; i++){
+
         probabilityByNow += alphaProbabilities[i] * 100;
 
-    return i - 1;
+        if(probabilityByNow > desiredProbability)
+            return i;
+
+    }
 
 }
 

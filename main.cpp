@@ -210,7 +210,7 @@ int main(int argc, char const *argv[]) {
         //Retorno de pair é dividido em duas variaveis
         list<Node*> cds;
         float** alphasInfo;
-        tie(cds, alphasInfo) = graph.reactiveRandomizedGreedy(0.5, 0.05);
+        tie(cds, alphasInfo) = graph.reactiveRandomizedGreedy(0.4, 0.02);
 
         if(!cds.empty()){
             output_file << "Subconjunto Dominante Minimo Conexo" << endl;
@@ -220,7 +220,7 @@ int main(int argc, char const *argv[]) {
             }
 
             int bestAlphaId = 0;
-            for(int i = 0; i < ceil(0.5/0.05); i++)
+            for(int i = 0; i < ceil(0.4/0.02); i++)
                 if(alphasInfo[3][i] < alphasInfo[3][bestAlphaId])
                     if(alphasInfo[5][i] > alphasInfo[5][bestAlphaId])
                         bestAlphaId = i;
@@ -230,13 +230,11 @@ int main(int argc, char const *argv[]) {
             //Imprimindo todos os dados sem formatação
             for(int i = 0; i < 6; i++){
                 output_file << i << " - ";
-                for(int j = 0; j < ceil(0.5/0.05); j++){
+                for(int j = 0; j < ceil(0.4/0.02); j++){
                     output_file << alphasInfo[i][j] << " ";
                 }
                 output_file << endl;
             }
-
-
 
         }else{
 
