@@ -169,11 +169,11 @@ list<Node*> Graph::greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegr
     }else{
         if(this->directed){
             Graph* gS = this->getSubjacent();
-            list<Node*> MCDS = gS->auxGreedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
+            list<Node*> MCDS = gS->auxGreedyMinimumConnectedDominantSetByTree(nodesSortedByOutDegree, alpha);
             return MCDS;
 
         }else{
-            list<Node*> MCDS = this->auxGreedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
+            list<Node*> MCDS = this->auxGreedyMinimumConnectedDominantSetByTree(nodesSortedByOutDegree, alpha);
             return MCDS;
 
         }
@@ -232,6 +232,66 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutD
     }
 
     return minimun_connected_dominant_set;
+
+}
+
+// This function returns the Minimum Connected Dominant Set by tree
+
+list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSortedByOutDegree, float alpha){
+
+    Graph tree(this->order, true, false, false);
+    //List for the Minimum Connected Dominant Set
+    list<Node*> minimun_connected_dominant_set;
+    //Queue for visiting nodes
+    queue<Node*> toVisit;
+    //Vector to know if a node was visited and marking all as unvisited
+    bool *visited = new bool[this->order];
+    for(int i = 0; i < this->order; i++)
+        visited[i] = false;
+
+    Node* auxNode;
+
+    // Get the alpha node which is already selected via rand and a given alpha
+    Node* alphaNode = this->getAlphaNode(nodesSortedByOutDegree, alpha);
+
+    //The alphaNode is already visited and is our root for the BFS
+    visited[this->indexForNodes(alphaNode->getId())] = true;
+    toVisit.push(alphaNode);
+
+    while(!toVisit.empty()){
+
+        //Auxilar to the node in the queue front
+        auxNode = toVisit.front();
+        //Then its is removed from the queue
+        toVisit.pop();
+
+        //Recur all of his adjacents
+        int sourceId = auxNode->getId();
+        for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
+
+            int targetId = auxEdge->getTargetId();
+            int respectiveId = this->indexForNodes(targetId);
+            
+
+            //If a adjacent was not visited it is marked as visited and added to the queue
+            if(!visited[respectiveId]){
+
+                visited[respectiveId] = true;
+                tree.makeGraph(sourceId, targetId, 0);
+                auxNode = this->getNode(targetId);
+                toVisit.push(auxNode);
+
+            }
+
+        }
+
+    }
+
+    for(Node* aux = tree.getFirstNode(); aux != nullptr; aux = aux->getNextNode())
+        if(aux->getOutDegree() != 0)
+            minimun_connected_dominant_set.push_front(aux);
+ 
+    return minimun_connected_dominant_set;    
 
 }
 
