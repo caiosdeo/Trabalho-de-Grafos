@@ -239,7 +239,7 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutD
 
 list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSortedByOutDegree, float alpha){
 
-    Graph tree(this->order, true, false, false);
+    Graph* tree = new Graph(this->order, true, false, false);
     //List for the Minimum Connected Dominant Set
     list<Node*> minimun_connected_dominant_set;
     //Queue for visiting nodes
@@ -277,7 +277,7 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSorted
             if(!visited[respectiveId]){
 
                 visited[respectiveId] = true;
-                tree.makeGraph(sourceId, targetId, 0);
+                tree->makeGraph(sourceId, targetId, 0);
                 auxNode = this->getNode(targetId);
                 toVisit.push(auxNode);
 
@@ -287,7 +287,7 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSorted
 
     }
 
-    for(Node* aux = tree.getFirstNode(); aux != nullptr; aux = aux->getNextNode())
+    for(Node* aux = tree->getFirstNode(); aux != nullptr; aux = aux->getNextNode())
         if(aux->getOutDegree() != 0)
             minimun_connected_dominant_set.push_front(aux);
  
