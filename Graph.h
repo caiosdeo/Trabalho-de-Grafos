@@ -6,6 +6,8 @@
 #define GRAPH_H_INCLUDED
 #include "Node.h"
 #include <fstream>
+#include <stack>
+#include <list>
 
 using namespace std;
 
@@ -20,9 +22,6 @@ class Graph{
         bool weighted_node;
         Node* first_node;
         Node* last_node;
-        //Auxiliar methods
-        int indexForNodes(int id);
-        bool auxDepthFirstSearch(int initialId,int targetId,bool visited[]);
 
     public:
         //Constructor
@@ -38,13 +37,46 @@ class Graph{
         Node* getFirstNode();
         Node* getLastNode();
         //Other methods
-        void insertNode(int id, int target_id, float weight);
+        void insertNode(int id);
+        void makeGraph(int id, int target_id, float weight);
         void removeNode(int id);
         bool searchNode(int id);
         Node* getNode(int id);
         void printGraph(ofstream& output_file);
         bool depthFirstSearch(int initialId,int targetId);
-        int connectedComponent(int initialId);
+        int* stronglyConnectedComponents();
+        Graph* getTranspose();
+        void breadthFirstSearch(ofstream& output_file);
+        Graph* getComplement();
+        Graph* getSubjacent();
+        int* degreeSequence();
+        bool hasCircuit();
+        int* topologicalSort();
+        int* connectedComponents();
+        bool connectedGraph();
+        Node* getHighestDegreeNode();
+        pair<list<Node*>, float**> reactiveRandomizedGreedy(float maxAlpha, float alphaStep);
+        list<Node*> greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha);
+        list<Node*> randomizedGreedy(Node** nodesSortedByOutDegree, int iterations, float alpha);
+        Node** sortNodesByOutDegree();
+        Node* getAlphaNode(Node** nodesSortedByOutDegree, float alpha);
+
+    private:
+        //Auxiliar methods
+        int indexForNodes(int id);
+        bool auxDepthFirstSearch(int initialId,int targetId,bool visited[]);
+        void exploreOrder(int initialId, int targetId, bool visited[], stack<int>* explored);
+        void auxComponents(int initialId, int targetId, bool visited[], int c[], int label);
+        bool auxBreadthFirstSearchVerify(int *verify, int size, int targetId);
+        bool isLeafNode(Node* node, bool *visited);
+        list<Node*> auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha);
+        list<Node*> auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSortedByOutDegree, float alpha);
+        void quickSort(Node** arr, int low, int high);
+        int partition(Node** arr, int low, int high);
+        void swap(Node** arr, int i, int j);
+        int roulette(float* alphaProbabilities, int desiredProbability, int vectorSize);
+        float updateQ(float* qVector, float* averageVector, int vectorSize, int starSize);
+        void updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ);
 
 };
 

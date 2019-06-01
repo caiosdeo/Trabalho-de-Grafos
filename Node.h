@@ -13,11 +13,11 @@ class Node{
 
     // Attributes
     private:
-        Edge* first_edge;  
+        Edge* first_edge;
         Edge* last_edge;
         int id;
         unsigned int in_degree;
-        int out_degree;
+        unsigned int out_degree;
         float weight;
         Node* next_node;
 
@@ -41,12 +41,13 @@ class Node{
         bool searchEdge(int target_id);
         void insertEdge(int target_id, float weight);
         void removeEdges();
-        void removeEdge(int id, bool directed, Node* target_node);
+        int removeEdge(int id, bool directed, Node* target_node);
         void incrementOutDegree();
         void decrementOutDegree();
         void incrementInDegree();
         void decrementInDegree();
+        // Auxiliar methods
 
-}; 
+};
 
 #endif // NODE_H_INCLUDED

@@ -1,6 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <math.h>
+#include <utility>
+#include <tuple>
+#include <iomanip>
 #include "Graph.h"
 #include "Node.h"
 
@@ -50,7 +54,7 @@ int main(int argc, char const *argv[]) {
 
             while(input_file >> idNodeSource >> idNodeTarget) {
 
-                graph.insertNode(idNodeSource, idNodeTarget, 0);
+                graph.makeGraph(idNodeSource, idNodeTarget, 0);
 
             }
 
@@ -60,7 +64,7 @@ int main(int argc, char const *argv[]) {
 
             while(input_file >> idNodeSource >> idNodeTarget >> edgeWeight) {
 
-                graph.insertNode(idNodeSource, idNodeTarget, edgeWeight);
+                graph.makeGraph(idNodeSource, idNodeTarget, edgeWeight);
 
             }
 
@@ -70,7 +74,7 @@ int main(int argc, char const *argv[]) {
 
             while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight) {
 
-                graph.insertNode(idNodeSource, idNodeTarget, 0);
+                graph.makeGraph(idNodeSource, idNodeTarget, 0);
                 graph.getNode(idNodeSource)->setWeight(nodeSourceWeight);
                 graph.getNode(idNodeTarget)->setWeight(nodeTargetWeight);
 
@@ -82,7 +86,7 @@ int main(int argc, char const *argv[]) {
 
             while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight) {
 
-                graph.insertNode(idNodeSource, idNodeTarget, edgeWeight);
+                graph.makeGraph(idNodeSource, idNodeTarget, edgeWeight);
                 graph.getNode(idNodeSource)->setWeight(nodeSourceWeight);
                 graph.getNode(idNodeTarget)->setWeight(nodeTargetWeight);
 
@@ -103,17 +107,150 @@ int main(int argc, char const *argv[]) {
         output_file << "Direcionado: " << graph.getDirected() << endl;
         output_file << "Ponderado Arestas: " << graph.getWeightedEdge() << endl;
         output_file << "Ponderado Nós: " << graph.getWeightedNode() << endl;
+        output_file << "Conexo: " << graph.connectedGraph() << endl;
         output_file << "Numero de arestas: " << graph.getNumberEdges() << endl;
-        output_file << "No com id = 7 esta no grafo? " << graph.searchNode(7) << endl;
-        output_file << "No com id = 4 esta no grafo? " << graph.searchNode(4) << endl;
+        output_file << endl;
 
         //Imprimindo o Grafo
         graph.printGraph(output_file);
+        output_file << endl;
+
+        //Teste sequencia de graph
+        output_file << "Sequencia de grau" << endl;
+        int* seqDeg = graph.degreeSequence();
+        for(int i = 0; i < graph.getOrder(); i++)
+            output_file << seqDeg[i] << " ";
+        output_file << endl << endl;
+
+        //Teste BFS
+        output_file << "BFS" << endl;
+        graph.breadthFirstSearch(output_file);
+        output_file << endl << endl;
+
+        //Teste CC
+        //Imprime as componentes conexas se o grafo for não direcionado
+        if(!graph.getDirected()){
+            output_file << "Connected Components" << endl;
+            int* cc = graph.connectedComponents();
+
+            output_file << "Node     ";
+            for(Node* n = graph.getFirstNode(); n != nullptr; n = n->getNextNode())
+                output_file << n->getId() << " ";
+
+            output_file << endl << "CC[Node] ";
+
+            for(int i = 0; i < graph.getOrder(); i++)
+                output_file << cc[i] << " ";
+
+            output_file << endl << endl;
+
+        }else{
+
+            output_file << "Grafo direcionado não tem CC" << endl << endl;
+
+        }
+
+        //Imprimindo as componentes fortemente conexas se o grafo for direcionado
+        if(graph.getDirected()){
+
+            int* scc = graph.stronglyConnectedComponents();
+            if(scc != nullptr){
+
+                output_file << "Componentes Fortemente Conexas: "  << endl;
+
+                output_file << "Node      ";
+                for(Node* n = graph.getFirstNode(); n != nullptr; n = n->getNextNode())
+                    output_file << n->getId() << " ";
+
+                output_file << endl << "SCC[Node] ";
+
+                for(int i = 0; i < graph.getOrder(); i++)
+                    output_file << scc[i] << " ";
+
+                output_file << endl << endl;
+
+                output_file << "Graph has circuit: " << graph.hasCircuit() << endl;
+
+                int* topSort = graph.topologicalSort();
+
+                if(topSort != nullptr){
+
+                    output_file << "Ordenacao Topologica "  << endl;
+                    for(int i = 0; i < graph.getOrder(); i++)
+                        output_file << topSort[i] << " ";
+                    output_file << endl;
+
+                }else{
+
+                    output_file << "Grafo possui circuito(s), portanto não é um DAG para ter ordenção Topológica" << endl;
+
+                }
+
+                output_file << endl;
+
+            }else{
+
+                output_file << "Grafo não conexo, sem componentes fortemente conexas" << endl << endl;
+
+            }
+
+        }else{
+
+            output_file << "Grafo não direcionado, não possui SCC" << endl << endl;
+
+        }
+
+        //Imprimindo o complementar
+        output_file << "Complement" << endl;
+        Graph* gC = graph.getComplement();
+        gC->printGraph(output_file);
+        output_file << endl;
+
+        //Teste Greedy
+
+        //Retorno de pair é dividido em duas variaveis
+        list<Node*> cds;
+        float** alphasInfo;
+        tie(cds, alphasInfo) = graph.reactiveRandomizedGreedy(0.5, 0.05);
+
+        if(!cds.empty()){
+            output_file << "Subconjunto Dominante Minimo Conexo" << endl;
+
+            for (list<Node*>::iterator i = cds.begin(); i != cds.end(); i++){
+                output_file << (*i)->getId() << " ";
+            }
+
+            int bestAlphaId = 0;
+            for(int i = 0; i < ceil(0.5/0.05); i++)
+                if(alphasInfo[3][i] < alphasInfo[3][bestAlphaId])
+                    if(alphasInfo[5][i] > alphasInfo[5][bestAlphaId])
+                        bestAlphaId = i;
+
+            output_file << endl << "Melhor alpha: " << alphasInfo[0][bestAlphaId] << endl << endl;
+
+            //Imprimindo todos os dados sem formatação
+            for(int i = 0; i < 6; i++){
+                output_file << i << " - ";
+                for(int j = 0; j < ceil(0.5/0.05); j++){
+                    output_file << setw(9) << setprecision(4) << alphasInfo[i][j] << " ";
+                }
+                output_file << endl;
+            }
+
+        }else{
+
+            output_file << "Grafo não conexo, sem Subconjunto Dominante Minimo Conexo";
+
+        }
+
+        output_file << endl << endl;
 
         //Removendo um nó
         output_file << "Removendo nó id = 4" << endl;
         graph.removeNode(4);
         graph.printGraph(output_file);
+        output_file << "Numero de arestas: " << graph.getNumberEdges() << endl;
+        output_file << endl;
 
     }else {
 
