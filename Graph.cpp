@@ -362,28 +362,48 @@ bool Graph::depthFirstSearch(int initialId, int targetId)
 
 void Graph::breadthFirstSearch(ofstream &output_file)
 {
-    int i = 0;
-    Node *auxNode = this->getFirstNode();
-    Edge *auxEdge = auxNode->getFirstEdge();
-    int *visited = new int[this->getOrder()]; // vector to keep the ids that are already analysed.
-    for (; auxNode != nullptr; auxNode = auxNode->getNextNode())
-    {                                                                                 //Start the analysis of the nodes from the graph
-        if (this->auxBreadthFirstSearchVerify(visited, i, auxNode->getId()) == false) //checks if the node is already verified
-        {
-            output_file << auxNode->getId() << " "; //print the Id of the Node
-            visited[i] = auxNode->getId();          // Add the node to visited
-            i++;                                    //increase the range of the visited array.
-        }
-        for (; auxEdge != nullptr; auxEdge = auxEdge->getNextEdge())
-        {                                                                                       //Checks every edge of this node.
-            if (this->auxBreadthFirstSearchVerify(visited, i, auxEdge->getTargetId()) == false) //checks if the node is already verified
-            {
-                output_file << auxEdge->getTargetId() << " "; //print the Id of the Node
-                visited[i] = auxEdge->getTargetId();          // Add the node to visited
-                i++;                                          //increase the range of the visited array.
+
+    //Queue for visiting nodes
+    queue<Node*> toVisit;
+    //Vector to know if a node was visited and marking all as unvisited
+    bool *visited = new bool[this->order];
+    for(int i = 0; i < this->order; i++)
+        visited[i] = false;
+
+    Node* auxNode;
+
+    //The alphaNode is already visited and is our root for the BFS
+    visited[this->first_node->getId()] = true;
+    toVisit.push(this->first_node);
+
+    while(!toVisit.empty()){
+
+        //Auxilar to the node in the queue front
+        auxNode = toVisit.front();
+        //Then its is removed from the queue
+        toVisit.pop();
+        //The node's id is printed
+        output_file << auxNode->getId() << " ";
+
+        //Recur all of his adjacents
+        for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
+
+            int targetId = auxEdge->getTargetId();
+            int respectiveId = this->indexForNodes(targetId);
+
+            //If a adjacent was not visited it is marked as visited and added to the queue
+            if(!visited[respectiveId]){
+
+                visited[respectiveId] = true;
+                auxNode = this->getNode(targetId);
+                toVisit.push(auxNode);
+
             }
+
         }
+
     }
+
 }
 
 Graph *Graph::getComplement()
@@ -444,7 +464,7 @@ Graph* Graph::getSubjacent()
         }
     }
     return gS;
-
+}
 
 bool Graph::connectedGraph()
 {
@@ -598,20 +618,6 @@ void Graph::auxComponents(int initialId, int targetId, bool visited[], int c[], 
             auxComponents(aux->getTargetId(), targetId, visited, c, label);
 
 
-}
-
-bool Graph ::auxBreadthFirstSearchVerify(int *verify, int size, int targetId)
-{
-    bool verified = false; // not found yet
-    for (int i = 0; i < size; i++)
-    {
-        if (verify[i] == targetId)
-        {                    // check if the id has been already analysed
-            verified = true; //node founded
-            return verified; //no need to check the rest.
-        }
-    }
-    return verified; //Node not founded
 }
 
 // This function return the Node with the highest degree

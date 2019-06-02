@@ -66,7 +66,6 @@ class Graph{
         bool auxDepthFirstSearch(int initialId,int targetId,bool visited[]);
         void exploreOrder(int initialId, int targetId, bool visited[], stack<int>* explored);
         void auxComponents(int initialId, int targetId, bool visited[], int c[], int label);
-        bool auxBreadthFirstSearchVerify(int *verify, int size, int targetId);
         bool isLeafNode(Node* node, bool *visited);
         list<Node*> auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha);
         list<Node*> auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSortedByOutDegree, float alpha);
