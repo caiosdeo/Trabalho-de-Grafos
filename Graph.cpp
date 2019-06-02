@@ -444,32 +444,7 @@ Graph* Graph::getSubjacent()
         }
     }
     return gS;
-}
 
-int* Graph::degreeSequence(){
-    int* sequence = new int [this->getOrder()]; // create array for the sequence.
-    Node* auxNode = this->getFirstNode(); // auxiliar node to pass on the nodes of the graph.
-    for(int i = 0; auxNode != nullptr; i++)
-    {
-        //The variable will control the position of the degrees int the array,
-        //while auxNode will move in the graph picking all Nodes
-        //and stops when all nodes has been visited.
-        sequence[i] = auxNode->getOutDegree(); // adds the degree to the array
-        int j = 0;
-        while(sequence[i-j] > sequence[i-(j+1)] || i-j == 0)
-        {
-            // checks if the array is already descending, if not, the degree will change position until its degreed,
-            // if yes, it will go back to the for.
-            int aux = sequence[i-j];
-            sequence[i-j] = sequence[i-(j+1)];
-            sequence[i-(j+1)] = aux;
-            j++;
-        }
-        auxNode = auxNode->getNextNode(); //Moving to the next node.
-    }
-    return sequence;
-    //return the sequence of degrees in descending order.
-}
 
 bool Graph::connectedGraph()
 {
