@@ -238,6 +238,7 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutD
 
 list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSortedByOutDegree, float alpha){
 
+    int respectiveId, targetId, sourceId; // Declares auxiliar variables to work with indexes
     Graph* tree = new Graph(this->order, true, false, false);
     //List for the Minimum Connected Dominant Set
     list<Node*> minimun_connected_dominant_set;
@@ -265,11 +266,11 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSorted
         toVisit.pop();
 
         //Recur all of his adjacents
-        int sourceId = auxNode->getId();
+        sourceId = auxNode->getId();
         for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
 
-            int targetId = auxEdge->getTargetId();
-            int respectiveId = this->indexForNodes(targetId);
+            targetId = auxEdge->getTargetId();
+            respectiveId = this->indexForNodes(targetId);
 
             //If a adjacent was not visited it is marked as visited and added to the queue
             if(!visited[respectiveId]){
