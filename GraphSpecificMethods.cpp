@@ -183,6 +183,7 @@ list<Node*> Graph::greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegr
 // This function returns the Minimum Connected Dominant Set
 list<Node*> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha){
 
+    int respectiveId, targetId; // Declares auxiliar variables to work with indexes
     //List for the Minimum Connected Dominant Set
     list<Node*> minimun_connected_dominant_set;
     //Queue for visiting nodes
@@ -213,8 +214,8 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutD
         //Recur all of his adjacents
         for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
 
-            int targetId = auxEdge->getTargetId();
-            int respectiveId = this->indexForNodes(targetId);
+            targetId = auxEdge->getTargetId();
+            respectiveId = this->indexForNodes(targetId);
             //If a adjacent was not visited it is marked as visited and added to the queue
             if(!visited[respectiveId]){
 
