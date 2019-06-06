@@ -200,7 +200,7 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file){
 
                 if(graph->connectedGraph()){
                     int* topSort = graph->topologicalSort();
-
+                    
                     if(topSort != nullptr){
 
                         output_file << "Ordenacao Topologica "  << endl;

@@ -112,18 +112,16 @@ int* Graph::stronglyConnectedComponents(){
 // Kahn's algorithm adapted
 int *Graph::topologicalSort()
 {
-
+    int *vec = new int(this->order); // Allocating the vector that will contains the topological sort
     // Verifies if the graph has a circuit or not
     if (this->hasCircuit())
         return nullptr;
 
     else
     {
-
         int i = 0;
         Edge *aux_edge;
         Node *aux_node;
-        int *vec = new int(this->order); // Allocating the vector that will contains the topological sort
         queue<Node *> topological_queue; // Declaring the auxiliar queue for the source nodes
         // Searching for nodes with indegree equal to zero
         for (aux_node = this->first_node; aux_node != nullptr; aux_node = aux_node->getNextNode())
@@ -271,7 +269,6 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSorted
 
             int targetId = auxEdge->getTargetId();
             int respectiveId = this->indexForNodes(targetId);
-            
 
             //If a adjacent was not visited it is marked as visited and added to the queue
             if(!visited[respectiveId]){
