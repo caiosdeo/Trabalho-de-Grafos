@@ -1,10 +1,284 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <math.h>
+#include <utility>
+#include <tuple>
+#include <iomanip>
+#include <stdlib.h>
 #include "Graph.h"
 #include "Node.h"
 
 using namespace std;
+
+Graph* leitura(ifstream& input_file, int directed, int weightedEdge, int weightedNode){
+
+    //Variáveis para auxiliar na criação dos nós no Grafo
+    int idNodeSource;
+    int idNodeTarget;
+    int order;
+
+    //Pegando a ordem do grafo
+    input_file >> order;
+
+    //Criando objeto grafo
+    Graph* graph = new Graph(order, directed, weightedEdge, weightedNode);
+
+    //Leitura de arquivo
+
+    if(!graph->getWeightedEdge() && !graph->getWeightedNode()){
+
+        while(input_file >> idNodeSource >> idNodeTarget) {
+
+            graph->makeGraph(idNodeSource, idNodeTarget, 0);
+
+        }
+
+    }else if(graph->getWeightedEdge() && !graph->getWeightedNode() ){
+
+        float edgeWeight;
+
+        while(input_file >> idNodeSource >> idNodeTarget >> edgeWeight) {
+
+            graph->makeGraph(idNodeSource, idNodeTarget, edgeWeight);
+
+        }
+
+    }else if(graph->getWeightedNode() && !graph->getWeightedEdge()){
+
+        float nodeSourceWeight, nodeTargetWeight;
+
+        while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight) {
+
+            graph->makeGraph(idNodeSource, idNodeTarget, 0);
+            graph->getNode(idNodeSource)->setWeight(nodeSourceWeight);
+            graph->getNode(idNodeTarget)->setWeight(nodeTargetWeight);
+
+        }
+
+    }else if(graph->getWeightedNode() && graph->getWeightedEdge()){
+
+        float nodeSourceWeight, nodeTargetWeight, edgeWeight;
+
+        while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight) {
+
+            graph->makeGraph(idNodeSource, idNodeTarget, edgeWeight);
+            graph->getNode(idNodeSource)->setWeight(nodeSourceWeight);
+            graph->getNode(idNodeTarget)->setWeight(nodeTargetWeight);
+
+        }
+
+    }
+
+    return graph;
+}
+
+int menu(){
+
+    int selecao;
+
+    cout << "MENU" << endl;
+    cout << "----" << endl;
+    cout << "[1] Complementar do grafo" << endl;
+    cout << "[2] Imprimir caminhamento em largura" << endl;
+    cout << "[3] Busca em profundidade" << endl;
+    cout << "[4] Imprimir componentes conexas" << endl;
+    cout << "[5] Imprimir componentes fortemente conexas" << endl;
+    cout << "[6] Imprimir ordenacao topológica" << endl;
+    cout << "[7] Guloso Randomizado Reativo" << endl;
+    cout << "[0] Sair" << endl;
+
+    cin >> selecao;
+
+    return selecao;
+
+}
+
+void selecionar(int selecao, Graph* graph, ofstream& output_file){
+
+    switch (selecao) {
+
+        //Complementar
+        case 1:{
+            output_file << "Complementar" << endl;
+            Graph* gC = graph->getComplement();
+            gC->printGraph(output_file);
+            output_file << endl;
+            break;
+        }
+
+        //BFS
+        case 2:{
+            output_file << "BFS" << endl;
+            graph->breadthFirstSearch(output_file);
+            output_file << endl;
+            break;
+        }
+
+        //DFS
+        case 3:{
+            int initialId;
+            int targetId;
+
+            cout << "ID nó inicio: "; cin >> initialId;
+            cout << "ID a ser buscado: "; cin >> targetId;
+
+            output_file << "DFS" << endl;
+            if(graph->depthFirstSearch(initialId, targetId))
+                output_file << "Nó " << targetId << " encontrado partindo de " << initialId;
+            else
+                output_file << "Nó " << targetId << " não encontrado partindo de " << initialId;
+
+            output_file << endl;
+            break;
+        }
+
+        //Componentes Conexas
+        case 4:{
+            //Imprime as componentes conexas se o grafo for não direcionado
+            if(!graph->getDirected()){
+                output_file << "Connected Components" << endl;
+                int* cc = graph->connectedComponents();
+
+                output_file << "Node     ";
+                for(Node* n = graph->getFirstNode(); n != nullptr; n = n->getNextNode())
+                    output_file << n->getId() << " ";
+
+                output_file << endl << "CC[Node] ";
+
+                for(int i = 0; i < graph->getOrder(); i++)
+                    output_file << cc[i] << " ";
+
+                output_file << endl;
+
+            }else{
+
+                output_file << "Grafo direcionado não tem CC" << endl;
+
+            }
+            break;
+        }
+
+        //Componentes Fortementes Conexas
+        case 5:{
+            //Imprimindo as componentes fortemente conexas se o grafo for direcionado
+            if(graph->getDirected()){
+
+                int* scc = graph->stronglyConnectedComponents();
+                if(scc != nullptr){
+
+                    output_file << "Componentes Fortemente Conexas: "  << endl;
+
+                    output_file << "Node      ";
+                    for(Node* n = graph->getFirstNode(); n != nullptr; n = n->getNextNode())
+                        output_file << n->getId() << " ";
+
+                    output_file << endl << "SCC[Node] ";
+
+                    for(int i = 0; i < graph->getOrder(); i++)
+                        output_file << scc[i] << " ";
+
+                    output_file << endl;
+
+                }else{
+
+                    output_file << "Grafo não conexo, sem componentes fortemente conexas" << endl;
+
+                }
+
+            }else{
+
+                output_file << "Grafo não direcionado, não possui SCC" << endl;
+
+            }
+            break;
+        }
+
+        //Ordenação Topológica
+        case 6:{
+            if(graph->getDirected()){
+
+                if(graph->connectedGraph()){
+                    int* topSort = graph->topologicalSort();
+                    
+                    if(topSort != nullptr){
+
+                        output_file << "Ordenacao Topologica "  << endl;
+                        for(int i = 0; i < graph->getOrder(); i++)
+                            output_file << topSort[i] << " ";
+                        output_file << endl;
+
+                    }else{
+
+                        output_file << "Grafo possui circuito(s), portanto não é um DAG para ter ordenação topológica" << endl;
+
+                    }
+
+                }else{
+
+                    output_file << "Grafo não conexo, sem ordenação topológica" << endl;
+
+                }
+            }else{
+
+                output_file << "Grafo não direcionado, não possui ordenação topológica" << endl;
+
+            }
+            break;
+        }
+
+        case 7:{
+            //Retorno de pair é dividido em duas variaveis
+            list<Node*> cds;
+            float** alphasInfo;
+
+            float alphaStep;
+            float alphaMax;
+
+            cout << "Maior alfa: "; cin >> alphaMax;
+            cout << "Passo alfa: "; cin >> alphaStep;
+
+            tie(cds, alphasInfo) = graph->reactiveRandomizedGreedy(alphaMax, alphaStep);
+
+            if(!cds.empty()){
+                output_file << "Subconjunto Dominante Minimo Conexo" << endl;
+
+                for (list<Node*>::iterator i = cds.begin(); i != cds.end(); i++){
+                    output_file << (*i)->getId() << " ";
+                }
+
+                int bestAlphaId = 0;
+                for(int i = 0; i < ceil(alphaMax/alphaStep); i++)
+                    if(alphasInfo[3][i] < alphasInfo[3][bestAlphaId])
+                        if(alphasInfo[5][i] > alphasInfo[5][bestAlphaId])
+                            bestAlphaId = i;
+
+                output_file << endl << "Melhor alpha: " << alphasInfo[0][bestAlphaId] << endl << endl;
+
+                //Imprimindo todos os dados sem formatação
+                for(int i = 0; i < 6; i++){
+                    output_file << i << " - ";
+                    for(int j = 0; j < ceil(alphaMax/alphaStep); j++){
+                        output_file << setw(9) << setprecision(4) << alphasInfo[i][j] << " ";
+                    }
+                    output_file << endl;
+                }
+
+            }else{
+
+                output_file << "Grafo não conexo, sem Subconjunto Dominante Minimo Conexo";
+
+            }
+            break;
+        }
+
+        default:
+            cout << "Saindo..." << endl;
+            break;
+
+    }
+
+}
 
 int main(int argc, char const *argv[]) {
 
@@ -27,187 +301,28 @@ int main(int argc, char const *argv[]) {
     ofstream output_file;
     output_file.open(argv[2], ios::out | ios::trunc);
 
-    //Variáveis para auxiliar na criação dos nós no Grafo
-    int idNodeSource;
-    int idNodeTarget;
+    Graph* graph;
 
-    int order;
+    if(input_file.is_open())
+        //Criando grafo
+        graph = leitura(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
 
-    if(input_file.is_open()){
-
-        input_file >> order;
-
-    }
-
-
-    //Criando objeto grafo
-    Graph graph(order, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
-
-    //Leitura de arquivo:
-    if(input_file.is_open()){
-
-        if(!graph.getWeightedEdge() && !graph.getWeightedNode()){
-
-            while(input_file >> idNodeSource >> idNodeTarget) {
-
-                graph.makeGraph(idNodeSource, idNodeTarget, 0);
-
-            }
-
-        }else if(graph.getWeightedEdge() && !graph.getWeightedNode() ){
-
-            float edgeWeight;
-
-            while(input_file >> idNodeSource >> idNodeTarget >> edgeWeight) {
-
-                graph.makeGraph(idNodeSource, idNodeTarget, edgeWeight);
-
-            }
-
-        }else if(graph.getWeightedNode() && !graph.getWeightedEdge()){
-
-            float nodeSourceWeight, nodeTargetWeight;
-
-            while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight) {
-
-                graph.makeGraph(idNodeSource, idNodeTarget, 0);
-                graph.getNode(idNodeSource)->setWeight(nodeSourceWeight);
-                graph.getNode(idNodeTarget)->setWeight(nodeTargetWeight);
-
-            }
-
-        }else if(graph.getWeightedNode() && graph.getWeightedEdge()){
-
-            float nodeSourceWeight, nodeTargetWeight, edgeWeight;
-
-            while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight) {
-
-                graph.makeGraph(idNodeSource, idNodeTarget, edgeWeight);
-                graph.getNode(idNodeSource)->setWeight(nodeSourceWeight);
-                graph.getNode(idNodeTarget)->setWeight(nodeTargetWeight);
-
-            }
-
-        }
-
-    }else{
-
+    else
         cout << "Unable to open " << argv[1];
 
-    }
+    int selecao = 1;
 
-    if(output_file.is_open()){
+    while(selecao != 0){
+        system("clear");
+        selecao = menu();
 
-        //Imprimindo funções básicas
-        output_file << "Ordem: " << graph.getOrder() << endl;
-        output_file << "Direcionado: " << graph.getDirected() << endl;
-        output_file << "Ponderado Arestas: " << graph.getWeightedEdge() << endl;
-        output_file << "Ponderado Nós: " << graph.getWeightedNode() << endl;
-        output_file << "Conexo: " << graph.connectedGraph() << endl;
-        output_file << "Numero de arestas: " << graph.getNumberEdges() << endl;
-        output_file << "No com id = 7 esta no grafo? " << graph.searchNode(7) << endl;
-        output_file << "No com id = 4 esta no grafo? " << graph.searchNode(4) << endl;
-        output_file << "Busca em profundidade id = 6 apartir do primeiro nó inserido? " << graph.depthFirstSearch(1,6) << endl;
+        if(output_file.is_open())
+            selecionar(selecao, graph, output_file);
+
+        else
+            cout << "Unable to open " << argv[2];
+
         output_file << endl;
-
-        //Imprimindo o Grafo
-        graph.printGraph(output_file);
-        output_file << endl;
-
-        //Teste BFS
-        output_file << "BFS" << endl;
-        graph.breadthFirstSearch(output_file);
-        output_file << endl << endl;
-
-        //Teste CC
-        //Imprime as componentes conexas se o grafo for não direcionado
-        if(!graph.getDirected()){
-            output_file << "Connected Components" << endl;
-            int* cc = graph.connectedComponents();
-
-            output_file << "Node     ";
-            for(Node* n = graph.getFirstNode(); n != nullptr; n = n->getNextNode())
-                output_file << n->getId() << " ";
-
-            output_file << endl << "CC[Node] ";
-
-            for(int i = 0; i < graph.getOrder(); i++)
-                output_file << cc[i] << " ";
-
-            output_file << endl << endl;
-
-        }else{
-
-            output_file << "Grafo direcionado não tem CC" << endl << endl;
-
-        }
-
-        //Imprimindo as componentes fortemente conexas se o grafo for direcionado
-        if(graph.getDirected()){
-
-            int* scc = graph.stronglyConnectedComponents();
-            if(scc != nullptr){
-
-                output_file << "Componentes Fortemente Conexas: "  << endl;
-
-                output_file << "Node      ";
-                for(Node* n = graph.getFirstNode(); n != nullptr; n = n->getNextNode())
-                    output_file << n->getId() << " ";
-
-                output_file << endl << "SCC[Node] ";
-
-                for(int i = 0; i < graph.getOrder(); i++)
-                    output_file << scc[i] << " ";
-
-                output_file << endl << endl;
-
-                output_file << "Graph has circuit: " << graph.hasCircuit() << endl;
-
-                int* topSort = graph.topologicalSort();
-
-                if(topSort != nullptr){
-
-                    output_file << "Ordenacao Topologica "  << endl;
-                    for(int i = 0; i < graph.getOrder(); i++)
-                        output_file << topSort[i] << " ";
-                    output_file << endl;
-
-                }else{
-
-                    output_file << "Grafo possui circuito(s), portanto não é um DAG para ter ordenção Topológica" << endl;
-
-                }
-
-                output_file << endl;
-
-            }else{
-
-                output_file << "Grafo não conexo, sem componentes fortemente conexas" << endl << endl;
-
-            }
-
-        }else{
-
-            output_file << "Grafo não direcionado, não possui SCC" << endl << endl;
-
-        }
-
-        //Imprimindo o complementar
-        output_file << "Complement" << endl;
-        Graph* gC = graph.getComplement();
-        gC->printGraph(output_file);
-        output_file << endl;
-
-        //Removendo um nó
-        output_file << "Removendo nó id = 4" << endl;
-        graph.removeNode(4);
-        graph.printGraph(output_file);
-        output_file << "Numero de arestas: " << graph.getNumberEdges() << endl;
-        output_file << endl;
-
-    }else {
-
-        cout << "Unable to open " << argv[2];
 
     }
 
@@ -217,6 +332,7 @@ int main(int argc, char const *argv[]) {
     //Fechando arquivo de saída
     output_file.close();
 
+    system("clear");
 
     return 0;
 }

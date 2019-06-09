@@ -13,7 +13,7 @@ class Node{
 
     // Attributes
     private:
-        Edge* first_edge;  
+        Edge* first_edge;
         Edge* last_edge;
         int id;
         unsigned int in_degree;
@@ -47,7 +47,8 @@ class Node{
         void incrementInDegree();
         void decrementInDegree();
         Edge hasEdgeBetween(int target_id)
+        // Auxiliar methods
 
-}; 
+};
 
 #endif // NODE_H_INCLUDED

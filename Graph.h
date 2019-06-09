@@ -7,6 +7,7 @@
 #include "Node.h"
 #include <fstream>
 #include <stack>
+#include <list>
 
 using namespace std;
 
@@ -48,12 +49,17 @@ class Graph{
         void breadthFirstSearch(ofstream& output_file);
         Graph* getComplement();
         Graph* getSubjacent();
-        int* degreeSequence();
         bool hasCircuit();
         int* topologicalSort();
         int* connectedComponents();
         bool connectedGraph();
         int** floydMarshall()
+        Node* getHighestDegreeNode();
+        pair<list<Node*>, float**> reactiveRandomizedGreedy(float maxAlpha, float alphaStep);
+        list<Node*> greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha);
+        list<Node*> randomizedGreedy(Node** nodesSortedByOutDegree, int iterations, float alpha);
+        Node** sortNodesByOutDegree();
+        Node* getAlphaNode(Node** nodesSortedByOutDegree, float alpha);
 
     private:
         //Auxiliar methods
@@ -63,6 +69,15 @@ class Graph{
         void auxComponents(int initialId, int targetId, bool visited[], int c[], int label);
         bool auxBreadthFirstSearchVerify(int *verify, int size, int targetId);
         float auxFindWeight();
+        bool isLeafNode(Node* node, bool *visited);
+        list<Node*> auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha);
+        list<Node*> auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSortedByOutDegree, float alpha);
+        void quickSort(Node** arr, int low, int high);
+        int partition(Node** arr, int low, int high);
+        void swap(Node** arr, int i, int j);
+        int roulette(float* alphaProbabilities, int desiredProbability, int vectorSize);
+        float updateQ(float* qVector, float* averageVector, int vectorSize, int starSize);
+        void updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ);
 
 };
 

@@ -6,6 +6,8 @@
 #include <stack>
 #include <queue>
 #include <list>
+#include <math.h>
+#include <cstdlib>
 
 using namespace std;
 
@@ -358,95 +360,50 @@ bool Graph::depthFirstSearch(int initialId, int targetId)
     return auxDepthFirstSearch(initialId, targetId, visited);
 }
 
-//Used Kosaraju Algorithm
-int* Graph::stronglyConnectedComponents(){
-
-    if(!this->connectedGraph()){
-        return nullptr;
-
-    }else{
-
-        //Stack for visited nodes
-        stack<int> explored;
-        bool *visited = new bool[order];
-        //Vector with the stronglyConnectedComponents
-        int *sc = new int[this->order];
-        //Int to label the SCCs
-        int label = 0;
-
-        if (this->first_node == nullptr || this->last_node == nullptr){
-            return 0;
-        }
-
-        //Begin the DFS with every node as unvisited
-        for (int i = 0; i < order; i++){
-            visited[i] = false;
-        }
-
-        //Function to fill the stack with DFS visited nodes in post order
-        exploreOrder(this->first_node->getId(), this->first_node->getId(), visited, &explored);
-
-        //Confirms that all the nodes were included in the stack
-        for (Node *n = this->first_node; n != nullptr; n = n->getNextNode())
-            if (visited[indexForNodes(n->getId())] == false)
-                exploreOrder(n->getId(), n->getId(), visited, &explored);
-
-        //Create a reverse graph
-        Graph *gT = this->getTranspose();
-
-        //Define every node as unvisited for the second DFS
-        for (int i = 0; i < order; i++)
-        {
-            visited[i] = false;
-        }
-
-        //DFS on the reverse graph by the stack order as its is running we find the SCCs of the graph
-        while (explored.empty() == false)
-        {
-
-            int v = explored.top();
-            explored.pop();
-
-            //DFS on the reverse graph that will find the SCCs
-            if (visited[gT->indexForNodes(v)] == false){
-
-                gT->auxComponents(v, v, visited, sc, label);
-                label++;
-
-            }
-
-        }
-
-        return sc;
-
-    }
-
-}
-
 void Graph::breadthFirstSearch(ofstream &output_file)
 {
-    int i = 0;
-    Node *auxNode = this->getFirstNode();
-    Edge *auxEdge = auxNode->getFirstEdge();
-    int *visited = new int[this->getOrder()]; // vector to keep the ids that are already analysed.
-    for (; auxNode != nullptr; auxNode = auxNode->getNextNode())
-    {                                                                                 //Start the analysis of the nodes from the graph
-        if (this->auxBreadthFirstSearchVerify(visited, i, auxNode->getId()) == false) //checks if the node is already verified
-        {
-            output_file << auxNode->getId() << " "; //print the Id of the Node
-            visited[i] = auxNode->getId();          // Add the node to visited
-            i++;                                    //increase the range of the visited array.
-        }
-        for (; auxEdge != nullptr; auxEdge = auxEdge->getNextEdge())
-        {                                                                                       //Checks every edge of this node.
-            if (this->auxBreadthFirstSearchVerify(visited, i, auxEdge->getTargetId()) == false) //checks if the node is already verified
-            {
-                output_file << auxEdge->getTargetId() << " "; //print the Id of the Node
-                visited[i] = auxEdge->getTargetId();          // Add the node to visited
-                i++;                                          //increase the range of the visited array.
+
+    //Queue for visiting nodes
+    queue<Node*> toVisit;
+    //Vector to know if a node was visited and marking all as unvisited
+    bool *visited = new bool[this->order];
+    for(int i = 0; i < this->order; i++)
+        visited[i] = false;
+
+    Node* auxNode;
+
+    //The alphaNode is already visited and is our root for the BFS
+    visited[this->first_node->getId()] = true;
+    toVisit.push(this->first_node);
+
+    while(!toVisit.empty()){
+
+        //Auxilar to the node in the queue front
+        auxNode = toVisit.front();
+        //Then its is removed from the queue
+        toVisit.pop();
+        //The node's id is printed
+        output_file << auxNode->getId() << " ";
+
+        //Recur all of his adjacents
+        for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
+
+            int targetId = auxEdge->getTargetId();
+            int respectiveId = this->indexForNodes(targetId);
+
+            //If a adjacent was not visited it is marked as visited and added to the queue
+            if(!visited[respectiveId]){
+
+                visited[respectiveId] = true;
+                auxNode = this->getNode(targetId);
+                toVisit.push(auxNode);
+
             }
+
         }
+
     }
+
 }
 
 Graph *Graph::getComplement()
@@ -476,29 +433,37 @@ Graph *Graph::getComplement()
     return complement;
 }
 
-int* Graph::degreeSequence(){
-    int* sequence = new int [this->getOrder()]; // create array for the sequence.
-    Node* auxNode = this->getFirstNode(); // auxiliar node to pass on the nodes of the graph.
-    for(int i = 0; auxNode != nullptr; i++)
+//A function that returns a reverse graph, which is a graph which the arcs have opposite directions to the original graph
+Graph* Graph::getTranspose(){
+
+    //Create the reverse as the same order
+    Graph *gT = new Graph(this->order, this->directed, this->weighted_edge, this->weighted_node);
+
+    for (Node *n = this->first_node; n != nullptr; n = n->getNextNode())
     {
-        //The variable will control the position of the degrees int the array,
-        //while auxNode will move in the graph picking all Nodes
-        //and stops when all nodes has been visited.
-        sequence[i] = auxNode->getOutDegree(); // adds the degree to the array
-        int j = 0;
-        while(sequence[i-j] > sequence[i-(j+1)] || i-j == 0)
+        for (Edge *e = n->getFirstEdge(); e != nullptr; e = e->getNextEdge())
         {
-            // checks if the array is already descending, if not, the degree will change position until its degreed,
-            // if yes, it will go back to the for.
-            int aux = sequence[i-j];
-            sequence[i-j] = sequence[i-(j+1)];
-            sequence[i-(j+1)] = aux;
-            j++;
+            gT->makeGraph(e->getTargetId(), n->getId(), e->getWeight());
         }
-        auxNode = auxNode->getNextNode(); //Moving to the next node.
     }
-    return sequence;
-    //return the sequence of degrees in descending order.
+    return gT;
+}
+
+//A function that returns a subjacent of a directed graph, which is a graph which the arcs have opposite directions to the original graph
+Graph* Graph::getSubjacent()
+{
+
+    //Create the subjacent with the same order
+    Graph *gS = new Graph(this->order, 0, this->weighted_edge, this->weighted_node);
+
+    for (Node *n = this->first_node; n != nullptr; n = n->getNextNode())
+    {
+        for (Edge *e = n->getFirstEdge(); e != nullptr; e = e->getNextEdge())
+        {
+            gS->makeGraph(n->getId(), e->getTargetId(), e->getWeight());
+        }
+    }
+    return gS;
 }
 
 bool Graph::connectedGraph()
@@ -539,34 +504,6 @@ bool Graph::connectedGraph()
     }
 }
 
-//function that finds the connected component of a node
-int* Graph::connectedComponents(){
-
-    bool *visited = new bool[this->order];
-    //Vector with the connectedComponents
-    int *cc = new int[this->order];
-    //Int to label the CCs
-    int label = 0;
-
-    //Begin the DFS with every node as unvisited
-    for (int i = 0; i < order; i++){
-        visited[i] = false;
-    }
-
-    //Label all nodes from the beginning
-    for (Node* aux = this->getFirstNode(); aux != nullptr; aux = aux->getNextNode()){
-
-        if(visited[indexForNodes(aux->getId())] == false){
-
-            this->auxComponents(aux->getId(), this->getLastNode()->getId(), visited, cc, label);
-            label++;
-
-        }
-
-    }
-    return cc;
-}
-
 //Auxiliar methods
 bool Graph::hasCircuit()
 {
@@ -596,38 +533,6 @@ bool Graph::hasCircuit()
 
     //If all the labels are different among them, this graph does not have a circuit
     return false;
-}
-//A function that returns a reverse graph, which is a graph which the arcs have opposite directions to the original graph
-Graph* Graph::getTranspose(){
-
-    //Create the reverse as the same order
-    Graph *gT = new Graph(this->order, this->directed, this->weighted_edge, this->weighted_node);
-
-    for (Node *n = this->first_node; n != nullptr; n = n->getNextNode())
-    {
-        for (Edge *e = n->getFirstEdge(); e != nullptr; e = e->getNextEdge())
-        {
-            gT->makeGraph(e->getTargetId(), n->getId(), e->getWeight());
-        }
-    }
-    return gT;
-}
-
-//A function that returns a subjacent of a directed graph, which is a graph which the arcs have opposite directions to the original graph
-Graph* Graph::getSubjacent()
-{
-
-    //Create the subjacent with the same order
-    Graph *gS = new Graph(this->order, 0, this->weighted_edge, this->weighted_node);
-
-    for (Node *n = this->first_node; n != nullptr; n = n->getNextNode())
-    {
-        for (Edge *e = n->getFirstEdge(); e != nullptr; e = e->getNextEdge())
-        {
-            gS->makeGraph(n->getId(), e->getTargetId(), e->getWeight());
-        }
-    }
-    return gS;
 }
 
 //A function that fixate ordinal indexes for a node list
@@ -715,64 +620,89 @@ void Graph::auxComponents(int initialId, int targetId, bool visited[], int c[], 
 
 }
 
-bool Graph ::auxBreadthFirstSearchVerify(int *verify, int size, int targetId)
-{
-    bool verified = false; // not found yet
-    for (int i = 0; i < size; i++)
-    {
-        if (verify[i] == targetId)
-        {                    // check if the id has been already analysed
-            verified = true; //node founded
-            return verified; //no need to check the rest.
-        }
+// This function return the Node with the highest degree
+Node* Graph::getHighestDegreeNode() {
+
+    Node* highestDegreeNode = this->first_node;
+
+    for (Node *nodeI = this->first_node; nodeI != nullptr; nodeI = nodeI->getNextNode()) {
+        if(highestDegreeNode->getOutDegree() < nodeI->getOutDegree())
+            highestDegreeNode = nodeI;
     }
-    return verified; //Node not founded
+
+    return highestDegreeNode;
 }
 
-// Kahn's algorithm adapted
-int *Graph::topologicalSort()
-{
+// The node is marked as leaf if all of his sons were visited
+bool Graph::isLeafNode(Node* node, bool *visited){
 
-    // Verifies if the graph has a circuit or not
-    if (this->hasCircuit())
-        return nullptr;
+    if(node->getFirstEdge() != nullptr){
 
-    else
-    {
+        Edge* aux_edge = node->getFirstEdge();
 
-        int i = 0;
-        Edge *aux_edge;
-        Node *aux_node;
-        int *vec = new int(this->order); // Allocating the vector that will contains the topological sort
-        queue<Node *> topological_queue; // Declaring the auxiliar queue for the source nodes
-        // Searching for nodes with indegree equal to zero
-        for (aux_node = this->first_node; aux_node != nullptr; aux_node = aux_node->getNextNode())
-        {
-            // Verifies whether the indegree is equal to zero
-            if (aux_node->getInDegree() == 0)
-                topological_queue.push(aux_node); // Pushing the correct nodes in the queue
+        while(aux_edge != nullptr){
+
+            if(!visited[this->indexForNodes(aux_edge->getTargetId())])
+                return false;
+
+            aux_edge = aux_edge->getNextEdge();
+
         }
-        // Verifies if the queue is empty
-        while (!topological_queue.empty())
-        {
 
-            vec[i] = topological_queue.front()->getId();          // Pushing the id of the node to be popped of the queue
-            aux_edge = topological_queue.front()->getFirstEdge(); // Getting the first edge of the node to be popped
-            topological_queue.pop();                              // Popping the node
-            // Verifies whether an edge exists
-            while (aux_edge != nullptr)
-            {
+        return true;
 
-                aux_node = this->getNode(aux_edge->getTargetId()); // Picking up the neighboring node
-                aux_node->decrementInDegree();                     // Decrementing indegree
-                // Verifies whether the indegree is equal to zero
-                if (aux_node->getInDegree() == 0)
-                    topological_queue.push(aux_node);
+    }
 
-                aux_edge = aux_edge->getNextEdge();
-            }
+    return false;
 
+}
+
+// Returns the correspondent node chosen through the alpha coefficient and a random number of a range
+Node* Graph::getAlphaNode(Node** nodesSortedByOutDegree, float alpha){
+
+    int alphaId;
+    int sizeAlphaRange = floor(this->order * alpha);
+
+    if(sizeAlphaRange == 0)
+        alphaId = 0;
+    else
+        alphaId = rand() % sizeAlphaRange;
+
+    return nodesSortedByOutDegree[alphaId];
+
+}
+
+Node** Graph::sortNodesByOutDegree(){
+
+    Node** nodesSortedByOutDegree = new Node*[this->order];
+    Node* aux_node = this->first_node;
+
+    for(int i = 0; aux_node != nullptr; i++, aux_node = aux_node->getNextNode())
+        nodesSortedByOutDegree[i] = aux_node;
+
+    this->quickSort(nodesSortedByOutDegree, 0, this->order - 1);
+    return nodesSortedByOutDegree;
+
+}
+
+void Graph::swap(Node** arr, int i, int j){
+
+    Node* z = arr[i];
+    arr[i] = arr[j];
+    arr[j] = z;
+
+}
+
+int Graph::partition(Node** arr, int low, int high){
+
+    Node* pivot = arr[high];
+    int i = (low - 1);
+
+    for(int j = low; j <= high - 1; j++){
+
+        if(arr[j]->getOutDegree() >= pivot->getOutDegree()) {
             i++;
+            this->swap(arr, i, j);
         }
 
         return vec; // Returning the indexes correlated to the topological sort in a vector
@@ -882,5 +812,64 @@ float Graph::auxFindWeight()
         }
     }
     return value;
+    }
+
+    this->swap(arr, i + 1, high);
+    return (i + 1);
+
+}
+
+void Graph::quickSort(Node** arr, int low, int high){
+
+    if(low < high){
+
+        int pi = partition(arr, low, high);
+        this->quickSort(arr, low, pi - 1);
+        this->quickSort(arr, pi + 1, high);
+
+    }
+
+}
+
+// Function to select a alpha by its probability
+int Graph::roulette(float* alphaProbabilities, int desiredProbability, int vectorSize){
+
+    float probabilityByNow = 0;
+    int i;
+
+    for(i = 0; i < vectorSize; i++){
+
+        probabilityByNow += alphaProbabilities[i] * 100;
+
+        if(probabilityByNow > desiredProbability)
+            return i;
+
+    }
+
+}
+
+// Update the q vector
+float Graph::updateQ(float* qVector, float* averageVector, int vectorSize, int starSize){
+
+    float sumQ = 0;
+
+    for(int i = 0; i < vectorSize; i++){
+
+        qVector[i] = starSize / averageVector[i];
+        sumQ += qVector[i];
+
+    }
+
+    return sumQ;
+
+}
+
+// Update the p vector
+
+void Graph::updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ){
+
+    for(int i =0; i < vectorSize; i++)
+        vectorP[i] = vectorQ[i] / sumQ;
+
 }
 
