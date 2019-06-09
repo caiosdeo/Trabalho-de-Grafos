@@ -53,6 +53,7 @@ class Graph{
         int* topologicalSort();
         int* connectedComponents();
         bool connectedGraph();
+        int** floydMarshall()
 
     private:
         //Auxiliar methods
@@ -61,6 +62,7 @@ class Graph{
         void exploreOrder(int initialId, int targetId, bool visited[], stack<int>* explored);
         void auxComponents(int initialId, int targetId, bool visited[], int c[], int label);
         bool auxBreadthFirstSearchVerify(int *verify, int size, int targetId);
+        float auxFindWeight();
 
 };
 
