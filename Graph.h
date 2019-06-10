@@ -60,6 +60,7 @@ class Graph{
         list<Node*> randomizedGreedy(Node** nodesSortedByOutDegree, int iterations, float alpha);
         Node** sortNodesByOutDegree();
         Node* getAlphaNode(Node** nodesSortedByOutDegree, float alpha);
+        Graph* kruskal();
 
     private:
         //Auxiliar methods
@@ -77,6 +78,7 @@ class Graph{
         int roulette(float* alphaProbabilities, int desiredProbability, int vectorSize);
         float updateQ(float* qVector, float* averageVector, int vectorSize, int starSize);
         void updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ);
+        Edge** sortEdgesByWeight();
 
 };
 

@@ -509,21 +509,31 @@ bool Graph::connectedGraph()
     }
 }
 
-int Graph::connectedComponent(int initialId)
+Graph* Graph::kruskal()
 {
-    int *cc = new int[order];
-    Node* aux = getFirstNode();
-    int i = 0;
-    cc[i] = initialId;
-    for(; aux->getNextNode() == nullptr ; aux = aux->getNextNode())
-    {
-        if(depthFirstSearch(initialId, aux->getId()))
-        {
+    //forest with all the nodes
+    Graph* f = new Graph(this->order, this->directed, this->weighted_edge, this->weighted_node);
+    Node* aux = this->getFirstNode();
+    while(aux != nullptr){
+        f->insertNode(aux->getId());
+        aux = aux->getNextNode();
+    }
+    //vector with all edges of the graph (in ascending order)
+    Edge** e = new Edge*[number_edges];
+    e = sortEdgesByWeight();
+    // while there are still edges, do
+    for(int i = 0; i <= number_edges;){
+        //if that edge connects two trees, add to the forest, otherwise, delete the edge
+        f->getNode(e[i]->getTargetId())->insertEdge(e[i]->getTargetId(), e[i]->getWeight());
+        if(f->hasCircuit()){
+            f->getNode(e[i]->getTargetId())->removeEdge(e[i]->getTargetId(), f->getDirected(), f->getNode(e[i]->getTargetId()));
             i++;
-            cc[i] = aux->getId();
+        }else{
+            i++;
         }
     }
-    return *cc;
+    //return the forest
+    return f;
 }
 
 //Auxiliar methods
@@ -757,6 +767,16 @@ void Graph::quickSort(Node** arr, int low, int high){
         this->quickSort(arr, pi + 1, high);
 
     }
+
+}
+
+Edge** Graph::sortEdgesByWeight(){
+
+
+
+
+
+
 
 }
 
