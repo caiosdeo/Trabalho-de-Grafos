@@ -46,6 +46,7 @@ class Node{
         void decrementOutDegree();
         void incrementInDegree();
         void decrementInDegree();
+        Edge hasEdgeBetween(int target_id)
         // Auxiliar methods
 
 };
