@@ -504,6 +504,93 @@ bool Graph::connectedGraph()
     }
 }
 
+//Returns the sum of edge's weight used to form the MST
+float Graph::primMinimumSpanningTree(int initialId)
+{
+    //See if the Graph is connected, has weighted edges and the initial node exists
+    if(this->connectedGraph()&&this->getWeightedEdge()&&this->searchNode(initialId))
+    {
+        //Vector for visited nodes
+        int *visited = new int[this->order];
+        //Vector for nodes that weren't visited yet 
+        int *toVisit = new int[this->order];
+        //Variable to set the dynamic size of the visited vector
+        int visitedSize = 0;
+        //Variable to set the sum of the best weighted edges
+        float MSTWeight = 0;
+        //Filling toVisit vector with all nodes
+        Node *aux = this->getFirstNode();
+        while (aux!=nullptr)
+        {
+            toVisit[indexForNodes(aux->getId())] = aux->getId();
+            aux = aux->getNextNode();
+        }
+        //Marking the initial node as visited and icreasing visited vector dynamic size
+        visited[0] = initialId;
+        visitedSize++;
+        //Removing initial node of the toVisit vector
+        toVisit[indexForNodes(initialId)] = -1;
+        //The loop won't stop until all nodes were visited
+        while (visitedSize < this->order)
+        {
+           //Variable to store the best edge for the MST
+           Edge *bestEdge = nullptr;
+           /*
+            Series of loops to search on every visited node for the best edge for the MST 
+            The loop won't stop until all visited nodes were analyzed
+           */ 
+           for(int i = 0; i < visitedSize; i++)
+           {
+               //Variable to help search edges on the current node
+               Edge *auxEdge = this->getNode(visited[i])->getFirstEdge();
+               //Variable to store the best edge on the current node 
+               Edge *bestEdgeOnNode = nullptr;
+               //Loop to analyze every edge on the current node 
+               while (auxEdge!=nullptr)
+               {
+                   //See if the target node of the current edge wasn't visited yet
+                   if(auxEdge->getTargetId()==toVisit[indexForNodes(auxEdge->getTargetId())])
+                   {
+                       //See if the current node doesn't have a best edge yet or the current edge is better than the "best edge"   
+                       if(bestEdgeOnNode == nullptr || auxEdge->getWeight() < bestEdgeOnNode->getWeight())
+                       {
+                           //Update the best edge of the current node
+                           bestEdgeOnNode = auxEdge;
+                       }
+                   }
+                   auxEdge = auxEdge->getNextEdge();
+               }
+               /*
+                See if the current node has a best edge candidate, in case of true, see if there isn't a best edge for this 
+                iteration yet or the best edge candidate is better than the "best edge" 
+               */
+               if(bestEdgeOnNode!=nullptr && (bestEdge == nullptr || bestEdgeOnNode->getWeight() < bestEdge->getWeight()))
+               {
+                   //Update the best edge for this iteration
+                   bestEdge = bestEdgeOnNode;
+               }
+           }
+           //Update the sum with the best edge's weight
+           MSTWeight += bestEdge->getWeight();
+           //Update the visited vector with the target node of the best edge
+           visited[visitedSize]  = bestEdge->getTargetId();
+           //Update the dynamic size of the visited vector
+           visitedSize++;
+           //Remove the target node of the best edge of the toVisit vector
+           toVisit[indexForNodes(bestEdge->getTargetId())] = -1;
+        }
+
+        //Returning the sum
+        return MSTWeight;   
+    }
+    //In case of false, inform the user that the graph don't match with the method and return 0
+    else
+    {
+        cout << "Graph don't have the right characteristics for this method" << endl;
+        return 0;
+    }
+}
+
 //Auxiliar methods
 bool Graph::hasCircuit()
 {
