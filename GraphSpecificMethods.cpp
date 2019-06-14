@@ -162,23 +162,8 @@ int *Graph::topologicalSort()
 //This function is just to decide which way the greey will act if is a graph is directed or not
 list<Node*> Graph::greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha){
 
-    if(!this->connectedGraph()){
-        list<Node*> empty;
-        return empty;
-
-    }else{
-        if(this->directed){
-            Graph* gS = this->getSubjacent();
-            list<Node*> MCDS = gS->auxGreedyMinimumConnectedDominantSetByTree(nodesSortedByOutDegree, alpha);
-            return MCDS;
-
-        }else{
-            list<Node*> MCDS = this->auxGreedyMinimumConnectedDominantSetByTree(nodesSortedByOutDegree, alpha);
-            return MCDS;
-
-        }
-
-    }
+    list<Node*> MCDS = this->auxGreedyMinimumConnectedDominantSetByTree(nodesSortedByOutDegree, alpha);
+    return MCDS;
 
 }
 
@@ -271,7 +256,6 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSorted
 
             int targetId = auxEdge->getTargetId();
             int respectiveId = this->indexForNodes(targetId);
-            
 
             //If a adjacent was not visited it is marked as visited and added to the queue
             if(!visited[respectiveId]){
@@ -290,8 +274,8 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSorted
     for(Node* aux = tree->getFirstNode(); aux != nullptr; aux = aux->getNextNode())
         if(aux->getOutDegree() != 0)
             minimun_connected_dominant_set.push_front(aux);
- 
-    return minimun_connected_dominant_set;    
+
+    return minimun_connected_dominant_set;
 
 }
 
@@ -307,7 +291,7 @@ list<Node*> Graph::randomizedGreedy(Node** nodesSortedByOutDegree, int iteration
 
         auxList = this->greedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
 
-        if(auxList.size() < starList.size())
+        if(auxList.size() <= starList.size())
             starList = auxList;
 
     }
@@ -364,6 +348,7 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(float maxAlpha, float
     // External loop to run the randomized greedy for each alpha
     for(int i = 1; i < maxIterations; i++){
 
+        srand(rand() % i);
         int randProbability = rand() % 100;
         int alphadId = this->roulette(alphasInfo[5], randProbability, vectorsSize);
         auxList = this->randomizedGreedy(nodesSortedByOutDegree, 1, alphasInfo[0][alphadId]);
@@ -372,7 +357,7 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(float maxAlpha, float
         alphasInfo[3][alphadId] = alphasInfo[2][alphadId] / alphasInfo[1][alphadId];
 
         // Updating the star solution
-        if(auxList.size() < starList.size())
+        if(auxList.size() <= starList.size())
             starList = auxList;
 
         // Updating the q and p vector for each block of 100

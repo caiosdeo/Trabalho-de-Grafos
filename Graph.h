@@ -59,6 +59,7 @@ class Graph{
         list<Node*> randomizedGreedy(Node** nodesSortedByOutDegree, int iterations, float alpha);
         Node** sortNodesByOutDegree();
         Node* getAlphaNode(Node** nodesSortedByOutDegree, float alpha);
+        bool solutionViabilty(list<Node*> solution);
 
     private:
         //Auxiliar methods

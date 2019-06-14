@@ -228,45 +228,41 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file){
         }
 
         case 7:{
-            //Retorno de pair é dividido em duas variaveis
-            list<Node*> cds;
-            float** alphasInfo;
 
-            float alphaStep;
-            float alphaMax;
+            if(graph->connectedGraph()){
 
-            cout << "Maior alfa: "; cin >> alphaMax;
-            cout << "Passo alfa: "; cin >> alphaStep;
+                Graph* auxGraph;
 
-            tie(cds, alphasInfo) = graph->reactiveRandomizedGreedy(alphaMax, alphaStep);
+                if(graph->getDirected()){
 
-            if(!cds.empty()){
+                    auxGraph = graph->getSubjacent();
+
+                }else{
+
+                    auxGraph = graph;
+
+                }
+
+                //Retorno de pair é dividido em duas variaveis
+                list<Node*> cds;
+                float** alphasInfo;
+
+                float alphaStep;
+                float alphaMax;
+
+                cout << "Maior alfa: "; cin >> alphaMax;
+                cout << "Passo alfa: "; cin >> alphaStep;
+
+                tie(cds, alphasInfo) = auxGraph->reactiveRandomizedGreedy(alphaMax, alphaStep);
+
                 output_file << "Subconjunto Dominante Minimo Conexo" << endl;
+                output_file << "Tamanho: " << cds.size() << endl;
 
-                for (list<Node*>::iterator i = cds.begin(); i != cds.end(); i++){
-                    output_file << (*i)->getId() << " ";
-                }
-
-                int bestAlphaId = 0;
-                for(int i = 0; i < ceil(alphaMax/alphaStep); i++)
-                    if(alphasInfo[3][i] < alphasInfo[3][bestAlphaId])
-                        if(alphasInfo[5][i] > alphasInfo[5][bestAlphaId])
-                            bestAlphaId = i;
-
-                output_file << endl << "Melhor alpha: " << alphasInfo[0][bestAlphaId] << endl << endl;
-
-                //Imprimindo todos os dados sem formatação
-                for(int i = 0; i < 6; i++){
-                    output_file << i << " - ";
-                    for(int j = 0; j < ceil(alphaMax/alphaStep); j++){
-                        output_file << setw(9) << setprecision(4) << alphasInfo[i][j] << " ";
-                    }
-                    output_file << endl;
-                }
+                output_file << "Viabilidade: " << graph->solutionViabilty(cds) << endl;
 
             }else{
 
-                output_file << "Grafo não conexo, sem Subconjunto Dominante Minimo Conexo";
+                output_file << "Grafo não conexo, sem Subconjunto Dominante Minimo Conexo" << endl;
 
             }
             break;

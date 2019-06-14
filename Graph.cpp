@@ -765,3 +765,45 @@ void Graph::updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ){
         vectorP[i] = vectorQ[i] / sumQ;
 
 }
+
+//Function to know if the greedy solution is viable
+bool Graph::solutionViabilty(list<Node*> solution){
+
+    //Vector to mark all nodes as unvisited
+    bool *visited = new bool[this->order];
+    for(int i = 0; i < this->order; i++)
+        visited[i] = false;
+
+    //Variable to compare if the number of visited nodes is equal to the graph order
+    int numVisiteds = 0;
+
+    //Visiting all nodes from each node on the solution
+    for(list<Node*>::iterator it = solution.begin(); it != solution.end(); it++){
+
+        int solutionNodeId = this->indexForNodes((*it)->getId());
+
+        if(!visited[solutionNodeId]){
+            visited[solutionNodeId] = true;
+            numVisiteds++;
+        }
+
+        for(Edge* e = (*it)->getFirstEdge(); e != nullptr; e = e->getNextEdge()){
+
+            int targetId = this->indexForNodes(e->getTargetId());
+
+            if(!visited[targetId]){
+                visited[targetId] = true;
+                numVisiteds++;
+            }
+
+        }
+
+    }
+
+    //If all the nodes were visited, we can guarantee that the solution is viable
+    if(numVisiteds == this->order)
+        return true;
+
+    return false;
+
+}
