@@ -792,101 +792,102 @@ int Graph::partition(Node** arr, int low, int high){
             this->swap(arr, i, j);
         }
 
-        return vec; // Returning the indexes correlated to the topological sort in a vector
-    }  
+    }
+
+    this->swap(arr, i + 1, high);
+    return (i + 1);
+
 }
 
 int** Graph::floydMarshall(){
     float value = this->auxFindWeight() + 1;
-        
-    float ** dist = new *float[this->order];
-    for(int i = 0; i < this->order; i++)
-        *dist[i] = new float[this->order];
 
-    Node* auxFirstNode = new Node(); 
-    Node* auxSecondNode = new Node(); 
+    float ** dist = new float*[this->order];
+    for(int i = 0; i < this->order; i++)
+        dist[i] = new float[this->order];
+
+    Node* auxFirstNode = this->first_node;
+    Node* auxSecondNode;
 
     //building the first matrix with the values of every edge between adjacents nodes.
-    for(auxFirstNode = this->firstNode, int i = 0; auxFirstNode != nullptr; auxFirstNode = auxFirstNode->getNextNode(), i++)
+    for(int i = 0; auxFirstNode != nullptr; auxFirstNode = auxFirstNode->getNextNode(), i++)
     {
-        for(auxSecondNode = this->firstNode, int j = 0; auxSecondNode != nullptr; auxSecondNode = auxSecondNode->getNextNode(), j++)
+        int j = 0;
+
+        for(auxSecondNode = this->first_node; auxSecondNode != nullptr; auxSecondNode = auxSecondNode->getNextNode(), j++)
         {
-            Edge *aux = new Edge();
-            aux = auxFirstNode->HasEdgeBetween(auxSecondNode->getId());
+            Edge *aux = auxFirstNode->hasEdgeBetween(auxSecondNode->getId());
             if(aux != nullptr)
-                dist[i][j] = aux->getWeight;
+                dist[i][j] = aux->getWeight();
             else
                 dist[i][j] = value;
         }
     }
 
-    //Running the floyd Marshall algorithm 
-    for (k = 0; k < this->order; k++) 
-    { 
-        // Pick all vertices as source one by one 
-        for (i = 0; i < this->order; i++) 
-        { 
-            // Pick all vertices as destination for the 
-            // above picked source 
-            for (j = 0; j < this->order; j++) 
-            { 
-                // If vertex k is on the shortest path from 
-                // i to j, then update the value of dist[i][j] 
-                if (dist[i][k] + dist[k][j] < dist[i][j]) 
-                    dist[i][j] = dist[i][k] + dist[k][j]; 
-            } 
-        } 
+    //Running the floyd Marshall algorithm
+    for (int k = 0; k < this->order; k++)
+    {
+        // Pick all vertices as source one by one
+        for (int i = 0; i < this->order; i++)
+        {
+            // Pick all vertices as destination for the
+            // above picked source
+            for (int j = 0; j < this->order; j++)
+            {
+                // If vertex k is on the shortest path from
+                // i to j, then update the value of dist[i][j]
+                if (dist[i][k] + dist[k][j] < dist[i][j])
+                    dist[i][j] = dist[i][k] + dist[k][j];
+            }
+        }
     }
-    
+
     cout << "The following matrix shows the shortest distances"
             " between every pair of vertices " << "\n";
 
     int auxPrint = this->order + 1;
 
-    for (int i = 0; i <= auxPrint; i++) 
-    { 
+    for (int i = 0; i <= auxPrint; i++)
+    {
         if(i == 0 || i == 1)
             auxFirstNode = this->first_node;
-        for (int j = 0; j <= this->order; j++) 
-        { 
+        for (int j = 0; j <= this->order; j++)
+        {
             if(i == 0 && j == 0)
-                cout << "%7s" << ""; 
+                cout << "%7s" << "";
             else
             {
                 if(i == 0)
                 {
-                    cout <<"%7d" << auxFirstNode->getId(); 
+                    cout <<"%7d" << auxFirstNode->getId();
                     auxFirstNode = auxFirstNode->getNextNode();
                 }
                 else
                 {
                     if(j == 0)
                     {
-                        cout << "%7d" << auxFirstNode->getId(); 
+                        cout << "%7d" << auxFirstNode->getId();
                         auxFirstNode = auxFirstNode->getNextNode();
                     }
                     else
                     {
-                        if (dist[i][j] == value) 
-                            cout <<"%7s" << "INF"; 
+                        if (dist[i][j] == value)
+                            cout <<"%7s" << "INF";
                         else
-                            cout <<"%7d" << dist[i][j];   
+                            cout <<"%7d" << dist[i][j];
                     }
-                } 
+                }
             }
-        } 
-        printf("\n"); 
+        }
+        printf("\n");
     }
 }
 
 
 float Graph::auxFindWeight()
 {
-    Node *auxNode = new Node();
-    Edge *auxEdge = new Edge();
-
-    auxNode = this->getFirstNode();
-    auxEdge = auxNode->getFirstEdge();
+    Node *auxNode = this->getFirstNode();
+    Edge *auxEdge = auxNode->getFirstEdge();
 
     float value = auxEdge->getWeight();
 
@@ -899,10 +900,7 @@ float Graph::auxFindWeight()
         }
     }
     return value;
-    }
 
-    this->swap(arr, i + 1, high);
-    return (i + 1);
 
 }
 
@@ -959,4 +957,3 @@ void Graph::updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ){
         vectorP[i] = vectorQ[i] / sumQ;
 
 }
-
