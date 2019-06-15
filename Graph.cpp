@@ -507,8 +507,8 @@ bool Graph::connectedGraph()
 //Returns the sum of edge's weight used to form the MST
 float Graph::primMinimumSpanningTree(int initialId)
 {
-    //See if the Graph is connected, has weighted edges and the initial node exists
-    if(this->connectedGraph()&&this->getWeightedEdge()&&this->searchNode(initialId))
+    //See if the initial node exists
+    if(this->searchNode(initialId))
     {
         //Vector for visited nodes
         int *visited = new int[this->order];
@@ -586,7 +586,7 @@ float Graph::primMinimumSpanningTree(int initialId)
     //In case of false, inform the user that the graph don't match with the method and return 0
     else
     {
-        cout << "Graph don't have the right characteristics for this method" << endl;
+        cout << "Invalid ID inserted" << endl;
         return 0;
     }
 }

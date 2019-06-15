@@ -86,6 +86,7 @@ int menu(){
     cout << "[5] Imprimir componentes fortemente conexas" << endl;
     cout << "[6] Imprimir ordenacao topológica" << endl;
     cout << "[7] Guloso Randomizado Reativo" << endl;
+    cout << "[8] Árvore Geradora Mínima de Prim" << endl;
     cout << "[0] Sair" << endl;
 
     cin >> selecao;
@@ -268,6 +269,25 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file){
 
                 output_file << "Grafo não conexo, sem Subconjunto Dominante Minimo Conexo";
 
+            }
+            break;
+        }
+
+        //Algoritmo de Prim
+        case 8:
+        {
+            if(graph->connectedGraph() && graph->getWeightedEdge() && !graph->getDirected())
+            {
+                int initialId;
+                float pesoAGM;
+                cout << "ID do nó de início: ";
+                cin >> initialId;
+                pesoAGM = graph->primMinimumSpanningTree(initialId);
+                output_file << "Peso da solução encontrada partindo do nó " << initialId << ": " << pesoAGM << endl;
+            }
+            else
+            {
+                output_file << "O algoritmo de Prim não funciona com o atual grafo" << endl;
             }
             break;
         }
