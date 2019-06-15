@@ -6,6 +6,7 @@
 #include <tuple>
 #include <iomanip>
 #include <stdlib.h>
+#include <chrono>
 #include "Graph.h"
 #include "Node.h"
 
@@ -67,6 +68,30 @@ Graph* leitura(ifstream& input_file, int directed, int weightedEdge, int weighte
             graph->getNode(idNodeTarget)->setWeight(nodeTargetWeight);
 
         }
+
+    }
+
+    return graph;
+}
+
+Graph* leituraInstancia(ifstream& input_file, int directed, int weightedEdge, int weightedNode){
+
+    //Variáveis para auxiliar na criação dos nós no Grafo
+    int idNodeSource;
+    int idNodeTarget;
+    int order;
+    int numEdges;
+
+    //Pegando a ordem do grafo
+    input_file >> order >> numEdges;
+
+    //Criando objeto grafo
+    Graph* graph = new Graph(order, directed, weightedEdge, weightedNode);
+
+    //Leitura de arquivo
+    while(input_file >> idNodeSource >> idNodeTarget) {
+
+        graph->makeGraph(idNodeSource, idNodeTarget, 0);
 
     }
 
@@ -228,45 +253,41 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file){
         }
 
         case 7:{
-            //Retorno de pair é dividido em duas variaveis
-            list<Node*> cds;
-            float** alphasInfo;
 
-            float alphaStep;
-            float alphaMax;
+            if(graph->connectedGraph()){
 
-            cout << "Maior alfa: "; cin >> alphaMax;
-            cout << "Passo alfa: "; cin >> alphaStep;
+                Graph* auxGraph;
 
-            tie(cds, alphasInfo) = graph->reactiveRandomizedGreedy(alphaMax, alphaStep);
+                if(graph->getDirected()){
 
-            if(!cds.empty()){
+                    auxGraph = graph->getSubjacent();
+
+                }else{
+
+                    auxGraph = graph;
+
+                }
+
+                //Retorno de pair é dividido em duas variaveis
+                list<Node*> cds;
+                float** alphasInfo;
+
+                float alphaStep;
+                float alphaMax;
+
+                cout << "Maior alfa: "; cin >> alphaMax;
+                cout << "Passo alfa: "; cin >> alphaStep;
+
+                tie(cds, alphasInfo) = auxGraph->reactiveRandomizedGreedy(alphaMax, alphaStep);
+
                 output_file << "Subconjunto Dominante Minimo Conexo" << endl;
+                output_file << "Tamanho: " << cds.size() << endl;
 
-                for (list<Node*>::iterator i = cds.begin(); i != cds.end(); i++){
-                    output_file << (*i)->getId() << " ";
-                }
-
-                int bestAlphaId = 0;
-                for(int i = 0; i < ceil(alphaMax/alphaStep); i++)
-                    if(alphasInfo[3][i] < alphasInfo[3][bestAlphaId])
-                        if(alphasInfo[5][i] > alphasInfo[5][bestAlphaId])
-                            bestAlphaId = i;
-
-                output_file << endl << "Melhor alpha: " << alphasInfo[0][bestAlphaId] << endl << endl;
-
-                //Imprimindo todos os dados sem formatação
-                for(int i = 0; i < 6; i++){
-                    output_file << i << " - ";
-                    for(int j = 0; j < ceil(alphaMax/alphaStep); j++){
-                        output_file << setw(9) << setprecision(4) << alphasInfo[i][j] << " ";
-                    }
-                    output_file << endl;
-                }
+                output_file << "Viabilidade: " << graph->solutionViabilty(cds) << endl;
 
             }else{
 
-                output_file << "Grafo não conexo, sem Subconjunto Dominante Minimo Conexo";
+                output_file << "Grafo não conexo, sem Subconjunto Dominante Minimo Conexo" << endl;
 
             }
             break;
@@ -280,12 +301,82 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file){
 
 }
 
+int mainMenu(ofstream& output_file, Graph* graph){
+
+    int selecao = 1;
+
+    while(selecao != 0){
+        //system("clear");
+        selecao = menu();
+
+        if(output_file.is_open())
+            selecionar(selecao, graph, output_file);
+
+        else
+            cout << "Unable to open the output_file" << endl;
+
+        output_file << endl;
+
+    }
+
+    return 0;
+}
+
+int greedyMain(ofstream& output_file, Graph* graph){
+
+    if(output_file.is_open()){
+
+        if(graph->connectedGraph()){
+
+            Graph* auxGraph;
+
+            if(graph->getDirected())
+                auxGraph = graph->getSubjacent();
+
+            else
+                auxGraph = graph;
+
+            //Retorno de pair é dividido em duas variaveis
+            list<Node*> cds;
+            float** alphasInfo;
+
+            float alphaStep = 0.05;
+            float alphaMax = 0.5;
+
+            //Start point to measure greedy runtime
+            auto start = chrono::high_resolution_clock::now();
+
+            tie(cds, alphasInfo) = auxGraph->reactiveRandomizedGreedy(alphaMax, alphaStep);
+
+            //Stop point to measure greedy runtime
+            auto stop = chrono::high_resolution_clock::now();
+
+            //Duration of greedy runtime
+            auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+
+            output_file << cds.size() << "," << graph->solutionViabilty(cds) << "," << duration.count();
+
+        }else{
+
+            cout << "Grafo desconexo, sem Subconjunto Dominante Minimo Conexo" << endl;
+
+        }
+
+    }else
+        cout << "Unable to open the output_file" << endl;
+
+    output_file << endl;
+
+    return 0;
+}
+
 int main(int argc, char const *argv[]) {
 
     //Verificação se todos os parâmetros do programa foram entrados
-    if (argc != 6) {
+    if (argc != 7) {
 
-        cout << "ERROR: Expecting: ./<program_name> <input_file> <output_file> <directed> <weighted_edge> <weighted_node> " << endl;
+        cout << "ERROR: Expecting: ./<program_name> <input_file> <output_file> <directed> <weighted_edge> <weighted_node> <main_menu>" << endl;
+        cout << "<main_menu> 1 to run a menu; 0 to run only greedy" << endl;
         return 0;
 
     }
@@ -299,40 +390,36 @@ int main(int argc, char const *argv[]) {
 
     //Criação do arquivo de saída
     ofstream output_file;
-    output_file.open(argv[2], ios::out | ios::trunc);
+    if(argv[6] == "1")
+        output_file.open(argv[2], ios::out | ios::trunc);
+    else
+        output_file.open(argv[2], ios::out | ios::app);
 
     Graph* graph;
 
-    if(input_file.is_open())
-        //Criando grafo
-        graph = leitura(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
+    if(input_file.is_open()){
 
-    else
+        //Criando grafo
+        if(argv[6] == "1")
+            graph = leitura(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
+        else
+            graph = leituraInstancia(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
+
+    }else
         cout << "Unable to open " << argv[1];
 
-    int selecao = 1;
+    if(argv[6] == "1")
+        mainMenu(output_file, graph);
 
-    while(selecao != 0){
-        system("clear");
-        selecao = menu();
+    else
+        greedyMain(output_file, graph);
 
-        if(output_file.is_open())
-            selecionar(selecao, graph, output_file);
-
-        else
-            cout << "Unable to open " << argv[2];
-
-        output_file << endl;
-
-    }
 
     //Fechando arquivo de entrada
     input_file.close();
 
     //Fechando arquivo de saída
     output_file.close();
-
-    system("clear");
 
     return 0;
 }
