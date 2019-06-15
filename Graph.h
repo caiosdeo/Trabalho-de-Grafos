@@ -53,7 +53,7 @@ class Graph{
         int* topologicalSort();
         int* connectedComponents();
         bool connectedGraph();
-        int** floydMarshall()
+        int** floydMarshall();
         Node* getHighestDegreeNode();
         pair<list<Node*>, float**> reactiveRandomizedGreedy(float maxAlpha, float alphaStep);
         list<Node*> greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha);

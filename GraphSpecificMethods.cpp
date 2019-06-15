@@ -289,8 +289,8 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSorted
     for(Node* aux = tree->getFirstNode(); aux != nullptr; aux = aux->getNextNode())
         if(aux->getOutDegree() != 0)
             minimun_connected_dominant_set.push_front(aux);
- 
-    return minimun_connected_dominant_set;    
+
+    return minimun_connected_dominant_set;
 
 }
 
