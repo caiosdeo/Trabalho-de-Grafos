@@ -80,10 +80,10 @@ Graph* leituraInstancia(ifstream& input_file, int directed, int weightedEdge, in
     int idNodeSource;
     int idNodeTarget;
     int order;
-    //int numEdges;
+    int numEdges;
 
     //Pegando a ordem do grafo
-    input_file >> order;// >> numEdges;
+    input_file >> order >> numEdges;
 
     //Criando objeto grafo
     Graph* graph = new Graph(order, directed, weightedEdge, weightedNode);
@@ -354,7 +354,7 @@ int greedyMain(ofstream& output_file, Graph* graph){
             //Duration of greedy runtime
             auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
 
-            output_file << cds.size() << " " << graph->solutionViabilty(cds) << " " << duration.count();
+            output_file << cds.size() << "," << graph->solutionViabilty(cds) << "," << duration.count();
 
         }else{
 
