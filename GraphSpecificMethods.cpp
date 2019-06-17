@@ -166,60 +166,6 @@ list<Node*> Graph::greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegr
 
 }
 
-// This function returns the Minimum Connected Dominant Set
-list<Node*> Graph::auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha){
-
-    int respectiveId, targetId; // Declares auxiliar variables to work with indexes
-    //List for the Minimum Connected Dominant Set
-    list<Node*> minimun_connected_dominant_set;
-    //Queue for visiting nodes
-    queue<Node*> toVisit;
-    //Vector to know if a node was visited and marking all as unvisited
-    bool *visited = new bool[this->order];
-    for(int i = 0; i < this->order; i++)
-        visited[i] = false;
-
-    Node* auxNode;
-
-    // Get the alpha node which is already selected via rand and a given alpha
-    Node* alphaNode = this->getAlphaNode(nodesSortedByOutDegree, alpha);
-
-    //The alphaNode is already visited and is our root for the BFS
-    visited[this->indexForNodes(alphaNode->getId())] = true;
-    toVisit.push(alphaNode);
-
-    while(!toVisit.empty()){
-
-        //Auxilar to the node in the queue front
-        auxNode = toVisit.front();
-        // Adding the node id in the solution list
-        minimun_connected_dominant_set.push_front(auxNode);
-        //Then its is removed from the queue
-        toVisit.pop();
-
-        //Recur all of his adjacents
-        for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
-
-            targetId = auxEdge->getTargetId();
-            respectiveId = this->indexForNodes(targetId);
-            //If a adjacent was not visited it is marked as visited and added to the queue
-            if(!visited[respectiveId]){
-
-                visited[respectiveId] = true;
-                auxNode = this->getNode(targetId);
-                if(!this->isLeafNode(auxNode, visited))
-                    toVisit.push(auxNode);
-
-            }
-
-        }
-
-    }
-
-    return minimun_connected_dominant_set;
-
-}
-
 // This function returns the Minimum Connected Dominant Set by tree
 
 list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSortedByOutDegree, float alpha){
