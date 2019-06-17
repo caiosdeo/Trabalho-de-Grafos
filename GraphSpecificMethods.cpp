@@ -167,7 +167,6 @@ list<Node*> Graph::greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegr
 }
 
 // This function returns the Minimum Connected Dominant Set by tree
-
 list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSortedByOutDegree, float alpha){
 
     int respectiveId, targetId, sourceId; // Declares auxiliar variables to work with indexes
