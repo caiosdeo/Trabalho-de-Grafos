@@ -9,6 +9,7 @@
 #include <math.h>
 #include <random>
 #include <utility>
+#include <ctime>
 
 using namespace std;
 
@@ -254,13 +255,8 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSorted
         sourceId = auxNode->getId();
         for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
 
-<<<<<<< HEAD
             targetId = auxEdge->getTargetId();
             respectiveId = this->indexForNodes(targetId);
-=======
-            int targetId = auxEdge->getTargetId();
-            int respectiveId = this->indexForNodes(targetId);
->>>>>>> caio
 
             //If a adjacent was not visited it is marked as visited and added to the queue
             if(!visited[respectiveId]){
@@ -353,7 +349,7 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(float maxAlpha, float
     // External loop to run the randomized greedy for each alpha
     for(int i = 1; i < maxIterations; i++){
 
-        srand(rand() % i);
+        srand((int)time(0));
         int randProbability = rand() % 100;
         int alphadId = this->roulette(alphasInfo[5], randProbability, vectorsSize);
         auxList = this->randomizedGreedy(nodesSortedByOutDegree, 1, alphasInfo[0][alphadId]);
