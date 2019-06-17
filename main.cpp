@@ -225,7 +225,7 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file){
 
                 if(graph->connectedGraph()){
                     int* topSort = graph->topologicalSort();
-                    
+
                     if(topSort != nullptr){
 
                         output_file << "Ordenacao Topologica "  << endl;
@@ -322,7 +322,7 @@ int mainMenu(ofstream& output_file, Graph* graph){
     return 0;
 }
 
-int greedyMain(ofstream& output_file, Graph* graph){
+int greedyMain(ofstream& output_file, Graph* graph, string instance){
 
     if(output_file.is_open()){
 
@@ -354,7 +354,7 @@ int greedyMain(ofstream& output_file, Graph* graph){
             //Duration of greedy runtime
             auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
 
-            output_file << cds.size() << "," << graph->solutionViabilty(cds) << "," << duration.count();
+            output_file << instance << "," << cds.size() << "," << graph->solutionViabilty(cds) << "," << duration.count();
 
         }else{
 
@@ -382,7 +382,9 @@ int main(int argc, char const *argv[]) {
     }
 
     string program_name(argv[0]);
-    cout << "Running " << program_name << " ... " << endl;
+    string input_file_name(argv[1]);
+    string instance = input_file_name.substr(input_file_name.find("v"));
+    cout << "Running " << program_name << " with instance " << instance << " ... " << endl;
 
     //Abrindo arquivo de entrada
     ifstream input_file;
@@ -412,7 +414,7 @@ int main(int argc, char const *argv[]) {
         mainMenu(output_file, graph);
 
     else
-        greedyMain(output_file, graph);
+        greedyMain(output_file, graph, instance);
 
 
     //Fechando arquivo de entrada

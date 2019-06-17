@@ -254,13 +254,8 @@ list<Node*> Graph::auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSorted
         sourceId = auxNode->getId();
         for(Edge* auxEdge = auxNode->getFirstEdge(); auxEdge != nullptr; auxEdge = auxEdge->getNextEdge()){
 
-<<<<<<< HEAD
             targetId = auxEdge->getTargetId();
             respectiveId = this->indexForNodes(targetId);
-=======
-            int targetId = auxEdge->getTargetId();
-            int respectiveId = this->indexForNodes(targetId);
->>>>>>> caio
 
             //If a adjacent was not visited it is marked as visited and added to the queue
             if(!visited[respectiveId]){
