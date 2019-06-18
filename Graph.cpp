@@ -633,30 +633,6 @@ Node* Graph::getHighestDegreeNode() {
     return highestDegreeNode;
 }
 
-// The node is marked as leaf if all of his sons were visited
-bool Graph::isLeafNode(Node* node, bool *visited){
-
-    if(node->getFirstEdge() != nullptr){
-
-        Edge* aux_edge = node->getFirstEdge();
-
-        while(aux_edge != nullptr){
-
-            if(!visited[this->indexForNodes(aux_edge->getTargetId())])
-                return false;
-
-            aux_edge = aux_edge->getNextEdge();
-
-        }
-
-        return true;
-
-    }
-
-    return false;
-
-}
-
 // Returns the correspondent node chosen through the alpha coefficient and a random number of a range
 Node* Graph::getAlphaNode(Node** nodesSortedByOutDegree, float alpha){
 
