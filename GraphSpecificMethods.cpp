@@ -161,7 +161,7 @@ int *Graph::topologicalSort()
 //This function is just to decide which way the greey will act if is a graph is directed or not
 list<Node*> Graph::greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha){
 
-    list<Node*> MCDS = this->auxGreedyMinimumConnectedDominantSetByTree(nodesSortedByOutDegree, alpha);
+    list<Node*> MCDS = this->greedy(nodesSortedByOutDegree, alpha);
     return MCDS;
 
 }

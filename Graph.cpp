@@ -8,6 +8,7 @@
 #include <list>
 #include <math.h>
 #include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -625,6 +626,7 @@ Node* Graph::getAlphaNode(Node** nodesSortedByOutDegree, float alpha){
 
     int alphaId;
     int sizeAlphaRange = floor(this->order * alpha);
+    srand((int)time());
 
     if(sizeAlphaRange == 0)
         alphaId = 0;
