@@ -70,9 +70,7 @@ class Graph{
         void auxComponents(int initialId, int targetId, bool visited[], int c[], int label);
         bool auxBreadthFirstSearchVerify(int *verify, int size, int targetId);
         float auxFindWeight();
-        bool isLeafNode(Node* node, bool *visited);
-        list<Node*> auxGreedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha);
-        list<Node*> auxGreedyMinimumConnectedDominantSetByTree(Node** nodesSortedByOutDegree, float alpha);
+        list<Node*> greedy(Node** nodesSortedByOutDegree, float alpha);
         void quickSort(Node** arr, int low, int high);
         int partition(Node** arr, int low, int high);
         void swap(Node** arr, int i, int j);
