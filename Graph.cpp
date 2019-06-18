@@ -626,7 +626,7 @@ Node* Graph::getAlphaNode(Node** nodesSortedByOutDegree, float alpha){
 
     int alphaId;
     int sizeAlphaRange = floor(this->order * alpha);
-    srand((int)time());
+    srand((int)time(0));
 
     if(sizeAlphaRange == 0)
         alphaId = 0;
