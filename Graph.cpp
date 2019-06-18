@@ -620,19 +620,6 @@ void Graph::auxComponents(int initialId, int targetId, bool visited[], int c[], 
 
 }
 
-// This function return the Node with the highest degree
-Node* Graph::getHighestDegreeNode() {
-
-    Node* highestDegreeNode = this->first_node;
-
-    for (Node *nodeI = this->first_node; nodeI != nullptr; nodeI = nodeI->getNextNode()) {
-        if(highestDegreeNode->getOutDegree() < nodeI->getOutDegree())
-            highestDegreeNode = nodeI;
-    }
-
-    return highestDegreeNode;
-}
-
 // Returns the correspondent node chosen through the alpha coefficient and a random number of a range
 Node* Graph::getAlphaNode(Node** nodesSortedByOutDegree, float alpha){
 
