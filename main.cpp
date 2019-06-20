@@ -333,11 +333,11 @@ int greedyMain(ofstream& output_file, Graph* graph, string instance){
             else
                 auxGraph = graph;
 
-            //Retorno de pair é dividido em duas variaveis
+            //Lista de solução
             list<Node*> cds;
 
             // Sorting the nodes of the graph
-                Node** nodesSortedByOutDegree = auxGraph->sortNodesByOutDegree();
+            Node** nodesSortedByOutDegree = auxGraph->sortNodesByOutDegree();
 
             //Start point to measure greedy runtime
             auto start = chrono::high_resolution_clock::now();
@@ -380,11 +380,11 @@ int randGreedyMain(ofstream& output_file, Graph* graph, string instance, float a
             else
                 auxGraph = graph;
 
-            //Retorno de pair é dividido em duas variaveis
+            //Lista de solução
             list<Node*> cds;
 
             // Sorting the nodes of the graph
-                Node** nodesSortedByOutDegree = auxGraph->sortNodesByOutDegree();
+            Node** nodesSortedByOutDegree = auxGraph->sortNodesByOutDegree();
 
             //Start point to measure greedy runtime
             auto start = chrono::high_resolution_clock::now();
@@ -466,8 +466,8 @@ int main(int argc, char const *argv[]) {
     //Verificação se todos os parâmetros do programa foram entrados
     if (argc != 7) {
 
-        cout << "ERROR: Expecting: ./<program_name> <input_file> <output_file> <directed> <weighted_edge> <weighted_node> <main_menu>" << endl;
-        cout << "<main_menu>: " << endl;
+        cout << "ERROR: Expecting: ./<program_name> <input_file> <output_file> <directed> <weighted_edge> <weighted_node> <flow>" << endl;
+        cout << "<flow> options: " << endl;
         cout << "0 to run a menu" << endl;
         cout << "1 to run greedy" << endl;
         cout << "2 to run randomized greedy alpha 0.1" << endl;
@@ -488,9 +488,12 @@ int main(int argc, char const *argv[]) {
     ifstream input_file;
     input_file.open(argv[1], ios::in);
 
+    //Fluxo
+    int fluxo = atoi(argv[6]);
+
     //Criação do arquivo de saída
     ofstream output_file;
-    if(argv[6] != "0")
+    if(fluxo != 0)
         output_file.open(argv[2], ios::out | ios::app);
     else
         output_file.open(argv[2], ios::out | ios::trunc);
@@ -500,7 +503,7 @@ int main(int argc, char const *argv[]) {
     if(input_file.is_open()){
 
         //Criando grafo
-        if(argv[6] == "1")
+        if(fluxo == 0)
             graph = leitura(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
         else
             graph = leituraInstancia(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
@@ -508,19 +511,19 @@ int main(int argc, char const *argv[]) {
     }else
         cout << "Unable to open " << argv[1];
 
-    if(argv[6] == "0")
+    if(fluxo == 0)
         mainMenu(output_file, graph);
 
-    else if(argv[6] == "1")
+    else if(fluxo == 1)
         greedyMain(output_file, graph, instance);
 
-    else if(argv[6] == "2")
+    else if(fluxo == 2)
         randGreedyMain(output_file, graph, instance, 0.1);
 
-    else if(argv[6] == "3")
+    else if(fluxo == 3)
         randGreedyMain(output_file, graph, instance, 0.2);
 
-    else if(argv[6] == "4")
+    else if(fluxo == 4)
         randGreedyMain(output_file, graph, instance, 0.3);
 
     else
