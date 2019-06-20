@@ -8,6 +8,7 @@
 #include <list>
 #include <math.h>
 #include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -620,48 +621,12 @@ void Graph::auxComponents(int initialId, int targetId, bool visited[], int c[], 
 
 }
 
-// This function return the Node with the highest degree
-Node* Graph::getHighestDegreeNode() {
-
-    Node* highestDegreeNode = this->first_node;
-
-    for (Node *nodeI = this->first_node; nodeI != nullptr; nodeI = nodeI->getNextNode()) {
-        if(highestDegreeNode->getOutDegree() < nodeI->getOutDegree())
-            highestDegreeNode = nodeI;
-    }
-
-    return highestDegreeNode;
-}
-
-// The node is marked as leaf if all of his sons were visited
-bool Graph::isLeafNode(Node* node, bool *visited){
-
-    if(node->getFirstEdge() != nullptr){
-
-        Edge* aux_edge = node->getFirstEdge();
-
-        while(aux_edge != nullptr){
-
-            if(!visited[this->indexForNodes(aux_edge->getTargetId())])
-                return false;
-
-            aux_edge = aux_edge->getNextEdge();
-
-        }
-
-        return true;
-
-    }
-
-    return false;
-
-}
-
 // Returns the correspondent node chosen through the alpha coefficient and a random number of a range
 Node* Graph::getAlphaNode(Node** nodesSortedByOutDegree, float alpha){
 
     int alphaId;
     int sizeAlphaRange = floor(this->order * alpha);
+    srand((int)time(0));
 
     if(sizeAlphaRange == 0)
         alphaId = 0;
