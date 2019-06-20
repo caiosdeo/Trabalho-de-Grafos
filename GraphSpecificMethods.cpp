@@ -158,14 +158,6 @@ int *Graph::topologicalSort()
     }
 }
 
-//This function is just to decide which way the greey will act if is a graph is directed or not
-list<Node*> Graph::greedyMinimumConnectedDominantSet(Node** nodesSortedByOutDegree, float alpha){
-
-    list<Node*> MCDS = this->greedy(nodesSortedByOutDegree, alpha);
-    return MCDS;
-
-}
-
 // This function returns the Minimum Connected Dominant Set by tree
 list<Node*> Graph::greedy(Node** nodesSortedByOutDegree, float alpha){
 
@@ -228,14 +220,14 @@ list<Node*> Graph::greedy(Node** nodesSortedByOutDegree, float alpha){
 list<Node*> Graph::randomizedGreedy(Node** nodesSortedByOutDegree, int iterations, float alpha){
 
     //The best solution is initialized with the greedy solution
-    list<Node*> starList = this->greedyMinimumConnectedDominantSet(nodesSortedByOutDegree, 0);
+    list<Node*> starList = this->greedy(nodesSortedByOutDegree, 0);
 
     list<Node*> auxList;
 
     //The best solution is the one with lesser size
     for(int i = 0; i < iterations; i++){
 
-        auxList = this->greedyMinimumConnectedDominantSet(nodesSortedByOutDegree, alpha);
+        auxList = this->greedy(nodesSortedByOutDegree, alpha);
 
         if(auxList.size() <= starList.size())
             starList = auxList;

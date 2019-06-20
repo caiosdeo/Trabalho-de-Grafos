@@ -342,7 +342,7 @@ int greedyMain(ofstream& output_file, Graph* graph, string instance){
             //Start point to measure greedy runtime
             auto start = chrono::high_resolution_clock::now();
 
-            cds = auxGraph->auxGreedyMinimumConnectedDominantSetByTree(auxGraph->sortNodesByOutDegree(), 0);
+            cds = auxGraph->greedy(auxGraph->sortNodesByOutDegree(), 0);
 
             //Stop point to measure greedy runtime
             auto stop = chrono::high_resolution_clock::now();
