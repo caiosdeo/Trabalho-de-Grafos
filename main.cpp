@@ -303,7 +303,7 @@ int mainMenu(ofstream& output_file, Graph* graph){
     int selecao = 1;
 
     while(selecao != 0){
-        //system("clear");
+        system("clear");
         selecao = menu();
 
         if(output_file.is_open())
