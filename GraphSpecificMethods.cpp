@@ -265,7 +265,7 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(Node** nodesSortedByO
     alphasInfo[0] = vector;
 
     // Starting the starList with the randomized greedy solution
-    list<Node*> starList = this->randomizedGreedy(nodesSortedByOutDegree, 1, 0.0);
+    list<Node*> starList = this->greedy(nodesSortedByOutDegree, 0);
     list<Node*> auxList;
 
     // Loop to initialize the elements of the alphasInfo matrix
@@ -278,7 +278,7 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(Node** nodesSortedByO
         alphasInfo[4][i] = 0;
         alphasInfo[5][i] = 1 / vectorsSize;
 
-        if(auxList.size() < starList.size())
+        if(auxList.size() <= starList.size())
             starList = auxList;
 
     }
