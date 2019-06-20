@@ -54,7 +54,7 @@ class Graph{
         int* connectedComponents();
         bool connectedGraph();
         int** floydMarshall();
-        pair<list<Node*>, float**> reactiveRandomizedGreedy(float maxAlpha, float alphaStep);
+        pair<list<Node*>, float**> reactiveRandomizedGreedy(Node** nodesSortedByOutDegree);
         list<Node*> randomizedGreedy(Node** nodesSortedByOutDegree, int iterations, float alpha);
         list<Node*> greedy(Node** nodesSortedByOutDegree, float alpha);
         Node** sortNodesByOutDegree();

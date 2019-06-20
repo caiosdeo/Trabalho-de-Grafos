@@ -238,7 +238,7 @@ list<Node*> Graph::randomizedGreedy(Node** nodesSortedByOutDegree, int iteration
 
 }
 
-pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(float maxAlpha, float alphaStep){
+pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(Node** nodesSortedByOutDegree){
 
     /*
         alphasInfo matrix description
@@ -252,14 +252,16 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(float maxAlpha, float
 
     */
 
-    Node** nodesSortedByOutDegree = this->sortNodesByOutDegree();
-    int vectorsSize = ceil(maxAlpha / alphaStep);
-    int maxIterations = vectorsSize * 1000;
+    int vectorsSize = 10;
+    int maxIterations = 10000;
 
     // Alocatting the alphasInfo matrix
     float** alphasInfo = new float*[6];
     for(int i = 0; i < 6; i++)
         alphasInfo[i] = new float[vectorsSize];
+
+    // Setting the alpha values in the vector
+    alphasInfo[0] = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5];
 
     // Starting the starList with the randomized greedy solution
     list<Node*> starList = this->randomizedGreedy(nodesSortedByOutDegree, 1, 0.0);
@@ -270,7 +272,6 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(float maxAlpha, float
     // Loop to initialize the elements of the alphasInfo matrix
     for(int i = 0; i < vectorsSize; i++, auxAlphaStep += alphaStep){
 
-        alphasInfo[0][i] = auxAlphaStep;
         auxList = this->randomizedGreedy(nodesSortedByOutDegree, 1, alphasInfo[0][i]);
         alphasInfo[1][i] = 1;
         alphasInfo[2][i] = (float)(auxList.size());
