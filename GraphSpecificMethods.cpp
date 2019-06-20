@@ -296,7 +296,7 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(Node** nodesSortedByO
 
         // Updating the star solution
         if(auxList.size() <= starList.size())
-            starList = auxList;
+            starList = auxList; 
 
         // Updating the q and p vector for each block of 300
         if(i % 300 == 0){
