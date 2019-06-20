@@ -428,9 +428,6 @@ int reactiveRandGreedyMain(ofstream& output_file, Graph* graph, string instance)
             list<Node*> cds;
             float** alphasInfo;
 
-            float alphaStep = 0.05;
-            float alphaMax = 0.5;
-
             //Start point to measure greedy runtime
             auto start = chrono::high_resolution_clock::now();
 
