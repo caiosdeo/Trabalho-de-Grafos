@@ -338,6 +338,94 @@ int greedyMain(ofstream& output_file, Graph* graph, string instance){
 
             //Retorno de pair é dividido em duas variaveis
             list<Node*> cds;
+
+            //Start point to measure greedy runtime
+            auto start = chrono::high_resolution_clock::now();
+
+            cds = auxGraph->auxGreedyMinimumConnectedDominantSetByTree(auxGraph->sortNodesByOutDegree(), 0);
+
+            //Stop point to measure greedy runtime
+            auto stop = chrono::high_resolution_clock::now();
+
+            //Duration of greedy runtime
+            auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+
+            output_file << instance << "," << cds.size() << "," << graph->solutionViabilty(cds) << "," << duration.count();
+
+        }else{
+
+            cout << "Grafo desconexo, sem Subconjunto Dominante Minimo Conexo" << endl;
+
+        }
+
+    }else
+        cout << "Unable to open the output_file" << endl;
+
+    output_file << endl;
+
+    return 0;
+}
+
+int randGreedyMain(ofstream& output_file, Graph* graph, string instance, float alpha){
+
+    if(output_file.is_open()){
+
+        if(graph->connectedGraph()){
+
+            Graph* auxGraph;
+
+            if(graph->getDirected())
+                auxGraph = graph->getSubjacent();
+
+            else
+                auxGraph = graph;
+
+            //Retorno de pair é dividido em duas variaveis
+            list<Node*> cds;
+
+            //Start point to measure greedy runtime
+            auto start = chrono::high_resolution_clock::now();
+
+            cds = auxGraph->randomizedGreedy(auxGraph->sortNodesByOutDegree(), 1000, alpha);
+
+            //Stop point to measure greedy runtime
+            auto stop = chrono::high_resolution_clock::now();
+
+            //Duration of greedy runtime
+            auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+
+            output_file << instance << "," << cds.size() << "," << graph->solutionViabilty(cds) << "," << duration.count();
+
+        }else{
+
+            cout << "Grafo desconexo, sem Subconjunto Dominante Minimo Conexo" << endl;
+
+        }
+
+    }else
+        cout << "Unable to open the output_file" << endl;
+
+    output_file << endl;
+
+    return 0;
+}
+
+int reactiveRandGreedyMain(ofstream& output_file, Graph* graph, string instance){
+
+    if(output_file.is_open()){
+
+        if(graph->connectedGraph()){
+
+            Graph* auxGraph;
+
+            if(graph->getDirected())
+                auxGraph = graph->getSubjacent();
+
+            else
+                auxGraph = graph;
+
+            //Retorno de pair é dividido em duas variaveis
+            list<Node*> cds;
             float** alphasInfo;
 
             float alphaStep = 0.05;
@@ -376,7 +464,14 @@ int main(int argc, char const *argv[]) {
     if (argc != 7) {
 
         cout << "ERROR: Expecting: ./<program_name> <input_file> <output_file> <directed> <weighted_edge> <weighted_node> <main_menu>" << endl;
-        cout << "<main_menu> 1 to run a menu; 0 to run only greedy" << endl;
+        cout << "<main_menu>: " << endl;
+        cout << "0 to run a menu" << endl;
+        cout << "1 to run greedy" << endl;
+        cout << "2 to run randomized greedy alpha 0.1" << endl;
+        cout << "3 to run randomized greedy alpha 0.2" << endl;
+        cout << "4 to run randomized greedy alpha 0.3" << endl;
+        cout << "5 to run reactive randomized greedy" << endl;
+
         return 0;
 
     }
@@ -392,10 +487,10 @@ int main(int argc, char const *argv[]) {
 
     //Criação do arquivo de saída
     ofstream output_file;
-    if(argv[6] == "1")
-        output_file.open(argv[2], ios::out | ios::trunc);
-    else
+    if(argv[6] != "0")
         output_file.open(argv[2], ios::out | ios::app);
+    else
+        output_file.open(argv[2], ios::out | ios::trunc);
 
     Graph* graph;
 
@@ -410,12 +505,23 @@ int main(int argc, char const *argv[]) {
     }else
         cout << "Unable to open " << argv[1];
 
-    if(argv[6] == "1")
+    if(argv[6] == "0")
         mainMenu(output_file, graph);
 
-    else
+    else if(argv[6] == "1")
         greedyMain(output_file, graph, instance);
 
+    else if(argv[6] == "2")
+        randGreedyMain(output_file, graph, instance, 0.1);
+
+    else if(argv[6] == "3")
+        randGreedyMain(output_file, graph, instance, 0.2);
+
+    else if(argv[6] == "4")
+        randGreedyMain(output_file, graph, instance, 0.3);
+
+    else
+        reactiveRandGreedyMain(output_file, graph, instance);
 
     //Fechando arquivo de entrada
     input_file.close();
