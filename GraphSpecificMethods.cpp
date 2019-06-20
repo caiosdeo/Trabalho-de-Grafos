@@ -261,16 +261,15 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(Node** nodesSortedByO
         alphasInfo[i] = new float[vectorsSize];
 
     // Setting the alpha values in the vector
-    alphasInfo[0] = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5];
+    float vector[10] = {0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5};
+    alphasInfo[0] = vector;
 
     // Starting the starList with the randomized greedy solution
     list<Node*> starList = this->randomizedGreedy(nodesSortedByOutDegree, 1, 0.0);
     list<Node*> auxList;
 
-    float auxAlphaStep = alphaStep;
-
     // Loop to initialize the elements of the alphasInfo matrix
-    for(int i = 0; i < vectorsSize; i++, auxAlphaStep += alphaStep){
+    for(int i = 0; i < vectorsSize; i++){
 
         auxList = this->randomizedGreedy(nodesSortedByOutDegree, 1, alphasInfo[0][i]);
         alphasInfo[1][i] = 1;

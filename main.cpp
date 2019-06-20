@@ -272,13 +272,10 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file){
                 list<Node*> cds;
                 float** alphasInfo;
 
-                float alphaStep;
-                float alphaMax;
+                // Sorting the nodes of the graph
+                Node** nodesSortedByOutDegree = auxGraph->sortNodesByOutDegree();
 
-                cout << "Maior alfa: "; cin >> alphaMax;
-                cout << "Passo alfa: "; cin >> alphaStep;
-
-                tie(cds, alphasInfo) = auxGraph->reactiveRandomizedGreedy(alphaMax, alphaStep);
+                tie(cds, alphasInfo) = auxGraph->reactiveRandomizedGreedy(nodesSortedByOutDegree);
 
                 output_file << "Subconjunto Dominante Minimo Conexo" << endl;
                 output_file << "Tamanho: " << cds.size() << endl;
@@ -339,10 +336,13 @@ int greedyMain(ofstream& output_file, Graph* graph, string instance){
             //Retorno de pair é dividido em duas variaveis
             list<Node*> cds;
 
+            // Sorting the nodes of the graph
+                Node** nodesSortedByOutDegree = auxGraph->sortNodesByOutDegree();
+
             //Start point to measure greedy runtime
             auto start = chrono::high_resolution_clock::now();
 
-            cds = auxGraph->greedy(auxGraph->sortNodesByOutDegree(), 0);
+            cds = auxGraph->greedy(nodesSortedByOutDegree, 0);
 
             //Stop point to measure greedy runtime
             auto stop = chrono::high_resolution_clock::now();
@@ -383,10 +383,13 @@ int randGreedyMain(ofstream& output_file, Graph* graph, string instance, float a
             //Retorno de pair é dividido em duas variaveis
             list<Node*> cds;
 
+            // Sorting the nodes of the graph
+                Node** nodesSortedByOutDegree = auxGraph->sortNodesByOutDegree();
+
             //Start point to measure greedy runtime
             auto start = chrono::high_resolution_clock::now();
 
-            cds = auxGraph->randomizedGreedy(auxGraph->sortNodesByOutDegree(), 1000, alpha);
+            cds = auxGraph->randomizedGreedy(nodesSortedByOutDegree, 1000, alpha);
 
             //Stop point to measure greedy runtime
             auto stop = chrono::high_resolution_clock::now();
@@ -428,10 +431,13 @@ int reactiveRandGreedyMain(ofstream& output_file, Graph* graph, string instance)
             list<Node*> cds;
             float** alphasInfo;
 
+            // Sorting the nodes of the graph
+            Node** nodesSortedByOutDegree = auxGraph->sortNodesByOutDegree();
+
             //Start point to measure greedy runtime
             auto start = chrono::high_resolution_clock::now();
 
-            tie(cds, alphasInfo) = auxGraph->reactiveRandomizedGreedy(alphaMax, alphaStep);
+            tie(cds, alphasInfo) = auxGraph->reactiveRandomizedGreedy(nodesSortedByOutDegree);
 
             //Stop point to measure greedy runtime
             auto stop = chrono::high_resolution_clock::now();
