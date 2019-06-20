@@ -253,7 +253,7 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(Node** nodesSortedByO
     */
 
     int vectorsSize = 10;
-    int maxIterations = 10000;
+    int maxIterations = 3000;
 
     // Alocatting the alphasInfo matrix
     float** alphasInfo = new float*[6];
@@ -298,8 +298,8 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(Node** nodesSortedByO
         if(auxList.size() <= starList.size())
             starList = auxList;
 
-        // Updating the q and p vector for each block of 100
-        if(i % 100 == 0){
+        // Updating the q and p vector for each block of 10
+        if(i % 300 == 0){
 
             float sumQ = this->updateQ(alphasInfo[4], alphasInfo[3], vectorsSize, starList.size());
             this->updateP(alphasInfo[5], alphasInfo[4], vectorsSize, sumQ);
