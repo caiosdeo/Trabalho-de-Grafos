@@ -771,13 +771,30 @@ void Graph::quickSort(Node** arr, int low, int high){
 }
 
 Edge** Graph::sortEdgesByWeight(){
-
-
-
-
-
-
-
+    Graph* g = new Graph(this->order, this->directed, this->weighted_edge, this->weighted_node);
+    g = this;
+    Edge* menorE;
+    Edge* auxE;
+    Edge** e = new Edge*[g->getNumberEdges()];
+    Node* aux;
+    for(int i = 0; i < g->getNumberEdges(); i++){
+        aux = g->getFirstNode();
+        menorE = aux->getFirstEdge();
+        while(aux != nullptr){
+            auxE = aux->getFirstEdge();
+            while(auxE != nullptr){
+                auxE = aux->getFirstEdge();
+                if(auxE->getWeight() < menorE->getWeight()){
+                    menorE = auxE;
+                    aux->removeEdge(auxE->getTargetId(), this->directed, aux);
+                }
+                auxE -> getNextEdge();
+            }
+            aux = aux->getNextNode();
+        }
+        e[i] = menorE;
+    }
+    return e;
 }
 
 // Function to select a alpha by its probability
