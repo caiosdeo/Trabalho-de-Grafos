@@ -113,7 +113,7 @@ int* Graph::stronglyConnectedComponents(){
 // Kahn's algorithm adapted
 int *Graph::topologicalSorting()
 {
-    int *vec = new int(this->order); // Allocating the vector that will contains the topological sort
+    int *vec = new int(this->order); // Allocating the vector that will contains the topological sorting
     // Verifies if the graph has a circuit or not
     if (this->hasCircuit())
         return nullptr;
