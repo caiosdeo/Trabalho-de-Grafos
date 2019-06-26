@@ -111,7 +111,7 @@ int* Graph::stronglyConnectedComponents(){
 }
 
 // Kahn's algorithm adapted
-int *Graph::topologicalSort()
+int *Graph::topologicalSorting()
 {
     int *vec = new int(this->order); // Allocating the vector that will contains the topological sort
     // Verifies if the graph has a circuit or not
