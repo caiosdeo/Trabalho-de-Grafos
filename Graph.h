@@ -60,7 +60,9 @@ class Graph{
         list<Node*> randomizedGreedy(Node** nodesSortedByOutDegree, int iterations, float alpha);
         Node** sortNodesByOutDegree();
         Node* getAlphaNode(Node** nodesSortedByOutDegree, float alpha);
+        void quickSortEdge(Edge** arr, int low, int high);
         Graph* kruskal();
+        
 
     private:
         //Auxiliar methods
@@ -79,6 +81,8 @@ class Graph{
         float updateQ(float* qVector, float* averageVector, int vectorSize, int starSize);
         void updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ);
         Edge** sortEdgesByWeight();
+        int partitionEdge(Edge** arr, int low, int high);
+        void swapEdge(Edge** arr, int i, int j);
 
 };
 

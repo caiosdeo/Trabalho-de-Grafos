@@ -771,31 +771,58 @@ void Graph::quickSort(Node** arr, int low, int high){
 }
 
 Edge** Graph::sortEdgesByWeight(){
-    Graph* g = new Graph(this->order, this->directed, this->weighted_edge, this->weighted_node);
-    g = this;
-    Edge* menorE;
     Edge* auxE;
-    Edge** e = new Edge*[g->getNumberEdges()];
+    Edge** e = new Edge*[this->getNumberEdges()];
     Node* aux;
-    for(int i = 0; i < g->getNumberEdges(); i++){
-        aux = g->getFirstNode();
-        menorE = aux->getFirstEdge();
-        while(aux != nullptr){
-            auxE = aux->getFirstEdge();
-            while(auxE != nullptr){
-                auxE = aux->getFirstEdge();
-                if(auxE->getWeight() < menorE->getWeight()){
-                    menorE = auxE;
-                    aux->removeEdge(auxE->getTargetId(), this->directed, aux);
-                }
-                auxE -> getNextEdge();
-            }
-            aux = aux->getNextNode();
+    for(int i = 0; aux != nullptr && i <= this->getNumberEdges(); ){
+        aux = this->getFirstNode();
+        auxE = aux->getFirstEdge();
+        while(auxE != nullptr &&  i <= this->getNumberEdges()){
+            e[i] = auxE;
+            auxE -> getNextEdge();
+            i++;
         }
-        e[i] = menorE;
+        aux = aux->getNextNode();
     }
+    this->quickSortEdge(e, 0, this->order - 1);
     return e;
 }
+
+void Graph::swapEdge(Edge** arr, int i, int j){
+
+    Edge* z = arr[i];
+    arr[i] = arr[j];
+    arr[j] = z;
+
+}
+
+
+void Graph::quickSortEdge(Edge** arr, int low, int high){
+
+    if(low < high){
+
+        int pi = partitionEdge(arr, low, high);
+        this->quickSortEdge(arr, low, pi - 1);
+        this->quickSortEdge(arr, pi + 1, high);
+
+    }
+
+}
+
+int Graph::partitionEdge(Edge** arr, int low, int high){
+
+    Edge* pivot = arr[high];
+    int i = (low - 1);
+
+    for(int j = low; j <= high - 1; j++){
+
+        if(arr[j]->getWeight() <= pivot->getWeight()) {
+            i++;
+            this->swapEdge(arr, i, j);
+        }
+
+    }
+
 
 // Function to select a alpha by its probability
 int Graph::roulette(float* alphaProbabilities, int desiredProbability, int vectorSize){
