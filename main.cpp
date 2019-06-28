@@ -481,8 +481,12 @@ int main(int argc, char const *argv[]) {
 
     string program_name(argv[0]);
     string input_file_name(argv[1]);
-    string instance = input_file_name.substr(input_file_name.find("v"));
-    cout << "Running " << program_name << " with instance " << instance << " ... " << endl;
+
+    string instance;
+    if(input_file_name.find("v") <= input_file_name.size()){
+        string instance = input_file_name.substr(input_file_name.find("v"));
+        cout << "Running " << program_name << " with instance " << instance << " ... " << endl;
+    }
 
     //Abrindo arquivo de entrada
     ifstream input_file;
@@ -503,7 +507,7 @@ int main(int argc, char const *argv[]) {
     if(input_file.is_open()){
 
         //Criando grafo
-        if(fluxo == 0)
+        if(!(input_file_name.find("v") <= input_file_name.size()))
             graph = leitura(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
         else
             graph = leituraInstancia(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
