@@ -50,7 +50,7 @@ class Graph{
         Graph* getComplement();
         Graph* getSubjacent();
         bool hasCircuit();
-        int* topologicalSort();
+        int* topologicalSorting();
         int* connectedComponents();
         bool connectedGraph();
         int** floydMarshall();

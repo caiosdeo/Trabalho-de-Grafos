@@ -111,9 +111,9 @@ int* Graph::stronglyConnectedComponents(){
 }
 
 // Kahn's algorithm adapted
-int *Graph::topologicalSort()
+int *Graph::topologicalSorting()
 {
-    int *vec = new int(this->order); // Allocating the vector that will contains the topological sort
+    int *vec = new int(this->order); // Allocating the vector that will contains the topological sorting
     // Verifies if the graph has a circuit or not
     if (this->hasCircuit())
         return nullptr;
@@ -296,7 +296,7 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(Node** nodesSortedByO
 
         // Updating the star solution
         if(auxList.size() <= starList.size())
-            starList = auxList;
+            starList = auxList; 
 
         // Updating the q and p vector for each block of 300
         if(i % 300 == 0){

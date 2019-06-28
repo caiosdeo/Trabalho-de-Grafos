@@ -224,7 +224,7 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file){
             if(graph->getDirected()){
 
                 if(graph->connectedGraph()){
-                    int* topSort = graph->topologicalSort();
+                    int* topSort = graph->topologicalSorting();
 
                     if(topSort != nullptr){
 
