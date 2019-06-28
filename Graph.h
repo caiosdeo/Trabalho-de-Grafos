@@ -60,6 +60,7 @@ class Graph{
         Node** sortNodesByOutDegree();
         Node* getAlphaNode(Node** nodesSortedByOutDegree, float alpha);
         bool solutionViabilty(list<Node*> solution);
+        int* dijkstra(int id);
 
     private:
         //Auxiliar methods
@@ -75,6 +76,7 @@ class Graph{
         int roulette(float* alphaProbabilities, int desiredProbability, int vectorSize);
         float updateQ(float* qVector, float* averageVector, int vectorSize, int starSize);
         void updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ);
+        int minimalDistanceDijkstra(int* distance, bool* visited);
 
 };
 

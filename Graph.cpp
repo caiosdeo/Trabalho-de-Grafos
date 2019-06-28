@@ -9,6 +9,7 @@
 #include <math.h>
 #include <cstdlib>
 #include <ctime>
+#include <limits.h>
 
 using namespace std;
 
@@ -876,4 +877,57 @@ bool Graph::solutionViabilty(list<Node*> solution){
 
     return false;
 
+}
+
+int Graph::minimalDistanceDijkstra(int *distance, bool *visited)
+{
+    int min = INT_MAX;
+    int indice;
+
+    for (int i = 0; i < this.order; i++)
+        if (distance[i] < min && alreadyProcessed[i] == false) {
+            min = distance[i];
+            indice = i;
+        }
+}   
+
+int* Graph::dijkstra(int id)
+{
+    int *distance = new int[this.order];
+    bool *visited = new bool[this.order];
+    int *nodes = new int[this.order];
+
+    for (int i = 0; i < this.order; i++) {
+        distance[i] = INT_MAX / 2;
+        visited[i] = false;
+    }
+
+    for (Node auxNode = getFirstNode(), i = 0; auxNode != nullptr; auxNode = auxNode.getNextNode(), i++)
+        nodes[i] = auxNode.getId();
+
+    distance[indexForNodes(id)] = 0;
+
+    for (i = 0; i < this.order - 1; i++) {
+        
+        int indexMinimalDistance = minimalDistanceDijkstra(distance, visited);
+
+        visited[indexMinimalDistance] = true;
+        Node node = getNode(nodes[i]);
+        int edgeWeight = 1;
+        
+        for (Edge edge = node.getFirstEdge(); edge != nullptr; edge = edge.getNextEdge()) {
+
+            int adjacentNodeIndex = indexForNode(edge.getTargetId)
+            
+            if (this.weighted_edge)
+                edgeWeight = edge.getWeight();
+
+            if(!visited[adjacentNodeIndex] && distance[i] + edge.getWeight() < distance[adjacentNodeIndex])
+                distance[adjacentNodeIndex] = distance[i] + edge.getWeight();
+        }
+
+    }
+
+    return distance;
+    
 }
