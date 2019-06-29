@@ -278,12 +278,8 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file){
         {
             if(graph->connectedGraph() && graph->getWeightedEdge() && !graph->getDirected())
             {
-                int initialId;
-                float pesoAGM;
-                cout << "ID do nó de início: ";
-                cin >> initialId;
-                pesoAGM = graph->primMinimumSpanningTree(initialId);
-                output_file << "Peso da solução encontrada partindo do nó " << initialId << ": " << pesoAGM << endl;
+                output_file << "Árvore Geradora Mínima de Prim:" << endl;
+                graph->primMinimumSpanningTree(output_file);
             }
             else
             {

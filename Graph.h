@@ -60,7 +60,7 @@ class Graph{
         list<Node*> randomizedGreedy(Node** nodesSortedByOutDegree, int iterations, float alpha);
         Node** sortNodesByOutDegree();
         Node* getAlphaNode(Node** nodesSortedByOutDegree, float alpha);
-        float primMinimumSpanningTree(int initialId);
+        void primMinimumSpanningTree(ofstream &output_file);
 
     private:
         //Auxiliar methods
