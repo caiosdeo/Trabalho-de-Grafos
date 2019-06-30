@@ -889,6 +889,8 @@ int Graph::minimalDistanceDijkstra(int *distance, bool *visited)
             min = distance[i];
             indice = i;
         }
+
+    return indice;
 }   
 
 int* Graph::dijkstra(int id)
@@ -916,7 +918,8 @@ int* Graph::dijkstra(int id)
         int indexMinimalDistance = minimalDistanceDijkstra(distance, visited);
 
         visited[indexMinimalDistance] = true;
-        Node *node = getNode(nodes[i]);
+        Node *node = getNode(nodes[indexMinimalDistance]);
+
         int edgeWeight = 1;
         
         for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge()) {
@@ -926,12 +929,10 @@ int* Graph::dijkstra(int id)
             if (this->weighted_edge)
                 edgeWeight = edge->getWeight();
 
-            if(!visited[adjacentNodeIndex] && distance[i] + edge->getWeight() < distance[adjacentNodeIndex])
-                distance[adjacentNodeIndex] = distance[i] + edge->getWeight();
+            if(!visited[adjacentNodeIndex] && distance[indexMinimalDistance] + edgeWeight < distance[adjacentNodeIndex])
+                distance[adjacentNodeIndex] = distance[indexMinimalDistance] + edgeWeight;
         }
-
     }
 
     return distance;
-    
 }
