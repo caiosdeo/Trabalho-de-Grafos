@@ -9,7 +9,8 @@
 #include <math.h>
 #include <cstdlib>
 #include <ctime>
-#include <limits.h>
+#include <float.h>
+#include <iomanip>
 
 using namespace std;
 
@@ -678,41 +679,44 @@ int Graph::partition(Node** arr, int low, int high){
 
 }
 
-int** Graph::floydMarshall(){
-    float value = this->auxFindWeight() + 1;
+float** Graph::floydMarshall(){
 
     float ** dist = new float*[this->order];
-    for(int i = 0; i < this->order; i++)
+    for (int i = 0; i < this->order; i++)
         dist[i] = new float[this->order];
 
     Node* auxFirstNode = this->first_node;
     Node* auxSecondNode;
+    float edgeWeight = 1;
 
     //building the first matrix with the values of every edge between adjacents nodes.
-    for(int i = 0; auxFirstNode != nullptr; auxFirstNode = auxFirstNode->getNextNode(), i++)
-    {
-        int j = 0;
+    for (int i = 0; auxFirstNode != nullptr; auxFirstNode = auxFirstNode->getNextNode(), i++) {
+        auxSecondNode = this->first_node;
 
-        for(auxSecondNode = this->first_node; auxSecondNode != nullptr; auxSecondNode = auxSecondNode->getNextNode(), j++)
-        {
+        for (int j = 0; auxSecondNode != nullptr; auxSecondNode = auxSecondNode->getNextNode(), j++) {   
             Edge *aux = auxFirstNode->hasEdgeBetween(auxSecondNode->getId());
-            if(aux != nullptr)
-                dist[i][j] = aux->getWeight();
+            
+            if(this->weighted_edge && aux != nullptr)
+                edgeWeight = aux->getWeight();
+
+            if (auxFirstNode->getId() == auxSecondNode->getId()) 
+                dist[i][j] = 0;
+
+            else if(aux != nullptr)
+                dist[i][j] = edgeWeight;
+            
             else
-                dist[i][j] = value;
+                dist[i][j] = FLT_MAX / 2;
         }
     }
 
     //Running the floyd Marshall algorithm
-    for (int k = 0; k < this->order; k++)
-    {
+    for (int k = 0; k < this->order; k++) {
         // Pick all vertices as source one by one
-        for (int i = 0; i < this->order; i++)
-        {
+        for (int i = 0; i < this->order; i++) {
             // Pick all vertices as destination for the
             // above picked source
-            for (int j = 0; j < this->order; j++)
-            {
+            for (int j = 0; j < this->order; j++) {
                 // If vertex k is on the shortest path from
                 // i to j, then update the value of dist[i][j]
                 if (dist[i][k] + dist[k][j] < dist[i][j])
@@ -721,47 +725,49 @@ int** Graph::floydMarshall(){
         }
     }
 
-    cout << "The following matrix shows the shortest distances"
-            " between every pair of vertices " << "\n";
-
-    int auxPrint = this->order + 1;
-
-    for (int i = 0; i <= auxPrint; i++)
-    {
-        if(i == 0 || i == 1)
-            auxFirstNode = this->first_node;
-        for (int j = 0; j <= this->order; j++)
-        {
-            if(i == 0 && j == 0)
-                cout << "%7s" << "";
-            else
-            {
-                if(i == 0)
-                {
-                    cout <<"%7d" << auxFirstNode->getId();
-                    auxFirstNode = auxFirstNode->getNextNode();
-                }
-                else
-                {
-                    if(j == 0)
-                    {
-                        cout << "%7d" << auxFirstNode->getId();
-                        auxFirstNode = auxFirstNode->getNextNode();
-                    }
-                    else
-                    {
-                        if (dist[i][j] == value)
-                            cout <<"%7s" << "INF";
-                        else
-                            cout <<"%7d" << dist[i][j];
-                    }
-                }
-            }
-        }
-        printf("\n");
-    }
+    return dist;
 }
 
+void Graph::printFloydMatrix(float **dist)
+{
+    cout << "The following matrix shows the shortest distances"
+            " between every pair of vertices " << endl;
+
+    Node *auxNode = this->first_node;
+
+    for (int i = 0; i < this->order + 1; i++) {
+        if (i == 0)
+            cout << setw(7) << " ";
+
+        else {
+            cout << setw(7) << auxNode->getId();
+            auxNode = auxNode->getNextNode();
+        }
+    }
+
+    cout << endl;
+
+    auxNode = this->first_node;
+
+    for (int i = 0; i < this->order; i++) {
+
+        for (int j = 0; j < this->order + 1; j++) {
+                
+            if (j == 0) {
+                cout << setw(7) << auxNode->getId();
+                auxNode = auxNode->getNextNode();
+            }
+            else {
+                if (dist[i][j - 1] == FLT_MAX / 2)
+                    cout << setw(7) << "INF";
+
+                else
+                    cout << setw(7) << dist[i][j - 1];
+            }
+        }
+        cout << endl;
+    }
+}
 
 float Graph::auxFindWeight()
 {
@@ -879,9 +885,9 @@ bool Graph::solutionViabilty(list<Node*> solution){
 
 }
 
-int Graph::minimalDistanceDijkstra(int *distance, bool *visited)
+int Graph::minimalDistanceDijkstra(float *distance, bool *visited)
 {
-    int min = INT_MAX;
+    float min = FLT_MAX / 2;
     int indice;
 
     for (int i = 0; i < this->order; i++)
@@ -893,16 +899,16 @@ int Graph::minimalDistanceDijkstra(int *distance, bool *visited)
     return indice;
 }   
 
-int* Graph::dijkstra(int id)
+float* Graph::dijkstra(int id)
 {
-    int *distance = new int[this->order];
+    float *distance = new float[this->order];
     bool *visited = new bool[this->order];
     int *nodes = new int[this->order];
 
     int i;
 
     for (i = 0; i < this->order; i++) {
-        distance[i] = INT_MAX / 2;
+        distance[i] = FLT_MAX / 2;
         visited[i] = false;
     }
 
@@ -920,7 +926,7 @@ int* Graph::dijkstra(int id)
         visited[indexMinimalDistance] = true;
         Node *node = getNode(nodes[indexMinimalDistance]);
 
-        int edgeWeight = 1;
+        float edgeWeight = 1;
         
         for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge()) {
 

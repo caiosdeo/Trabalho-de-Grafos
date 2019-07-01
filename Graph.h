@@ -53,14 +53,14 @@ class Graph{
         int* topologicalSorting();
         int* connectedComponents();
         bool connectedGraph();
-        int** floydMarshall();
+        float** floydMarshall();
         pair<list<Node*>, float**> reactiveRandomizedGreedy(Node** nodesSortedByOutDegree);
         list<Node*> randomizedGreedy(Node** nodesSortedByOutDegree, int iterations, float alpha);
         list<Node*> greedy(Node** nodesSortedByOutDegree, float alpha);
         Node** sortNodesByOutDegree();
         Node* getAlphaNode(Node** nodesSortedByOutDegree, float alpha);
         bool solutionViabilty(list<Node*> solution);
-        int* dijkstra(int id);
+        float* dijkstra(int id);
 
     private:
         //Auxiliar methods
@@ -76,7 +76,8 @@ class Graph{
         int roulette(float* alphaProbabilities, int desiredProbability, int vectorSize);
         float updateQ(float* qVector, float* averageVector, int vectorSize, int starSize);
         void updateP(float* vectorP, float* vectorQ, int vectorSize, float sumQ);
-        int minimalDistanceDijkstra(int* distance, bool* visited);
+        int minimalDistanceDijkstra(float* distance, bool* visited);
+        void printFloydMatrix(float **dist);
 
 };
 
