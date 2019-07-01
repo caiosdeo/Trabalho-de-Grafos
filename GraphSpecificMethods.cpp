@@ -298,8 +298,8 @@ pair<list<Node*>, float**> Graph::reactiveRandomizedGreedy(Node** nodesSortedByO
         if(auxList.size() <= starList.size())
             starList = auxList; 
 
-        // Updating the q and p vector for each block of 300
-        if(i % 300 == 0){
+        // Updating the q and p vector for each block of 30
+        if(i % 30 == 0){
 
             float sumQ = this->updateQ(alphasInfo[4], alphasInfo[3], vectorsSize, starList.size());
             this->updateP(alphasInfo[5], alphasInfo[4], vectorsSize, sumQ);
