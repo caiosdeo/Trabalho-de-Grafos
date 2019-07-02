@@ -113,6 +113,7 @@ int menu(){
     cout << "[7] Guloso Randomizado Reativo" << endl;
     cout << "[8] Árvore Geradora Mínima de Prim" << endl;
     cout << "[9] Caminho Mínimo Dijkstra" << endl;
+    cout << "[10] Caminho Mínimo Floyd" << endl;
     cout << "[0] Sair" << endl;
 
     cin >> selecao;
@@ -325,6 +326,39 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file){
             else
             {
                 output_file << "O algoritmo de Dijkstra não funciona com o atual grafo" << endl;
+            }
+            break;
+        }
+
+        //Algoritmo de Floyd
+        case 10:
+        {
+            if(graph->connectedGraph())
+            {
+                output_file << "Caminho Mínimo de Floyd:" << endl;
+                float** distancias = graph->floydMarshall();
+
+                output_file << "Nó | ";
+
+                for(Node* aux = graph->getFirstNode(); aux!= nullptr; aux = aux->getNextNode())
+                    output_file << aux->getId() << " | ";
+                output_file << endl;
+
+                Node* aux = graph->getFirstNode();
+                for(int i = 0; i < graph->getOrder(); i++){
+
+                    output_file << aux->getId() << " | ";
+                    for(int j = 0; j < graph->getOrder(); j++){
+                        output_file << distancias[i][j] << " | ";
+                    }
+                    output_file << endl;
+                    aux = aux->getNextNode();
+                }
+                output_file << endl;
+            }
+            else
+            {
+                output_file << "O algoritmo de Floyd não funciona com o atual grafo" << endl;
             }
             break;
         }
