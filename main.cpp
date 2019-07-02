@@ -112,6 +112,7 @@ int menu(){
     cout << "[6] Imprimir ordenacao topológica" << endl;
     cout << "[7] Guloso Randomizado Reativo" << endl;
     cout << "[8] Árvore Geradora Mínima de Prim" << endl;
+    cout << "[9] Caminho Mínimo Dijkstra" << endl;
     cout << "[0] Sair" << endl;
 
     cin >> selecao;
@@ -302,6 +303,28 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file){
             else
             {
                 output_file << "O algoritmo de Prim não funciona com o atual grafo" << endl;
+            }
+            break;
+        }
+
+        //Algoritmo de Dijkstra
+        case 9:
+        {
+            if(graph->connectedGraph())
+            {
+                output_file << "Caminho Mínimo de Dijkstra:" << endl;
+                float* distancia = graph->dijkstra(1);
+                Node* aux = graph->getFirstNode();
+                output_file << "Nó | Distancia" << endl;
+                for(int i = 0; i < graph->getOrder(); i++){
+                    output_file << aux->getId() << " | " << distancia[i] << " " << endl;
+                    aux = aux->getNextNode();
+                }
+                output_file << endl;
+            }
+            else
+            {
+                output_file << "O algoritmo de Dijkstra não funciona com o atual grafo" << endl;
             }
             break;
         }
